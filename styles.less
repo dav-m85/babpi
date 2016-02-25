@@ -1,0 +1,57 @@
+@import "reset.less";
+
+body {
+    color: white;
+    font-family: 'Dosis', sans-serif;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.0; }
+}
+
+.instruction {
+    width: 100%;
+    font-size: 2em;
+    text-align: center;
+
+    &.blink {
+        text-transform: uppercase;
+        animation: blinker 3s linear infinite;
+    }
+}
+
+// Score
+.score {
+    width: 100%;
+    font-size: 10em;
+    text-align: center;
+}
+
+// Background
+@backgroundLeft: lighten(red, 20%);
+@backgroundRight: lighten(blue, 20%);
+.background {
+  background: linear-gradient(to right, @backgroundLeft 49%, @backgroundRight 51%); /* Standard syntax */
+}
+
+// player module
+@playerHeight: 72px;
+.player {
+    position: relative;
+    padding-left: @playerHeight;
+    height: @playerHeight;
+    .player-avatar {
+        position:absolute;
+        left: 0;
+        width:@playerHeight; height:@playerHeight;
+        border-radius: @playerHeight / 2;
+    }
+    .player-name {
+        line-height: @playerHeight / 2;
+        font-size: 2em;
+    }
+    .player-rank {
+        line-height: @playerHeight / 2;
+        font-size: 1em;
+    }
+}
