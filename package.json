@@ -5,14 +5,17 @@
   "main": "server.js",
   "dependencies": {
     "browserify": "^13.0.0",
-    "express": "*",
-    "socket.io": "*",
+    "express": "^4.13.4",
+    "lowdb": "^0.12.5",
+    "nodemon": "^1.9.1",
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {
     "watchify": "^3.7.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run watch-js & node server.js",
+    "start": "npm run watch-js & nodemon server.js",
     "build-js": "browserify client.js > public/build.js",
     "watch-js": "watchify client.js --poll=500 -o public/build.js -v"
   },
