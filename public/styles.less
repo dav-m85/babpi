@@ -1,5 +1,6 @@
 @import "reset.less";
 
+// util
 body {
     color: white;
     font-family: 'Dosis', sans-serif;
@@ -9,6 +10,25 @@ body {
   50% { opacity: 0.0; }
 }
 
+// homeRank
+.homeRank {
+    height: 50%;
+    width: 100%;
+    position:absolute;
+    top:50%;
+}
+
+// bottom clock
+.clock {
+    width: 100%;
+    position:absolute;
+    bottom:1em;
+    text-align: center;
+    font-size:1.5em;
+}
+
+
+// Instructions at top
 .instruction {
     width: 100%;
     font-size: 2em;
@@ -34,7 +54,7 @@ body {
   background: linear-gradient(to right, @backgroundLeft 49%, @backgroundRight 51%); /* Standard syntax */
 }
 
-// player module
+// Player
 @playerHeight: 72px;
 .player {
     position: relative;

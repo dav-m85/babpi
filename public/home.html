@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="stylesheet/less" type="text/css" href="styles.less" />
+<link href='https://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
+</head>
+<body class="background">
+
+    <div class="instruction blink">
+        Defy anyone on<br />babypi.frankandoak.com
+    </div>
+
+    <div class="homeRank">
+        <div class="player">
+            <img class="player-avatar" src="http://www.gravatar.com/avatar/e45d50e58af59d5612b348df39dbf710?s=72&d=wavatar" />
+            <div class="player-name">David M</div>
+            <div class="player-rank">#1 (125)</div>
+        </div>
+    </div>
+
+    <ul id='messages'></ul>
+
+    <div class="clock">
+        14:53
+    </div>
+
+    <script>less = { env: 'development'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.6.0/less.min.js"></script>
+    <script>less.watch();</script>
+    <script src='/socket.io/socket.io.js'></script>
+    <script>
+        var socket = io();
+
+        socket.on('welcome', function(data) {
+            addMessage(data.message);
+
+            // Respond with a message including this clients' id sent from the server
+            socket.emit('i am client', {data: 'foo!', id: data.id});
+        });
+        socket.on('time', function(data) {
+            addMessage(data.time);
+        });
+        socket.on('error', console.error.bind(console));
+        socket.on('message', console.log.bind(console));
+
+        function addMessage(message) {
+            var text = document.createTextNode(message),
+                el = document.createElement('li'),
+                messages = document.getElementById('messages');
+
+            el.appendChild(text);
+            messages.appendChild(el);
+        }
+    </script>
+</body>
+</html>
