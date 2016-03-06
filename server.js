@@ -5,7 +5,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
     //index = fs.readFileSync(__dirname + '/index.html')
 
-var game = new Game(io);
+//var game = new Game(io);
 
 // Static files
 app.use(express.static('public'));

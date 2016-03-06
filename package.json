@@ -1,0 +1,21 @@
+{
+  "name": "babpi",
+  "version": "1.0.0",
+  "description": "Use a Raspberry Pi to track your football table games.",
+  "main": "server.js",
+  "dependencies": {
+    "browserify": "^13.0.0",
+    "express": "*",
+    "socket.io": "*",
+    "watchify": "^3.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run watch-js & node server.js",
+    "build-js": "browserify client.js > public/build.js",
+    "watch-js": "watchify client.js --poll=500 -o public/build.js -v"
+  },
+  "author": "dav.m85@gmail.com",
+  "license": "ISC"
+}

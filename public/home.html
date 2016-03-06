@@ -27,29 +27,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/less.js/2.6.0/less.min.js"></script>
     <script>less.watch();</script>
     <script src='/socket.io/socket.io.js'></script>
-    <script>
-        var socket = io();
-
-        socket.on('welcome', function(data) {
-            addMessage(data.message);
-
-            // Respond with a message including this clients' id sent from the server
-            socket.emit('i am client', {data: 'foo!', id: data.id});
-        });
-        socket.on('time', function(data) {
-            addMessage(data.time);
-        });
-        socket.on('error', console.error.bind(console));
-        socket.on('message', console.log.bind(console));
-
-        function addMessage(message) {
-            var text = document.createTextNode(message),
-                el = document.createElement('li'),
-                messages = document.getElementById('messages');
-
-            el.appendChild(text);
-            messages.appendChild(el);
-        }
-    </script>
+    <script src='/build.js'></script>
 </body>
 </html>
