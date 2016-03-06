@@ -6,33 +6,30 @@ const io = require('socket.io')(http);
 const low = require('lowdb')
 const storage = require('lowdb/file-sync')
 const db = low('db.json', { storage })
+const Game = require('./src/Game')
 
-//var game = new Game(io);
+var game = new Game(io, db);
 
 // Static files
 app.use(express.static('public'));
 
-app.get('/book', function(req, res){
-  res.sendFile(__dirname + '/public/book.html');
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/public/index.html');
+});
+
+app.get('/scoreboard', function(req, res){
+  res.sendFile(__dirname + '/public/scoreboard.html');
 });
 
 io.on('connection', function(socket){
-    console.log('a user connected');
-
-    // User triggered a booking event
-    socket.on('book', function(data){
-        //data is a reservation
-        db('posts').push({ title: 'lowdb is awesome' })
-        socket.emit('onBook', {});
-    });
+    game.onConnect(socket);
 
     //io.emit('some event', { for: 'everyone' });
     socket.on('disconnect', function(){
-      console.log('user disconnected');
+        console.log('user disconnected');
     });
 });
 
-
 http.listen(3000, function(){
-  console.log('listening on *:3001');
+    console.log('listening on *:3000');
 });

@@ -5,22 +5,37 @@
 </head>
 <body class="background">
 
-    <div class="instruction blink">
-        Defy anyone on<br />babypi.frankandoak.com
+    <div id="available" class="display:none">
+        <div class="instruction blink">
+            Defy anyone on<br />ADRESS OF SERVER
+        </div>
+
+        <div class="clock">
+            14:53
+        </div>
     </div>
 
-    <div class="homeRank">
+    <div id="booked" class="display:none">
+        <div class="instruction blink">
+            Push any button to start
+        </div>
+        <div class="instruction">
+            Long push to cancel match
+        </div>
+
+        <div class="score">
+            0-0
+        </div>
+
         <div class="player">
             <img class="player-avatar" src="http://www.gravatar.com/avatar/e45d50e58af59d5612b348df39dbf710?s=72&d=wavatar" />
             <div class="player-name">David M</div>
             <div class="player-rank">#1 (125)</div>
         </div>
-    </div>
 
-    <ul id='messages'></ul>
-
-    <div class="clock">
-        14:53
+        <div class="clock">
+            14:53
+        </div>
     </div>
 
     <script>less = { env: 'development'};</script>
@@ -29,5 +44,9 @@
     <script src='/socket.io/socket.io.js'></script>
     <script src='/jquery.min.js'></script>
     <script src='/build.js'></script>
+    <script>
+        var controller = window.ScoreboardController();
+        controller.run();
+    </script>
 </body>
 </html>
