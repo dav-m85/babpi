@@ -12,6 +12,7 @@ function _setTimeout(callback, delay) {
     if (timeout) {
         clearTimeout(timeout);
     }
+    console.log('setTimeout ' + delay);
     timeout = setTimeout(callback, delay);
 }
 
@@ -22,7 +23,6 @@ var Game = function(io, db){
     this.io = io;
     this.db = db;
     this.bookingExpiration = 10 * 1000; // 10s
-    this.matchExpiration = 10 * 1000; // 10s
     this.winnerDisplayTime = 10 * 1000; // 10s
     this.winScore = 10; // maximum score
     // Status object
@@ -45,18 +45,22 @@ assign(Game.prototype, Events, {
 
         // Bind button press for debug, trigger redLong / blueShort / ...
         socket.on('buttonPress', function(data){
-            that.trigger(data.color + data.type.charAt(0).toUpperCase() + data.type.slice(1));
+            var event = data.color + data.type.charAt(0).toUpperCase() + data.type.slice(1);
+            console.log(event);
+            that.trigger(event);
         });
     },
 
     // Default initial state
     onStartup: function() {
+        console.log('onStartup');
         this.off('redShort blueShort');
         _clearTimeout();
 
         this.status = {
             'is': 'available'
         };
+        this.io.emit('statusChange', this.status);
     },
 
     // When a booking happened
@@ -65,40 +69,49 @@ assign(Game.prototype, Events, {
         this.status = {
             'is': 'booked',
             'redPlayers': ['david'],
-            'bluePlayers': ['leo'],
-            'redScore': 0,
-            'blueScore': 0
+            'bluePlayers': ['leo']
         };
         this.io.emit('statusChange', this.status);
 
         // Register next steps
         this.once('redLong blueLong', this.onStartup); // Book canceled
         this.once('redShort blueShort', this.onMatch); // Book confirmed
-        _setTimeout(this.startup, this.bookingExpiration); // Book expired after 10s
+        _setTimeout(this.onStartup.bind(this), this.bookingExpiration); // Book expired after 10s
     },
 
     onMatch: function() {
+        this.off('redShort blueShort');
+        _clearTimeout();
         this.status.is = 'playing';
-        this.io.emit('statusChange', this.status);
+        this.status.redScore = 0;
+        this.status.blueScore = 0;
 
+        this.io.emit('statusChange', this.status);
+        var that = this;
         // Register next steps
         this.once('redLong blueLong', this.onStartup); // Match canceled
-        this.on('redShort blueShort', this.onScore); // TODO CLEAR IT
-        _setTimeout(this.startup, this.matchExpiration); // Match took too long after 10s without score
+        this.on('redShort', function(){
+            that.status.redScore++;
+            that.onScore();
+        });
+        this.on('blueShort', function(){
+            that.status.blueScore++;
+            that.onScore();
+        });
     },
 
-    onScore: function(event) {
-        console.log(event);
-        // TODO detect who scored
-        this.status.redScore++;
+    onScore: function() {
         this.io.emit('statusChange', this.status);
 
         if (this.status.redScore >= this.winScore) {
-            this.onWin();
+            this.onWin('red');
+        }
+        if (this.status.blueScore >= this.winScore) {
+            this.onWin('blue');
         }
     },
 
-    onWin: function(winners, losers, score) {
+    onWin: function(winner) {
         this.off('redShort blueShort');
 
         this.status.is = 'win';
@@ -106,7 +119,7 @@ assign(Game.prototype, Events, {
         // TODO update database
 
         // Go back to startup screen after 10s
-        _setTimeout(this.startup, this.winnerDisplayTime);
+        _setTimeout(this.onStartup.bind(this), this.winnerDisplayTime);
     }
 });
 

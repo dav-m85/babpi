@@ -9,7 +9,7 @@ const db = low('db.json', { storage })
 const Game = require('./src/Game')
 
 var game = new Game(io, db);
-game.onBook();
+game.onStartup();
 
 // Static files
 app.use(express.static('public'));
