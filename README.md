@@ -55,8 +55,9 @@ There's a few steps. Have a fresh Raspberry Pi 2 with [Raspbian](https://www.ras
     @xset -dpms
     @xset s noblank
     unclutter -idle 0
-    node /home/pi/babpi/server.js < /dev/null &
-    chromium-browser --kiosk https://www.google.com --incognito
+    gpio mode 0 up
+    node /home/pi/babpi/server.js </dev/null >/home/pi/babpi/server.log 2>&1 &
+    chromium-browser --kiosk http://192.168.0.107:3000/scoreboard --incognito
 
 
 ## TODO
@@ -77,6 +78,7 @@ Feel free to do a Pull Request.
 * http://alexba.in/blog/2013/01/07/use-your-raspberrypi-to-power-a-company-dashboard/ (boot)
 * http://conoroneill.net/running-the-latest-chromium-45-on-debian-jessie-on-your-raspberry-pi-2/
 * https://medium.com/@icebob/jessie-on-raspberry-pi-2-with-docker-and-chromium-c43b8d80e7e1#.by528ziyc
+* http://hackaday.com/2015/12/09/embed-with-elliot-debounce-your-noisy-buttons-part-i/ (debouncing them all)
 
 Those below are outdated but I did use them for inspiration...
 
