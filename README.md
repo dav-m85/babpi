@@ -1,22 +1,20 @@
-# babPi
+# babpi
 
 Follow score and rank players for your football table games, using a raspberry-pi. Not a new idea, but never found a complete solution.
 
 You'll need:
 * Football table
-* Raspberry-pi B+ with 2016-02-09-raspbian-jessie-lite clean
+* [Raspberry-pi B+ with 2016-02-09-raspbian-jessie-lite clean](https://www.raspberrypi.org/downloads/raspbian)
 * An HDMI screen (to display current game scoreboard)
 * Two arcade plunger buttons (to increment score and interact with scoreboard)
-* Lot of cables
-* A basic shell understanding
+* Lot of wires
+* Basic shell understanding
 
 And you'll get:
 
 __provide screenshot__
 
 ## Installation
-
-There's a few steps. Have a fresh Raspberry Pi 2 with [Raspbian](https://www.raspberrypi.org/downloads/raspbian). Mine is a 2016-02-09-raspbian-jessie-lite.
 
     # Update system
     sudo apt-get update
@@ -39,6 +37,7 @@ There's a few steps. Have a fresh Raspberry Pi 2 with [Raspbian](https://www.ras
     git clone https://github.com/dav-m85/babpi.git
     cd babpi
     npm install
+    # npm install onoff
     npm run build-js
     
     # Setup GPIO
@@ -63,9 +62,13 @@ There's a few steps. Have a fresh Raspberry Pi 2 with [Raspbian](https://www.ras
 ## TODO
 There's still a few things I would like to improve:
 
-* mock longTouch shortTouch
 * Stat endpoint
 * Ranking page with TrueSkill algo, could use http://www.moserware.com/2010/03/computing-your-skill.html
+* Deal with longClick and shortClick on the GPIO
+* Cleanup the css
+* Autocomplete player in book page
+* Competition mode
+* Proper build to ease installation
 
 Feel free to do a Pull Request.
 
