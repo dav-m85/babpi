@@ -4,9 +4,9 @@ const fs = require('fs');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const low = require('lowdb')
-const storage = require('lowdb/file-sync')
-const db = low('db.json', { storage })
-const Game = require('./src/Game')
+const storage = require('lowdb/file-sync');
+const db = low('db.json', storage);
+const Game = require('./src/Game');
 
 var game = new Game(io, db);
 game.onStartup();

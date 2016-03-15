@@ -8,7 +8,9 @@
     "express": "^4.13.4",
     "lowdb": "^0.12.5",
     "nodemon": "^1.9.1",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "ampersand-events": "v1.1.1",
+    "lodash.assign":"4.0.6"
   },
   "devDependencies": {
     "watchify": "^3.7.0"

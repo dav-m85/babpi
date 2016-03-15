@@ -1,6 +1,18 @@
 # babPi
 
-Use a Raspberry Pi to track your football table games.
+Follow score and rank players for your football table games, using a raspberry-pi. Not a new idea, but never found a complete solution.
+
+You'll need:
+* Football table
+* Raspberry-pi B+ with 2016-02-09-raspbian-jessie-lite clean
+* An HDMI screen (to display current game scoreboard)
+* Two arcade plunger buttons (to increment score and interact with scoreboard)
+* Lot of cables
+* A basic shell understanding
+
+And you'll get:
+
+__provide screenshot__
 
 ## Installation
 
@@ -25,9 +37,17 @@ There's a few steps. Have a fresh Raspberry Pi 2 with [Raspbian](https://www.ras
     cd
     sudo apt-get install git
     git clone https://github.com/dav-m85/babpi.git
+    cd babpi
+    npm install
     npm run build-js
-     
-    # try /home/pi/.config/lxsession/LXDE/autostart
+    
+    # Setup GPIO
+    cd wiringPi-b0a60c3/
+    gpio -v
+    gpio readall
+    gpio mode 0 up
+    
+    # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines 
     @lxpanel --profile LXDE
     @pcmanfm --desktop --profile LXDE
     #@xscreensaver -no-splash
@@ -44,7 +64,7 @@ There's still a few things I would like to improve:
 
 * mock longTouch shortTouch
 * Stat endpoint
-* Ranking page with TrueSkill algo
+* Ranking page with TrueSkill algo, could use http://www.moserware.com/2010/03/computing-your-skill.html
 
 Feel free to do a Pull Request.
 
@@ -60,6 +80,7 @@ Feel free to do a Pull Request.
 
 Those below are outdated but I did use them for inspiration...
 
+* https://learn.adafruit.com/node-embedded-development/installing-node-dot-js
 * http://blogs.wcode.org/2013/09/howto-boot-your-raspberry-pi-into-a-fullscreen-browser-kiosk/
 * https://www.danpurdy.co.uk/web-development/raspberry-pi-kiosk-screen-tutorial/
 * https://github.com/basdegroot/raspberry-pi-kiosk
@@ -67,4 +88,10 @@ Those below are outdated but I did use them for inspiration...
 
 
 ## Other projects
-I know [BusBud](https://github.com/busbud) is working on a similar project, but they haven't open sourced it yet.
+
+* http://blog.makingwaves.com/technology/the-foosball-table-live-status-system/
+* http://austin.foos.buzz/about
+* https://developer.ibm.com/bluemix/2015/08/06/built-iot-foosball-table-ibm-bluemix/
+* https://www.reddit.com/r/AskElectronics/comments/2rqlhy/help_with_building_an_electronic_foosball_scoring/
+* http://www.semageek.com/projet-le-robot-champion-de-babyfoot-de-epfl/
+* I know [BusBud](https://github.com/busbud) is working on a similar project, but they haven't open sourced it yet.
