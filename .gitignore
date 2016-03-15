@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 public/build.js
 db.json
+.idea
