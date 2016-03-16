@@ -6,14 +6,14 @@ const io = require('socket.io')(http);
 const low = require('lowdb')
 const storage = require('lowdb/file-sync');
 const db = low('db.json', storage);
-const Game = require('./src/Game');
+const Game = require('./src/server/Game');
 
 var game = new Game(io, db);
 game.onStartup();
 
 // If your not on arduino, comment this
-var control = require('./src/GpioControl');
-control.bind(game);
+// var control = require('./src/GpioControl');
+// control.bind(game);
 
 // Static files
 app.use(express.static(__dirname + '/public'));
