@@ -1,5 +1,4 @@
 # babpi
-
 Follow score and rank players for your football table games, using a raspberry-pi. Not a new idea, but never found a complete solution.
 
 You'll need:
@@ -15,6 +14,8 @@ And you'll get:
 __provide screenshot__
 
 ## Installation
+### Raspberry pi
+Let's start with a fresh raspberry pi:
 
     # Update system
     sudo apt-get update
@@ -30,7 +31,7 @@ __provide screenshot__
     cd
     wget http://node-arm.herokuapp.com/node_latest_armhf.deb
     sudo dpkg -i node_latest_armhf.deb
-    
+
     # Install babPi (this)
     cd
     sudo apt-get install git
@@ -39,14 +40,14 @@ __provide screenshot__
     npm install
     # npm install onoff
     npm run build-js
-    
+
     # Setup GPIO
     cd wiringPi-b0a60c3/
     gpio -v
     gpio readall
     gpio mode 0 up
-    
-    # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines 
+
+    # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines
     @lxpanel --profile LXDE
     @pcmanfm --desktop --profile LXDE
     #@xscreensaver -no-splash
@@ -58,12 +59,20 @@ __provide screenshot__
     node /home/pi/babpi/server.js </dev/null >/home/pi/babpi/server.log 2>&1 &
     chromium-browser --kiosk http://192.168.0.107:3000/scoreboard --incognito
 
+### For development
+babpi can be run straight from your dev machine with:
+
+    npm install
+    npm run start
+    
+Then just open http://127.0.0.1:3000/ in your favorite browser. You can mock the button interface by pressing a, A, b and B.
+
 
 ## TODO
 There's still a few things I would like to improve:
 
 * Stat endpoint
-* Ranking page with TrueSkill algo, could use http://www.moserware.com/2010/03/computing-your-skill.html
+* Ranking page with TrueSkill algo, could use http://www.moserware.com/2010/03/computing-your-skill.html, and even https://github.com/freethenation/node-trueskill
 * Deal with longClick and shortClick on the GPIO
 * Cleanup the css
 * Autocomplete player in book page
@@ -93,7 +102,6 @@ Those below are outdated but I did use them for inspiration...
 
 
 ## Other projects
-
 * http://blog.makingwaves.com/technology/the-foosball-table-live-status-system/
 * http://austin.foos.buzz/about
 * https://developer.ibm.com/bluemix/2015/08/06/built-iot-foosball-table-ibm-bluemix/

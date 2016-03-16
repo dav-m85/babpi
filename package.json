@@ -4,16 +4,17 @@
   "description": "Use a Raspberry Pi to track your football table games.",
   "main": "server.js",
   "dependencies": {
+    "ampersand-events": "v1.1.1",
     "browserify": "^13.0.0",
     "express": "^4.13.4",
+    "lodash.assign": "4.0.6",
     "lowdb": "^0.12.5",
-    "nodemon": "^1.9.1",
-    "socket.io": "^1.4.5",
-    "ampersand-events": "v1.1.1",
-    "lodash.assign":"4.0.6"
+    "onoff": "^1.0.4",
+    "socket.io": "^1.4.5"
   },
   "devDependencies": {
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "nodemon": "^1.9.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
