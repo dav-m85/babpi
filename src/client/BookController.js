@@ -17,9 +17,10 @@ module.exports = function(){
 
         var btn = $('button#send');
         $('form#bookAGame').submit(function(event){
-            var me1 = $('#me1').val();
-            var foe1 = $('#foe1').val();
-            socket.emit('onBook', {me1, foe1});
+            socket.emit('onBook', [
+                $('#me1').val(),
+                $('#foe1').val()
+            ]);
             event.preventDefault();
 
             // Button loading

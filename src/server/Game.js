@@ -16,6 +16,10 @@ function _setTimeout(callback, delay) {
     timeout = setTimeout(callback, delay);
 }
 
+function getRandomIntInclusive(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 /**
  * Manage game on the server side.
  */
@@ -23,7 +27,7 @@ var Game = function(io, db, options){
     this.io = io;
     this.db = db;
     this.options = assign({
-        bookingExpiration: 10000, // 10s
+        bookingExpiration: 5000, // 10s
         winnerDisplayTime: 10000, // 10s
         winScore: 10
     }, options);
@@ -64,12 +68,16 @@ assign(Game.prototype, Events, {
     },
 
     // When a booking happened
-    onBook: function(data) {
-        // TODO choose sides randomly
+    onBook: function(players) {
+        // TODO choose sides randomly, assign regarding ranks
+        var rand = Math.round(Math.random()); // 0 or 1
+        console.log(players);
+        var redPlayer = players[rand %2];
+        var bluePlayer = players[(rand+1) %2];
         this.status = {
             'is': 'booked',
-            'redPlayers': ['david'],
-            'bluePlayers': ['leo']
+            'redPlayers': [redPlayer],
+            'bluePlayers': [bluePlayer]
         };
         this.io.emit('statusChange', this.status);
 

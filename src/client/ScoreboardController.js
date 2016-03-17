@@ -29,7 +29,7 @@ module.exports = function(){
                         // clock = expiration countdown
                         bigInstr.text('Push any button to start');
                         instr.text('Long push to cancel');
-                        score.text(data.redPlayers.join(',')+' VS '+data.bluePlayers.join(','));
+                        score.html('<span class="red">'+data.redPlayers.join(',')+'</span> VS <span class="blue">'+data.bluePlayers.join(',')+'</span>');
                     break;
                     case "playing":
                         bigInstr.text(null);
