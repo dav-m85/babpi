@@ -25,8 +25,6 @@ var Game = function(io, db){
     this.bookingExpiration = 10 * 1000; // 10s
     this.winnerDisplayTime = 10 * 1000; // 10s
     this.winScore = 10; // maximum score
-    // Status object
-    //this.onStartup();
 }
 
 // Extend the prototype with the event methods and your own:

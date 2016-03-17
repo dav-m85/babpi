@@ -1,6 +1,9 @@
 module.exports = function(){
     return {
-        run: function(){
+        run: function(options){
+            options = options || {
+                  "address": "ADDRESS OF THIS SERVER"
+              };
 
             var socket = io();
 
@@ -17,7 +20,7 @@ module.exports = function(){
                 switch (data.is) {
                     case "available":
                         // clock = time
-                        bigInstr.html('Defy anyone on<br />ADRESS OF SERVER');
+                        bigInstr.html('Defy anyone on<br />'+options.address);
                         instr.text('');
                         score.text('');
                     break;

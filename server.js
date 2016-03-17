@@ -8,6 +8,8 @@ const storage = require('lowdb/file-sync');
 const db = low('db.json', storage);
 const Game = require('./src/server/Game');
 
+var address = process.env.ADDRESS || 'raspberry.local:3000';
+
 var game = new Game(io, db);
 game.onStartup();
 
@@ -23,7 +25,11 @@ app.get('/', function(req, res){
 });
 
 app.get('/scoreboard', function(req, res){
-  res.sendFile(__dirname + '/public/scoreboard.html');
+  fs.readFile(__dirname+'/public/scoreboard.html', 'utf8', function(err, raw){
+    raw = raw.replace('/*%params%*/', JSON.stringify({address:address}));
+    res.send(raw);
+  });
+
 });
 
 io.on('connection', function(socket){
