@@ -2,8 +2,10 @@
 
 // util
 body {
+    background-color: black;
     color: white;
-    font-family: 'Dosis', sans-serif;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px; // multiple of 8
 }
 
 @keyframes blinker {
@@ -33,6 +35,7 @@ body {
     width: 100%;
     font-size: 2em;
     text-align: center;
+    margin-top: 1em;
 
     &.blink {
         text-transform: uppercase;
@@ -45,13 +48,6 @@ body {
     width: 100%;
     font-size: 10em;
     text-align: center;
-}
-
-// Background
-@backgroundLeft: lighten(red, 20%);
-@backgroundRight: lighten(blue, 20%);
-.background {
-  background: linear-gradient(to right, @backgroundLeft 49%, @backgroundRight 51%); /* Standard syntax */
 }
 
 // Player

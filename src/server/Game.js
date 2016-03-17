@@ -19,12 +19,14 @@ function _setTimeout(callback, delay) {
 /**
  * Manage game on the server side.
  */
-var Game = function(io, db){
+var Game = function(io, db, options){
     this.io = io;
     this.db = db;
-    this.bookingExpiration = 10 * 1000; // 10s
-    this.winnerDisplayTime = 10 * 1000; // 10s
-    this.winScore = 10; // maximum score
+    this.options = assign({
+        bookingExpiration: 10000, // 10s
+        winnerDisplayTime: 10000, // 10s
+        winScore: 10
+    }, options);
 }
 
 // Extend the prototype with the event methods and your own:
@@ -74,7 +76,7 @@ assign(Game.prototype, Events, {
         // Register next steps
         this.once('redLong blueLong', this.onStartup); // Book canceled
         this.once('redShort blueShort', this.onMatch); // Book confirmed
-        _setTimeout(this.onStartup.bind(this), this.bookingExpiration); // Book expired after 10s
+        _setTimeout(this.onStartup.bind(this), this.options.bookingExpiration); // Book expired after 10s
     },
 
     onMatch: function() {
@@ -101,10 +103,10 @@ assign(Game.prototype, Events, {
     onScore: function() {
         this.io.emit('statusChange', this.status);
 
-        if (this.status.redScore >= this.winScore) {
+        if (this.status.redScore >= this.options.winScore) {
             this.onWin('red');
         }
-        if (this.status.blueScore >= this.winScore) {
+        if (this.status.blueScore >= this.options.winScore) {
             this.onWin('blue');
         }
     },
@@ -117,7 +119,7 @@ assign(Game.prototype, Events, {
         // TODO update database
 
         // Go back to startup screen after 10s
-        _setTimeout(this.onStartup.bind(this), this.winnerDisplayTime);
+        _setTimeout(this.onStartup.bind(this), this.options.winnerDisplayTime);
     }
 });
 
