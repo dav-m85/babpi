@@ -3,9 +3,9 @@ const app = express();
 const fs = require('fs');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const low = require('lowdb')
+const low = require('lowdb');
 const storage = require('lowdb/file-sync');
-const db = low('db.json', storage);
+const db = low('db.json', { storage: storage });
 const Game = require('./src/server/Game');
 
 var address = process.env.ADDRESS || 'raspberry.local:3000';
@@ -29,7 +29,13 @@ app.get('/scoreboard', function(req, res){
     raw = raw.replace('/*%params%*/', JSON.stringify({address:address}));
     res.send(raw);
   });
+});
 
+app.get('/history', function(req, res){
+  fs.readFile(__dirname+'/public/history.html', 'utf8', function(err, raw){
+    raw = raw.replace('/*%games%*/', JSON.stringify(db.object.games || []));
+    res.send(raw);
+  });
 });
 
 io.on('connection', function(socket){

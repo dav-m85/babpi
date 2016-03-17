@@ -97,7 +97,11 @@ assign(Game.prototype, Events, {
         this.io.emit('statusChange', this.status);
         var that = this;
         // Register next steps
-        this.once('redLong blueLong', this.onStartup); // Match canceled
+        this.once('redLong blueLong', function(){ // Match canceled
+            that.status.is = 'canceled';
+            that.storeStatus();
+            that.onStartup();
+        });
         this.on('redShort', function(){
             that.status.redScore++;
             that.onScore();
@@ -124,10 +128,15 @@ assign(Game.prototype, Events, {
 
         this.status.is = 'win';
         this.io.emit('statusChange', this.status);
-        // TODO update database
+        this.storeStatus();
 
         // Go back to startup screen after 10s
         _setTimeout(this.onStartup.bind(this), this.options.winnerDisplayTime);
+    },
+
+    storeStatus: function(){
+        this.status.date = (new Date).getTime();
+        this.db('games').push(this.status);
     }
 });
 
