@@ -27,7 +27,7 @@ var Game = function(io, db, options){
     this.io = io;
     this.db = db;
     this.options = assign({
-        bookingExpiration: 5000, // 10s
+        bookingExpiration: 30000, // 30s
         winnerDisplayTime: 10000, // 10s
         winScore: 10
     }, options);

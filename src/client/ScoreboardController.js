@@ -34,7 +34,10 @@ module.exports = function(){
                     case "playing":
                         bigInstr.text(null);
                         instr.html('Push to score<br />Long push to stop');
-                        score.text(data.redScore+' - '+data.blueScore);
+                        score.html(
+                          '<span class="red">'+data.redPlayers.join(',')+'</span> VS <span class="blue">'+data.bluePlayers.join(',')+'</span><br />'+
+                          '<span class="big">'+data.redScore+' - '+data.blueScore+'</span>'
+                        );
                         // who is playing
                         // clock = expiration countdown
                     break;
