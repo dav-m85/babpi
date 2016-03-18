@@ -5,7 +5,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const low = require('lowdb');
 const storage = require('lowdb/file-sync');
-const db = low('db.json', { storage: storage });
+const db = low(__dirname+'/db.json', { storage: storage });
 const Game = require('./src/server/Game');
 
 var address = process.env.ADDRESS || 'raspberry.local:3000';
