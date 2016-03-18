@@ -1,24 +1,38 @@
 // button is attaced to pin 17, led to 18
 var GPIO = require('onoff').Gpio,
-    button = new GPIO(17, 'in', 'rising'); // falling edge
+  buttonRed = new GPIO(17, 'in', 'rising'),
+  buttonBlue = new GPIO(18, 'in', 'rising'); // falling edge
 
 module.exports = {
     bind: function(game){
         // ISR
-        function interruptHandler(err, state) {
-            button.unwatch(interruptHandler);
+        function interruptRedHandler(err, state) {
+            buttonRed.unwatch(interruptRedHandler);
             setTimeout(function(){
                 // If button is already up
-                if (button.readSync() == 1) {
+                if (buttonRed.readSync() == 1) {
                     console.log('redShort');
                     game.trigger('redShort');
                 }
                 // TODO detect long with readSync
-                button.watch(interruptHandler);
+                buttonRed.watch(interruptRedHandler);
+            }, 250); // ms
+        }
+        function interruptBlueHandler(err, state) {
+            buttonBlue.unwatch(interruptBlueHandler);
+            setTimeout(function(){
+                // If button is already up
+                if (buttonBlue.readSync() == 1) {
+                    console.log('blueShort');
+                    game.trigger('blueShort');
+                }
+                // TODO detect long with readSync
+                buttonBlue.watch(interruptBlueHandler);
             }, 250); // ms
         }
 
         // Start the interrupt
-        button.watch(interruptHandler);
+        buttonRed.watch(interruptRedHandler);
+        buttonBlue.watch(interruptBlueHandler);
     }
 };

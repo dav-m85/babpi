@@ -64,7 +64,7 @@ babpi can be run straight from your dev machine with:
 
     npm install
     npm run start
-    
+
 Then just open http://127.0.0.1:3000/ in your favorite browser. You can mock the button interface by pressing a, A, b and B.
 
 
@@ -78,6 +78,7 @@ There's still a few things I would like to improve:
 * Autocomplete player in book page
 * Competition mode
 * Proper build to ease installation
+* Propose a wireless version with a [low energy transceiver](http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html). 
 
 Feel free to do a Pull Request.
 
