@@ -79,6 +79,8 @@ There's still a few things I would like to improve:
 * Competition mode
 * Proper build to ease installation
 * Propose a wireless version with a [low energy transceiver](http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html). 
+* long click cancel point instead of canceling game
+* long click on both sides cancel the game
 
 Feel free to do a Pull Request.
 
