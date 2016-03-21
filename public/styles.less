@@ -9,7 +9,10 @@ body {
 }
 
 @keyframes blinker {
-  50% { opacity: 0.0; }
+    0% { opacity: 1; }
+  	50% { opacity: 1; }
+  	50.01% { opacity: 0; }
+  	100% { opacity: 0; }
 }
 
 // homeRank
@@ -39,7 +42,7 @@ body {
 
     &.blink {
         text-transform: uppercase;
-        animation: blinker 3s linear infinite;
+        animation: blinker 2s linear infinite;
     }
 }
 
