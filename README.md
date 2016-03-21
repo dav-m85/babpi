@@ -14,6 +14,15 @@ And you'll get:
 __provide screenshot__
 
 ## Installation
+### For development
+babpi can be run straight from your dev machine with:
+
+    npm install
+    npm run start
+
+Then just open http://127.0.0.1:3000/ in your favorite browser. You can mock the button interface by pressing a, A, b and B.
+
+
 ### Raspberry pi
 Let's start with a fresh raspberry pi:
 
@@ -58,15 +67,6 @@ Let's start with a fresh raspberry pi:
     gpio mode 0 up
     node /home/pi/babpi/server.js </dev/null >/home/pi/babpi/server.log 2>&1 &
     chromium-browser --kiosk http://192.168.0.107:3000/scoreboard --incognito
-
-### For development
-babpi can be run straight from your dev machine with:
-
-    npm install
-    npm run start
-
-Then just open http://127.0.0.1:3000/ in your favorite browser. You can mock the button interface by pressing a, A, b and B.
-
 
 ## TODO
 There's still a few things I would like to improve:

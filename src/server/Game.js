@@ -39,7 +39,7 @@ assign(Game.prototype, Events, {
      * Update an incoming client
      */
     onConnect: function(socket){
-        console.log('a user connected');
+        // console.log('a user connected');
         var that = this;
         // Update current status
         socket.emit('statusChange', this.status);

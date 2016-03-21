@@ -9,7 +9,6 @@
     "express": "^4.13.4",
     "lodash.assign": "4.0.6",
     "lowdb": "^0.12.5",
-    "onoff": "^1.0.4",
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
@@ -17,11 +16,11 @@
     "nodemon": "^1.9.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run watch-js & nodemon server.js",
     "build-js": "browserify client.js > public/build.js",
     "watch-js": "watchify client.js --poll=500 -o public/build.js -v"
   },
   "author": "dav.m85@gmail.com",
-  "license": "ISC"
+  "license": "MIT",
+  "engines" : { "node" : ">=0.12" }
 }

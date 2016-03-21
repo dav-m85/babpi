@@ -8,14 +8,44 @@ const storage = require('lowdb/file-sync');
 const db = low(__dirname+'/db.json', { storage: storage });
 const Game = require('./src/server/Game');
 
-var address = process.env.ADDRESS || 'raspberry.local:3000';
+// Argument processing
+var options = {
+  address: "no address"
+};
+process.argv.slice(2).forEach(function (val) {
+  if( match = val.match(/^--([^=]+)=?(.+?)?$/)) {
+    switch(match[1]) {
+      case 'address':
+        options.address = match[2];
+        break;
+      default:
+        console.log("Cannot understand argument "+match[0]);
+        break;
+    }
+  }
+});
 
 var game = new Game(io, db);
 game.onStartup();
 
-// If your not on arduino, comment this
-var control = require('./src/server/GpioControl');
-control.bind(game);
+// Bind GPIO on a RaspberryPi (yes that's an arm architecture)
+// @todo this check would be better with http://raspberrypi.stackexchange.com/questions/24733/determine-if-running-on-a-raspberry-pi-in-node-js
+if (process.arch == 'arm') {
+  console.log("GPIO mode");
+  var GPIO = null;
+  try {
+    GPIO = require('onoff').Gpio;
+  } catch(e) {
+    if ( e.code === 'MODULE_NOT_FOUND' ) {
+      console.log("Missing onoff. Please run \"npm require onoff@1.0.4\"");
+    }
+    throw e;
+  }
+  var control = require('./src/server/GpioControl');
+  control.bind(game);
+} else {
+  console.log("dev mode");
+}
 
 // Static files
 app.use(express.static(__dirname + '/public'));
@@ -26,7 +56,7 @@ app.get('/', function(req, res){
 
 app.get('/scoreboard', function(req, res){
   fs.readFile(__dirname+'/public/scoreboard.html', 'utf8', function(err, raw){
-    raw = raw.replace('/*%params%*/', JSON.stringify({address:address}));
+    raw = raw.replace('/*%params%*/', JSON.stringify(options));
     res.send(raw);
   });
 });
@@ -43,7 +73,7 @@ io.on('connection', function(socket){
 
     //io.emit('some event', { for: 'everyone' });
     socket.on('disconnect', function(){
-        console.log('user disconnected');
+        //console.log('user disconnected');
     });
 });
 

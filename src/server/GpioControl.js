@@ -1,10 +1,8 @@
 // button is attaced to pin 17, led to 18
-var GPIO = require('onoff').Gpio,
-  buttonRed = new GPIO(17, 'in', 'rising'),
-  buttonBlue = new GPIO(18, 'in', 'rising'); // falling edge
-
 module.exports = {
-    bind: function(game){
+    bind: function(GPIO, game){
+        var buttonRed = new GPIO(17, 'in', 'rising'),
+          buttonBlue = new GPIO(18, 'in', 'rising'); // falling edge
         // ISR
         function interruptRedHandler(err, state) {
             buttonRed.unwatch(interruptRedHandler);
