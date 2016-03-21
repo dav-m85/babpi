@@ -35,14 +35,14 @@ if (process.arch == 'arm') {
   var GPIO = null;
   try {
     GPIO = require('onoff').Gpio;
+    var control = require('./src/server/GpioControl');
+    control.bind(GPIO, game);
   } catch(e) {
     if ( e.code === 'MODULE_NOT_FOUND' ) {
       console.log("Missing onoff. Please run \"npm require onoff@1.0.4\"");
     }
     throw e;
   }
-  var control = require('./src/server/GpioControl');
-  control.bind(game);
 } else {
   console.log("dev mode");
 }
