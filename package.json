@@ -5,22 +5,29 @@
   "main": "server.js",
   "dependencies": {
     "ampersand-events": "v1.1.1",
-    "browserify": "^13.0.0",
     "express": "^4.13.4",
     "lodash.assign": "4.0.6",
     "lowdb": "^0.12.5",
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
-    "watchify": "^3.7.0",
-    "nodemon": "^1.9.1"
+    "less": "^2.6.1",
+    "browserify": "^13.0.0",
+    "bootstrap-less": "^3.3.8",
+    "catw": "~1.0.1",
+    "watchify": "^3.7.0"
   },
   "scripts": {
-    "start": "npm run watch-js & nodemon server.js",
     "build-js": "browserify client.js > public/build.js",
-    "watch-js": "watchify client.js --poll=500 -o public/build.js -v"
+    "build-css": "catw -c 'lessc -' 'less/*.less' > public/main.css",
+    "build": "npm run build-js; npm run build-css",
+    "watch-css": "catw -c 'lessc -' 'less/*.less' -o public/main.css -v",
+    "watch-js": "watchify client.js --poll=500 -o public/build.js -v",
+    "dev": "npm run watch-js & npm run watch-css & nodemon server.js"
   },
   "author": "dav.m85@gmail.com",
   "license": "MIT",
-  "engines" : { "node" : ">=0.12" }
+  "engines": {
+    "node": ">=0.12"
+  }
 }

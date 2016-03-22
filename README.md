@@ -18,7 +18,7 @@ __provide screenshot__
 babpi can be run straight from your dev machine with:
 
     npm install
-    npm run start
+    npm run dev
 
 Then just open http://127.0.0.1:3000/ in your favorite browser. You can mock the button interface by pressing a, A, b and B.
 
@@ -47,8 +47,8 @@ Let's start with a fresh raspberry pi:
     git clone https://github.com/dav-m85/babpi.git
     cd babpi
     npm install
-    # npm install onoff
-    npm run build-js
+    npm install onoff
+    npm run build
 
     # Setup GPIO
     cd wiringPi-b0a60c3/

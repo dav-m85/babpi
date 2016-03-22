@@ -1,0 +1,82 @@
+@import "./node_modules/bootstrap-less/bootstrap/normalize.less";
+
+// util
+body {
+  background-color: black;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 8px; // multiple of 8
+}
+
+@keyframes blinker {
+  0% { opacity: 1; }
+  50% { opacity: 1; }
+  50.01% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+// homeRank
+.homeRank {
+  height: 50%;
+  width: 100%;
+  position:absolute;
+  top:50%;
+}
+
+// bottom clock
+.clock {
+  width: 100%;
+  position:absolute;
+  bottom:1em;
+  text-align: center;
+  font-size:1.5em;
+}
+
+
+// Instructions at top
+.instruction {
+  width: 100%;
+  font-size: 2em;
+  text-align: center;
+  margin-top: 1em;
+
+  &.blink {
+    text-transform: uppercase;
+    animation: blinker 2s linear infinite;
+  }
+}
+
+// Score
+.score {
+  margin-top: 3em;
+  width: 100%;
+  font-size: 3em;
+  text-align: center;
+  span.red{color:red;}
+  span.blue{color:lightblue;}
+  span.big{
+    font-size:6em;
+  }
+}
+
+// Player
+@playerHeight: 72px;
+.player {
+  position: relative;
+  padding-left: @playerHeight;
+  height: @playerHeight;
+  .player-avatar {
+    position:absolute;
+    left: 0;
+    width:@playerHeight; height:@playerHeight;
+    border-radius: @playerHeight / 2;
+  }
+  .player-name {
+    line-height: @playerHeight / 2;
+    font-size: 2em;
+  }
+  .player-rank {
+    line-height: @playerHeight / 2;
+    font-size: 1em;
+  }
+}

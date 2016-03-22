@@ -12,6 +12,7 @@ const Game = require('./src/server/Game');
 var options = {
   address: "no address"
 };
+
 process.argv.slice(2).forEach(function (val) {
   if( match = val.match(/^--([^=]+)=?(.+?)?$/)) {
     switch(match[1]) {
@@ -50,21 +51,33 @@ if (process.arch == 'arm') {
 // Static files
 app.use(express.static(__dirname + '/public'));
 
+var headerHtm;
+fs.readFile(__dirname+'/views/_head.html', 'utf8', function(err, raw){
+  headerHtm = raw;
+});
+var footerHtm;
+fs.readFile(__dirname+'/views/_foot.html', 'utf8', function(err, raw){
+  footerHtm = raw;
+});
+
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/public/index.html');
+  fs.readFile(__dirname+'/views/index.html', 'utf8', function(err, raw){
+    raw = raw.replace('/*%params%*/', JSON.stringify(options));
+    res.send(headerHtm+raw+footerHtm);
+  });
 });
 
 app.get('/scoreboard', function(req, res){
-  fs.readFile(__dirname+'/public/scoreboard.html', 'utf8', function(err, raw){
+  fs.readFile(__dirname+'/views/scoreboard.html', 'utf8', function(err, raw){
     raw = raw.replace('/*%params%*/', JSON.stringify(options));
-    res.send(raw);
+    res.send(headerHtm+raw+footerHtm);
   });
 });
 
 app.get('/history', function(req, res){
-  fs.readFile(__dirname+'/public/history.html', 'utf8', function(err, raw){
+  fs.readFile(__dirname+'/views/history.html', 'utf8', function(err, raw){
     raw = raw.replace('/*%games%*/', JSON.stringify(db.object.games || []));
-    res.send(raw);
+    res.send(headerHtm+raw+footerHtm);
   });
 });
 

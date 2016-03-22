@@ -1,0 +1,20 @@
+<div class="instruction blink"></div>
+<div class="instruction"></div>
+<div class="score"></div>
+<div class="clock"></div>
+
+<!--
+    <div class="player">
+        <img class="player-avatar" src="http://www.gravatar.com/avatar/e45d50e58af59d5612b348df39dbf710?s=72&d=wavatar" />
+        <div class="player-name">David M</div>
+        <div class="player-rank">#1 (125)</div>
+    </div>
+-->
+
+<script src='/socket.io/socket.io.js'></script>
+<script src='/jquery.min.js'></script>
+<script src='/build.js'></script>
+<script>
+    var controller = window.ScoreboardController();
+    controller.run(/*%params%*/);
+</script>
