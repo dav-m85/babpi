@@ -76,8 +76,8 @@ assign(Game.prototype, Events, {
         var bluePlayer = players[(rand+1) %2];
         this.status = {
             'is': 'booked',
-            'redPlayers': [redPlayer],
-            'bluePlayers': [bluePlayer]
+            'redPlayers': redPlayer,
+            'bluePlayers': bluePlayer
         };
         this.io.emit('statusChange', this.status);
 

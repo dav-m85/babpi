@@ -1,12 +1,10 @@
 ;
 var $ = require("jquery");
 module.exports = BookController = function(){
-    return {run: function(){
+    return {run: function(options, players){
 
         var socket = io();
-
-        io().on('error', console.error.bind(console));
-        io().on('message', console.log.bind(console));
+        socket.on('error', console.error.bind(console));
 
         var that = this;
         socket.on('statusChange', function(data) {
@@ -21,19 +19,54 @@ module.exports = BookController = function(){
             }
         });
 
+        function validateInput($element, errCb){
+            var $group= $element.parents('.form-group');
+            var violations = [];
+            $group.removeClass('has-error');
+            var value = $element.val();
+
+            // Empty value
+            if (!value) {
+                violations.push($element.attr('id')+' should not be empty');
+            }
+
+            // Clean up
+            value = value.split(',').map(Function.prototype.call, String.prototype.trim);
+
+            // Report errors
+            if (violations.length > 0) {
+                $group.addClass('has-error');
+                errCb(violations);
+                return [];
+            }
+            return value;
+        }
+
         var btn = $('button#send');
         $('form#bookAGame').submit(function(event){
-            socket.emit('onBook', [
-                $('#me1').val(),
-                $('#foe1').val()
-            ]);
             event.preventDefault();
 
-            // Button loading
-            btn.prop('disabled', true);
+            var errors = [];
+            function cbErr(error){errors = errors.concat(error);}
+
+            var team1 = validateInput($('#team1'), cbErr);
+            var team2 = validateInput($('#team2'), cbErr);
+
+            if (errors.length == 0) {
+                socket.emit('onBook', [
+                    team1,
+                    team2
+                ]);
+
+                // Button loading
+                btn.prop('disabled', true);
+            } else {
+                // display errors
+            }
         });
 
         this.onAvailable = function(){
+            // Button Start available
             btn.prop('disabled', false);
             $('#available').show();
             $('#booked').hide();

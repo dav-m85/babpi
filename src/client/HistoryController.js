@@ -6,7 +6,7 @@ module.exports = HistoryController = function() {
       //var $ = require("jquery");
       var $tbody = $('#gameTable');
 
-      games.forEach(function (game, index) {
+      games.reverse().forEach(function (game, index) {
         var isWin = game.is == 'win';
         var row = $('<tr>');
         row.append($('<td>').text(games.length - index));

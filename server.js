@@ -60,9 +60,16 @@ fs.readFile(__dirname+'/views/_foot.html', 'utf8', function(err, raw){
   footerHtm = raw;
 });
 
+var players = [
+  'dav',
+  'jp',
+  'nelson'
+];
+
 app.get('/', function(req, res){
   fs.readFile(__dirname+'/views/index.html', 'utf8', function(err, raw){
-    raw = raw.replace('/*%params%*/', JSON.stringify(options));
+    raw = raw.replace('/*%options%*/', JSON.stringify(options));
+    raw = raw.replace('/*%players%*/', JSON.stringify(players));
     res.send(headerHtm+raw+footerHtm);
   });
 });

@@ -74,13 +74,13 @@ There's still a few things I would like to improve:
 * Stat endpoint
 * Ranking page with TrueSkill algo, could use http://www.moserware.com/2010/03/computing-your-skill.html, and even https://github.com/freethenation/node-trueskill
 * Deal with longClick and shortClick on the GPIO
-* Cleanup the css
 * Autocomplete player in book page
 * Competition mode
 * Proper build to ease installation
 * Propose a wireless version with a [low energy transceiver](http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html). 
 * long click cancel point instead of canceling game
 * long click on both sides cancel the game
+* On win screen, long click replay
 
 Feel free to do a Pull Request.
 

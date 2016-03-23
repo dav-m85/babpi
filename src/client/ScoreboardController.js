@@ -22,7 +22,7 @@ module.exports = ScoreboardController = function(){
                 switch (data.is) {
                     case "available":
                         // clock = time
-                        bigInstr.html('Defy anyone on<br />'+options.address);
+                        bigInstr.html('Start game on<br />'+options.address);
                         instr.text('');
                         score.text('');
                     break;
