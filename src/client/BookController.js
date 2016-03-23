@@ -1,7 +1,13 @@
-module.exports = function(){
+;
+var $ = require("jquery");
+module.exports = BookController = function(){
     return {run: function(){
 
         var socket = io();
+
+        io().on('error', console.error.bind(console));
+        io().on('message', console.log.bind(console));
+
         var that = this;
         socket.on('statusChange', function(data) {
             console.log(data.is);

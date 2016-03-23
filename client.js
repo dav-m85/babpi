@@ -1,5 +1,11 @@
-window.BookController = require('./src/client/BookController');
-window.ScoreboardController = require('./src/client/ScoreboardController');
+;
+"use strict";
+var Babpi = window.Babpi || {};
 
-io().on('error', console.error.bind(console));
-io().on('message', console.log.bind(console));
+// Define controllers
+Babpi.BookController = require('./src/client/BookController');
+Babpi.ScoreboardController = require('./src/client/ScoreboardController');
+Babpi.HistoryController = require('./src/client/HistoryController');
+
+// Export to global
+window.Babpi = Babpi;

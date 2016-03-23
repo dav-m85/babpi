@@ -1,4 +1,6 @@
-module.exports = function(){
+;
+var $ = require("jquery");
+module.exports = ScoreboardController = function(){
     return {
         run: function(options){
             options = options || {
@@ -53,4 +55,4 @@ module.exports = function(){
             });
         }
     };
-}
+};

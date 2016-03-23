@@ -1,82 +1,55 @@
-@import "./node_modules/bootstrap-less/bootstrap/normalize.less";
+@bootstrap: "node_modules/bootstrap-less/bootstrap";
 
-// util
-body {
-  background-color: black;
-  color: white;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 8px; // multiple of 8
-}
+// Core variables and mixins
+@import "variables.less";
+@import "@{bootstrap}/mixins.less";
 
-@keyframes blinker {
-  0% { opacity: 1; }
-  50% { opacity: 1; }
-  50.01% { opacity: 0; }
-  100% { opacity: 0; }
-}
+// Reset and dependencies
+@import "@{bootstrap}/normalize.less";
+//@import "print.less";
+//@import "glyphicons.less";
 
-// homeRank
-.homeRank {
-  height: 50%;
-  width: 100%;
-  position:absolute;
-  top:50%;
-}
+// Core CSS
+@import "@{bootstrap}/scaffolding.less";
+@import "@{bootstrap}/type.less";
+@import "@{bootstrap}/code.less";
+@import "@{bootstrap}/grid.less";
+@import "@{bootstrap}/tables.less";
+@import "@{bootstrap}/forms.less";
+@import "@{bootstrap}/buttons.less";
 
-// bottom clock
-.clock {
-  width: 100%;
-  position:absolute;
-  bottom:1em;
-  text-align: center;
-  font-size:1.5em;
-}
+// Components
+//@import "component-animations.less";
+//@import "dropdowns.less";
+//@import "button-groups.less";
+//@import "input-groups.less";
+//@import "navs.less";
+//@import "navbar.less";
+//@import "breadcrumbs.less";
+//@import "pagination.less";
+//@import "pager.less";
+//@import "labels.less";
+//@import "badges.less";
+//@import "jumbotron.less";
+//@import "thumbnails.less";
+//@import "alerts.less";
+//@import "progress-bars.less";
+//@import "media.less";
+//@import "list-group.less";
+//@import "panels.less";
+//@import "responsive-embed.less";
+//@import "wells.less";
+//@import "close.less";
 
+// Components w/ JavaScript
+//@import "modals.less";
+//@import "tooltip.less";
+//@import "popovers.less";
+//@import "carousel.less";
 
-// Instructions at top
-.instruction {
-  width: 100%;
-  font-size: 2em;
-  text-align: center;
-  margin-top: 1em;
+// Utility classes
+//@import "utilities.less";
+//@import "responsive-utilities.less";
 
-  &.blink {
-    text-transform: uppercase;
-    animation: blinker 2s linear infinite;
-  }
-}
-
-// Score
-.score {
-  margin-top: 3em;
-  width: 100%;
-  font-size: 3em;
-  text-align: center;
-  span.red{color:red;}
-  span.blue{color:lightblue;}
-  span.big{
-    font-size:6em;
-  }
-}
-
-// Player
-@playerHeight: 72px;
-.player {
-  position: relative;
-  padding-left: @playerHeight;
-  height: @playerHeight;
-  .player-avatar {
-    position:absolute;
-    left: 0;
-    width:@playerHeight; height:@playerHeight;
-    border-radius: @playerHeight / 2;
-  }
-  .player-name {
-    line-height: @playerHeight / 2;
-    font-size: 2em;
-  }
-  .player-rank {
-    line-height: @playerHeight / 2;
-    font-size: 1em;
-  }
-}
+// Babpi specific
+@import "babpi.less";

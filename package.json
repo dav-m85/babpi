@@ -6,6 +6,7 @@
   "dependencies": {
     "ampersand-events": "v1.1.1",
     "express": "^4.13.4",
+    "jquery": "^2.2.2",
     "lodash.assign": "4.0.6",
     "lowdb": "^0.12.5",
     "socket.io": "^1.4.5"
@@ -19,9 +20,9 @@
   },
   "scripts": {
     "build-js": "browserify client.js > public/build.js",
-    "build-css": "catw -c 'lessc -' 'less/*.less' > public/main.css",
+    "build-css": "catw -c 'lessc --include-path=./less -' 'less/*.less' > public/main.css",
     "build": "npm run build-js; npm run build-css",
-    "watch-css": "catw -c 'lessc -' 'less/*.less' -o public/main.css -v",
+    "watch-css": "catw -c 'lessc --include-path=./less -' 'less/*.less' -o public/main.css -v",
     "watch-js": "watchify client.js --poll=500 -o public/build.js -v",
     "dev": "npm run watch-js & npm run watch-css & nodemon server.js"
   },
