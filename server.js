@@ -7,6 +7,7 @@ const low = require('lowdb');
 const storage = require('lowdb/file-sync');
 const db = low(__dirname+'/db.json', { storage: storage });
 const Game = require('./src/server/Game');
+const Players = require('./src/server/Players');
 
 // Argument processing
 var options = {
@@ -60,23 +61,19 @@ fs.readFile(__dirname+'/views/_foot.html', 'utf8', function(err, raw){
   footerHtm = raw;
 });
 
-var players = [
-  'dav',
-  'jp',
-  'nelson'
-];
-
 app.get('/', function(req, res){
   fs.readFile(__dirname+'/views/index.html', 'utf8', function(err, raw){
     raw = raw.replace('/*%options%*/', JSON.stringify(options));
-    raw = raw.replace('/*%players%*/', JSON.stringify(players));
+    raw = raw.replace('/*%players%*/', "[]");
     res.send(headerHtm+raw+footerHtm);
   });
 });
 
 app.get('/scoreboard', function(req, res){
+  var players = (new Players(db)).all();
   fs.readFile(__dirname+'/views/scoreboard.html', 'utf8', function(err, raw){
     raw = raw.replace('/*%params%*/', JSON.stringify(options));
+    raw = raw.replace('/*%players%*/', JSON.stringify(players));
     res.send(headerHtm+raw+footerHtm);
   });
 });

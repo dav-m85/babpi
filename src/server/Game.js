@@ -69,11 +69,13 @@ assign(Game.prototype, Events, {
 
     // When a booking happened
     onBook: function(players) {
-        // TODO choose sides randomly, assign regarding ranks
+        // TODO choose sides randomly, assign regarding ranks, except replays
         var rand = Math.round(Math.random()); // 0 or 1
         console.log(players);
         var redPlayer = players[rand %2];
         var bluePlayer = players[(rand+1) %2];
+        // TODO create new player if applicable
+        // TODO Send player details to interface
         this.status = {
             'is': 'booked',
             'redPlayers': redPlayer,
@@ -137,7 +139,49 @@ assign(Game.prototype, Events, {
     storeStatus: function(){
         this.status.date = (new Date).getTime();
         this.db('games').push(this.status);
+
+        // Build player array
+        var yolo = [
+            {
+                name: "davm",
+                mu: 25.0,
+                sigma: 8.55,
+                rank: 1
+            },
+            {
+                name: "thom",
+                mu: 25.0,
+                sigma: 8.55,
+                rank: 1
+            },
+            {
+                name: "nels",
+                mu: 25.0,
+                sigma: 8.55,
+                rank: 2
+            },
+            {
+                name: "bigm",
+                mu: 25.0,
+                sigma: 8.55,
+                rank: 2
+            }
+        ];
+
+        // TODO Compute player score here...
+        var player = {
+            mu: 8.0,
+            sigma: 23,
+            skill : null,
+            name: 'dav', // trigram
+            email: 'dav.m85@gmail.com'
+        };
+
+
+
+        // TODO admin func: rename players
+        // rename in player, in games
     }
 });
 
-module.exports = Game
+module.exports = Game;

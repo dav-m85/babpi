@@ -31,7 +31,9 @@ module.exports = BookController = function(){
             }
 
             // Clean up
-            value = value.split(',').map(Function.prototype.call, String.prototype.trim);
+            value = value.split(',')
+              .map(Function.prototype.call, String.prototype.trim)
+              .map(Function.prototype.call, String.prototype.toLowerCase);
 
             // Report errors
             if (violations.length > 0) {

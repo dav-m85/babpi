@@ -2,12 +2,23 @@
 var $ = require("jquery");
 module.exports = ScoreboardController = function(){
     return {
-        run: function(options){
+        run: function(options, players){
+            console.log(players);
             options = options || {
                   "address": "ADDRESS OF THIS SERVER"
               };
 
             var socket = io();
+            var playerString = '*** BEST PLAYERS *** ' + players.reverse().join(' ') + ' ';
+            playerString = playerString.toUpperCase();
+            var $leaderboard = $('.leaderboard');
+            window.setInterval(function(){
+                // Rotate string
+                var tmp = playerString.charAt(0);
+                playerString = playerString.substring(1) + tmp;
+                $leaderboard.text(playerString);
+            }, 300);
+
 
             // RaspberryPiControl lives in server code...
             var Control = require('./MockControl');
@@ -25,6 +36,7 @@ module.exports = ScoreboardController = function(){
                         bigInstr.html('Start game on<br />'+options.address);
                         instr.text('');
                         score.text('');
+                        $leaderboard.show();
                     break;
                     case "booked":
                         // who has booked
@@ -32,7 +44,8 @@ module.exports = ScoreboardController = function(){
                         bigInstr.text('Push any button to start');
                         instr.text('Long push to cancel');
                         score.html('<span class="blue">'+data.bluePlayers.join(',')+'</span> VS <span class="red">'+data.redPlayers.join(',')+'</span>');
-                    break;
+                        $leaderboard.hide();
+                        break;
                     case "playing":
                         bigInstr.text(null);
                         instr.html('Push to score<br />Long push to stop');
