@@ -1,6 +1,5 @@
-from flask import Flask, url_for, json, request
-import trueskill
-from trueskill import Rating, quality_1vs1, rate_1vs1, rate_2vs2, rate
+from flask import Flask, url_for, json, request, Response
+from trueskill import Rating, rate_1vs1, rate
 
 app = Flask(__name__)
 
@@ -36,7 +35,7 @@ JSON message should be like :
     ];
 
 To test :
-    curl -H "Content-type: application/json" -X POST http://127.0.0.1:5000/rank -d '[{ "name": "davm", "mu": 25.0, "sigma": 8.55, "rank": 1 }, { "name": "thom", "mu": 25.0, "sigma": 8.55, "rank": 1 }, { "name": "nels", "mu": 25.0, "sigma": 8.55, "rank": 2 }, { "name": "bigm", "mu": 25.0, "sigma": 8.55, "rank": 2 }]'
+    curl -H "Content-type: application/json" -X POST http://127.0.0.1:5000/update_rank -d '[{ "name": "davm", "mu": 25.0, "sigma": 8.55, "rank": 1 }, { "name": "thom", "mu": 25.0, "sigma": 8.55, "rank": 1 }, { "name": "nels", "mu": 25.0, "sigma": 8.55, "rank": 2 }, { "name": "bigm", "mu": 25.0, "sigma": 8.55, "rank": 2 }]'
 
 """
 
@@ -59,8 +58,11 @@ def create_teams(res_list):
     for each list items
     """
     v = {}
+    ranks = list(set([l['rank'] for l in res_list]))
+
     for line in res_list:
-        key = line['rank']
+        # winner if has the minimum rank
+        key = 0 if line['rank'] == min(ranks) else 1
         value = line['name']
         if key in v.keys():
             v[key].append(value)
@@ -69,33 +71,68 @@ def create_teams(res_list):
     return v
 
 
-def get_new_ratings():
-    pass
+def get_new_ratings(players, teams):
+    """
+    Affect new ratings to players from teams results
+    """
+    nb_players_team0 = len(teams[0])
+    nb_players_team1 = len(teams[1])
+    winner = players[teams[0][0]]
+    loser = players[teams[1][0]]
+    if nb_players_team0 == 1 and nb_players_team1 == 1:
+        new_r1, new_r3 = rate_1vs1(winner,loser)
+    elif nb_players_team0 == 1 and nb_players_team1 > 1:
+        team_loser = [loser, players[teams[1][1]]]
+        (new_r1), (new_r3, new_r4) = rate([winner, team_loser], ranks=[0, 1])  
+    elif nb_players_team0 > 1 and nb_players_team1 == 1:
+        team_winner = [winner, players[teams[0][1]]]
+        (new_r1, new_r2), (new_r3) = rate([team_winner, loser], ranks=[0, 1])  
+    else:
+        team_loser = [loser, players[teams[1][1]]]
+        team_winner = [winner, players[teams[0][1]]]
+        (new_r1, new_r2), (new_r3, new_r4) = rate([team_winner, team_loser], ranks=[0, 1])  
+    player1 = {'name': teams[0][0], 'mu': new_r1.mu, 'sigma': new_r1.sigma}
+    player3 = {'name': teams[1][0], 'mu': new_r3.mu, 'sigma': new_r3.sigma}
+    if nb_players_team0 > 1:
+        player2 = {'name': teams[0][1], 'mu': new_r2.mu, 'sigma': new_r2.sigma}
+    if nb_players_team1 > 1:
+        player4 = {'name': teams[1][1], 'mu': new_r4.mu, 'sigma': new_r4.sigma}
+        if nb_players_team0 > 1:
+            return [player1, player2, player3, player4]
+        return [player1, player2, player4]
+    return [player1, player3]
 
 
-@app.route('/rank', methods=['POST'])
-def api_message():
+@app.route('/predict', methods=['POST'])
+def predict():
     if request.headers['Content-Type'] == 'application/json':
         # get list of players scores
-        data = json.loads(request.data)
-        nb_players = len(data)
-        players = create_players(data)
-        if nb_players == 4:
+        # data = json.loads(request.data)
+        # players = create_players(data)
+        # teams = create_teams(data)
+        return "I predict a win for david and thomas" 
+
+
+@app.route('/update_rank', methods=['POST'])
+def rank():
+    if request.headers['Content-Type'] == 'application/json':
+        try:
+            data = json.loads(request.data)
+        except Exception as e:
+            return "\n Error cant load JSON ! \n"
+        try:
+            players = create_players(data)
+        except Exception as e:
+            return "\n Error cant create players ! \n"
+        try:
             teams = create_teams(data)
-            return 'This is a 2v2 match'
-        elif nb_players == 2:
-            return 'This is a 1v1 match'
-        elif nb_players == 3:
-            teams = create_teams(data)
-            (new_r1,),
-            (new_r2, new_r3) = rate([teams[0], teams[1]], ranks=[0, 1])
-            return 'This is a 1v2 match'
-        else:
-            return 'Invalid number of players'
-        # return "JSON Message: " + json.dumps(dataDict) + '\n'
+        except Exception as e:
+            return "\n Error cant create teams ! \n"
+        return Response(json.dumps(get_new_ratings(players, teams)),
+                        mimetype='application/json')
     else:
         return "415 Unsupported Format Type (use application/json)"
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
