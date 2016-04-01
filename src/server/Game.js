@@ -49,13 +49,13 @@ assign(Game.prototype, Events, {
         socket.on('onBook', this.onBook.bind(this));
 
         // Bind button press for debug, trigger redLong / blueShort / ...
-        if (this.debug) {
+        //if (this.debug) {
             socket.on('buttonPress', function (data) {
                 var event = data.color + data.type.charAt(0).toUpperCase() + data.type.slice(1);
                 console.log(event);
                 that.trigger(event);
             });
-        }
+        //}
     },
 
     // Default initial state
