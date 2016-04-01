@@ -5,3 +5,4 @@ db.json
 .idea
 public/.*
 public/main.css
+server.log
