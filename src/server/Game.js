@@ -23,14 +23,15 @@ function getRandomIntInclusive(min, max) {
 /**
  * Manage game on the server side.
  */
-var Game = function(io, db, options){
+var Game = function(io, db, options, debug){
     this.io = io;
     this.db = db;
     this.options = assign({
-        bookingExpiration: 30000, // 30s
-        winnerDisplayTime: 10000, // 10s
+        bookingExpiration: 60000, // 60s
+        winnerDisplayTime: 15000, // 15s
         winScore: 10
-    }, options);
+    }, options || {});
+    this.debug = debug;
 }
 
 // Extend the prototype with the event methods and your own:
@@ -48,11 +49,13 @@ assign(Game.prototype, Events, {
         socket.on('onBook', this.onBook.bind(this));
 
         // Bind button press for debug, trigger redLong / blueShort / ...
-        socket.on('buttonPress', function(data){
-            var event = data.color + data.type.charAt(0).toUpperCase() + data.type.slice(1);
-            console.log(event);
-            that.trigger(event);
-        });
+        if (this.debug) {
+            socket.on('buttonPress', function (data) {
+                var event = data.color + data.type.charAt(0).toUpperCase() + data.type.slice(1);
+                console.log(event);
+                that.trigger(event);
+            });
+        }
     },
 
     // Default initial state
@@ -69,7 +72,7 @@ assign(Game.prototype, Events, {
 
     // When a booking happened
     onBook: function(players) {
-        // TODO choose sides randomly, assign regarding ranks, except replays
+        // TODO assign regarding ranks, except replays
         var rand = Math.round(Math.random()); // 0 or 1
         console.log(players);
         var redPlayer = players[rand %2];
@@ -77,9 +80,9 @@ assign(Game.prototype, Events, {
         // TODO create new player if applicable
         // TODO Send player details to interface
         this.status = {
-            'is': 'booked',
-            'redPlayers': redPlayer,
-            'bluePlayers': bluePlayer
+            is: 'booked',
+            redPlayers: redPlayer,
+            bluePlayers: bluePlayer
         };
         this.io.emit('statusChange', this.status);
 
@@ -90,7 +93,7 @@ assign(Game.prototype, Events, {
     },
 
     onMatch: function() {
-        this.off('redShort blueShort');
+        this.off('redShort blueShort redLong blueLong');
         _clearTimeout();
         this.status.is = 'playing';
         this.status.redScore = 0;
@@ -128,59 +131,41 @@ assign(Game.prototype, Events, {
     onWin: function(winner) {
         this.off('redShort blueShort');
 
+        // Rematch options
+        var status = this.status;
+        this.once('redLong blueLong', function(){
+            this.rematch(status);
+        });
+
         this.status.is = 'win';
         this.io.emit('statusChange', this.status);
         this.storeStatus();
+
+        // Recompute players ranking
+        var Players = require('./Players');
+        var players = new Players(this.db);
+        players.reset();
 
         // Go back to startup screen after 10s
         _setTimeout(this.onStartup.bind(this), this.options.winnerDisplayTime);
     },
 
+    /**
+     * Recreate a match with same players
+     */
+    rematch: function(status){
+        var newStatus = {
+            'is': 'booked',
+            'redPlayers': status.bluePlayers,
+            'bluePlayers': status.redPlayers
+        };
+        this.status = newStatus;
+        this.onMatch();
+    },
+
     storeStatus: function(){
         this.status.date = (new Date).getTime();
         this.db('games').push(this.status);
-
-        // Build player array
-        var yolo = [
-            {
-                name: "davm",
-                mu: 25.0,
-                sigma: 8.55,
-                rank: 1
-            },
-            {
-                name: "thom",
-                mu: 25.0,
-                sigma: 8.55,
-                rank: 1
-            },
-            {
-                name: "nels",
-                mu: 25.0,
-                sigma: 8.55,
-                rank: 2
-            },
-            {
-                name: "bigm",
-                mu: 25.0,
-                sigma: 8.55,
-                rank: 2
-            }
-        ];
-
-        // TODO Compute player score here...
-        var player = {
-            mu: 8.0,
-            sigma: 23,
-            skill : null,
-            name: 'dav', // trigram
-            email: 'dav.m85@gmail.com'
-        };
-
-
-
-        // TODO admin func: rename players
-        // rename in player, in games
     }
 });
 

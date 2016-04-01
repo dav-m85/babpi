@@ -27,7 +27,7 @@ process.argv.slice(2).forEach(function (val) {
   }
 });
 
-var game = new Game(io, db);
+var game = new Game(io, db, {}, process.arch != 'arm');
 game.onStartup();
 
 // Bind GPIO on a RaspberryPi (yes that's an arm architecture)
