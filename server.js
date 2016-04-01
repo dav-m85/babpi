@@ -27,7 +27,7 @@ process.argv.slice(2).forEach(function (val) {
   }
 });
 
-var game = new Game(io, db);
+var game = new Game(io, db, {}, process.arch != 'arm');
 game.onStartup();
 
 // Bind GPIO on a RaspberryPi (yes that's an arm architecture)
@@ -66,6 +66,14 @@ app.get('/', function(req, res){
   fs.readFile(__dirname+'/views/index.html', 'utf8', function(err, raw){
     raw = raw.replace('/*%options%*/', JSON.stringify(options));
     raw = raw.replace('/*%players%*/', "[]");
+    res.send(headerHtm+raw+footerHtm);
+  });
+});
+
+app.get('/rank', function(req, res){
+  var players = (new Players(db)).all();
+  fs.readFile(__dirname+'/views/rank.html', 'utf8', function(err, raw){
+    raw = raw.replace('/*%players%*/', JSON.stringify(players));
     res.send(headerHtm+raw+footerHtm);
   });
 });

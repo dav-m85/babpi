@@ -12,15 +12,17 @@ module.exports = HistoryController = function() {
         game.bluePlayers = game.bluePlayers || [];
         game.redScore = game.redScore || 0;
         game.blueScore = game.blueScore || 0;
+        if(game.is != 'win'){return;}
         var row = $('<tr>');
         row.append($('<td>').text(games.length - index));
         row.append($('<td>').text((new Date(game.date)).toLocaleDateString()));
-        row.append($('<td>').text(game.is));
-        row.append($('<td>').text(game.redPlayers.join(' ') + " (" + game.redScore + ")")
-          .toggleClass('success', (isWin && (game.redScore > game.blueScore))
+        row.append($('<td>').text(game.redScore + "/"+ game.blueScore));
+
+        row.append($('<td>').text(game.redPlayers.join(' '))
+          .toggleClass('danger', (game.redScore > game.blueScore)
         ));
-        row.append($('<td>').text(game.bluePlayers.join(' ') + " (" + game.blueScore + ")")
-          .toggleClass('success', (isWin && (game.redScore < game.blueScore))
+        row.append($('<td>').text(game.bluePlayers.join(' '))
+          .toggleClass('primary', (game.redScore < game.blueScore)
         ));
 
         $tbody.append(row);
