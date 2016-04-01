@@ -8,6 +8,10 @@ module.exports = HistoryController = function() {
 
       games.reverse().forEach(function (game, index) {
         var isWin = game.is == 'win';
+        game.redPlayers = game.redPlayers || [];
+        game.bluePlayers = game.bluePlayers || [];
+        game.redScore = game.redScore || 0;
+        game.blueScore = game.blueScore || 0;
         var row = $('<tr>');
         row.append($('<td>').text(games.length - index));
         row.append($('<td>').text((new Date(game.date)).toLocaleDateString()));

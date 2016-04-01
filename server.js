@@ -33,12 +33,13 @@ game.onStartup();
 // Bind GPIO on a RaspberryPi (yes that's an arm architecture)
 // @todo this check would be better with http://raspberrypi.stackexchange.com/questions/24733/determine-if-running-on-a-raspberry-pi-in-node-js
 if (process.arch == 'arm') {
-  console.log("GPIO mode");
-  var GPIO = null;
+  console.log("Pi mode");
   try {
-    GPIO = require('onoff').Gpio;
-    var control = require('./src/server/GpioControl');
-    control.bind(GPIO, game);
+    // GPIO = require('onoff').Gpio;
+    // var control = require('./src/server/GpioControl');
+    // control.bind(GPIO, game);
+    var control = require('./src/server/RadioControl');
+    control.bind(game);
   } catch(e) {
     if ( e.code === 'MODULE_NOT_FOUND' ) {
       console.log("Missing onoff. Please run \"npm require onoff@1.0.4\"");
@@ -94,6 +95,6 @@ io.on('connection', function(socket){
     });
 });
 
-http.listen(3000, function(){
-    console.log('listening on *:3000');
+http.listen(80, function(){
+    console.log('listening on *:80');
 });
