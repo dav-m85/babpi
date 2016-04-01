@@ -69,6 +69,14 @@ app.get('/', function(req, res){
   });
 });
 
+app.get('/rank', function(req, res){
+  var players = (new Players(db)).all();
+  fs.readFile(__dirname+'/views/rank.html', 'utf8', function(err, raw){
+    raw = raw.replace('/*%players%*/', JSON.stringify(players));
+    res.send(headerHtm+raw+footerHtm);
+  });
+});
+
 app.get('/scoreboard', function(req, res){
   var players = (new Players(db)).all();
   fs.readFile(__dirname+'/views/scoreboard.html', 'utf8', function(err, raw){

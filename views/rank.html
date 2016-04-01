@@ -1,16 +1,9 @@
 <table class="table table-striped">
-    <thead><tr>
-        <th>#</th>
-        <th>Date</th>
-        <th>Score</th>
-        <th>Red</th>
-        <th>Blue</th>
-    </tr></thead>
     <tbody id="gameTable"></tbody>
 </table>
 
 <script src='/socket.io/socket.io.js'></script>
 <script src='/build.js'></script>
 <script type="application/javascript">
-    window.Babpi.HistoryController().run(/*%games%*/);
+    window.Babpi.RankController().run(/*%players%*/);
 </script>
