@@ -61,7 +61,13 @@ assign(Game.prototype, Events, {
     // Default initial state
     onStartup: function() {
         console.log('onStartup');
+        var that = this;
         this.off('redShort blueShort');
+        this.on('redShort blueShort redLong blueLong', function(){
+            // Acknowledgement that moves Ken
+            that.io.emit('moveKen');
+            console.log('moveKen');
+        });
         _clearTimeout();
 
         this.status = {
@@ -72,6 +78,7 @@ assign(Game.prototype, Events, {
 
     // When a booking happened
     onBook: function(players) {
+        this.off('redShort blueShort redLong blueLong');
         // TODO assign regarding ranks, except replays
         var rand = Math.round(Math.random()); // 0 or 1
         console.log(players);
