@@ -77,7 +77,7 @@ There's still a few things I would like to improve:
 * Autocomplete player in book page
 * Competition mode
 * Proper build to ease installation
-* Propose a wireless version with a [low energy transceiver](http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html). 
+* Propose a wireless version with a [low energy transceiver](http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html).
 * long click cancel point instead of canceling game
 * long click on both sides cancel the game
 * On win screen, long click replay
@@ -103,6 +103,8 @@ Those below are outdated but I did use them for inspiration...
 * https://github.com/basdegroot/raspberry-pi-kiosk
 * https://lokir.wordpress.com/2012/09/16/raspberry-pi-kiosk-mode-with-chromium/
 
+* http://www.framboise314.fr/faire-dialoguer-un-raspberry-et-un-arduino-via-nrf24l01/#Installation_de_SPI (wireless inspiration)
+* http://www.helmancnc.com/g-code-example-mill-sample-g-code-program-for-beginners/
 
 ## Other projects
 * http://blog.makingwaves.com/technology/the-foosball-table-live-status-system/
