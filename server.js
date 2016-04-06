@@ -8,17 +8,39 @@ const storage = require('lowdb/file-sync');
 const db = low(__dirname+'/db.json', { storage: storage });
 const Game = require('./src/server/Game');
 const Players = require('./src/server/Players');
+const sys = require('sys');
 
 // Argument processing
 var options = {
-  address: "no address"
+  address: "no address",
+  // TODO Reverse blue and red button
+  reverse: false
 };
+
+// Credits to https://github.com/xxorax/node-shell-escape
+function shellescape(a) {
+  var ret = [];
+
+  a.forEach(function(s) {
+    if (/[^A-Za-z0-9_\/:=-]/.test(s)) {
+      s = "'"+s.replace(/'/g,"'\\''")+"'";
+      s = s.replace(/^(?:'')+/g, '') // unduplicate single-quote at the beginning
+        .replace(/\\'''/g, "\\'" ); // remove non-escaped single-quote if there are enclosed between 2 escaped
+    }
+    ret.push(s);
+  });
+
+  return ret.join(' ');
+}
 
 process.argv.slice(2).forEach(function (val) {
   if( match = val.match(/^--([^=]+)=?(.+?)?$/)) {
     switch(match[1]) {
       case 'address':
         options.address = match[2];
+        break;
+      case 'reverse':
+        options.reverse = true;
         break;
       default:
         console.log("Cannot understand argument "+match[0]);
@@ -27,8 +49,54 @@ process.argv.slice(2).forEach(function (val) {
   }
 });
 
+var players = (new Players(db));
 var game = new Game(io, db, {}, process.arch != 'arm');
+var exec = require('child_process').exec;
+var child;
 game.onStartup();
+game.on('onWin', function(status){
+  var winners, losers;
+  if (status.redScore > status.blueScore) {
+    winners = status.redPlayers; losers = status.bluePlayers;
+  } else {
+    winners = status.bluePlayers; losers = status.redPlayers;
+  }
+  var data = [];
+  winners.forEach(function(value){
+    var p = players.getPlayer(value);
+    data.push({
+      name: p.name,
+      mu: p.mu,
+      sigma: p.sigma,
+      rank: 1
+    });
+  });
+  losers.forEach(function(value){
+    var p = players.getPlayer(value);
+    data.push({
+      name: p.name,
+      mu: p.mu,
+      sigma: p.sigma,
+      rank: 2
+    });
+  });
+
+  // send data to process
+  exec(
+    'echo '+shellescape([JSON.stringify(data)])+"|python ranking_app.py",
+      function (error, stdout, stderr) {
+        if (error !== null) {
+          console.log('exec error: ' + error + stderr);
+        }
+        var result = JSON.parse(stdout);
+        result.forEach(function(res){
+          players.updateMuSigma(res.name, res.mu, res.sigma);
+        });
+    }
+  );
+
+  console.log(JSON.stringify(data));
+});
 
 // Bind GPIO on a RaspberryPi (yes that's an arm architecture)
 // @todo this check would be better with http://raspberrypi.stackexchange.com/questions/24733/determine-if-running-on-a-raspberry-pi-in-node-js
@@ -71,18 +139,16 @@ app.get('/', function(req, res){
 });
 
 app.get('/rank', function(req, res){
-  var players = (new Players(db)).all();
   fs.readFile(__dirname+'/views/rank.html', 'utf8', function(err, raw){
-    raw = raw.replace('/*%players%*/', JSON.stringify(players));
+    raw = raw.replace('/*%players%*/', JSON.stringify(players.all()));
     res.send(headerHtm+raw+footerHtm);
   });
 });
 
 app.get('/scoreboard', function(req, res){
-  var players = (new Players(db)).all();
   fs.readFile(__dirname+'/views/scoreboard.html', 'utf8', function(err, raw){
     raw = raw.replace('/*%params%*/', JSON.stringify(options));
-    raw = raw.replace('/*%players%*/', JSON.stringify(players));
+    raw = raw.replace('/*%players%*/', JSON.stringify(players.all()));
     res.send(headerHtm+raw+footerHtm);
   });
 });

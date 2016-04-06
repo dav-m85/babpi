@@ -29,31 +29,68 @@ assign(Players.prototype, {
   },
 
   /**
-   * Change player stat
+   * Retrieve a player by name, or create it
+   * @param name
+   * @returns {*}
    */
-  updatePlayer: function(name, score){
+  getPlayer: function(name) {
     var player = this.db('players')
       .chain()
       .find({name: name})
       .value();
+
+    // Create if does not exist
     if (! player) {
-      this.db('players').push({
+      player = {
         name: name,
-        scored: score,
-        gameCount: 1,
-        winCount: score == 10 ? 1 : 0
-      });
-    } else {
-      this.db('players')
-        .chain()
-        .find({name: name})
-        .assign({
-          gameCount: player.gameCount + 1,
-          scored: player.scored + score,
-          winCount: player.winCount + (score == 10 ? 1 : 0),
-        })
-        .value();
+        scored: 0,
+        gameCount: 0,
+        winCount: 0,
+        // trueskill parameters
+        mu: 0,
+        sigma: 0
+      };
+      this.db('players').push(player);
     }
+
+    if (player.mu == 0 && player.sigma == 0) {
+      player.mu = 25.000;
+      player.sigma = 8.333;
+    }
+
+    return player;
+  },
+
+  /**
+   * Change player stat
+   */
+  updatePlayer: function(name, score){
+    var player = this.getPlayer(name);
+    this.db('players')
+      .chain()
+      .find({name: name})
+      .assign({
+        gameCount: player.gameCount + 1,
+        scored: player.scored + score,
+        winCount: player.winCount + (score == 10 ? 1 : 0)
+      })
+      .value();
+  },
+
+  save: function(player){
+    console.log("Saving",player);
+    this.db('players')
+      .chain()
+      .find({name: player.name})
+      .assign(player)
+      .value();
+  },
+
+  updateMuSigma: function(name, mu, sigma){
+    var player = this.getPlayer(name);
+    player.mu = mu;
+    player.sigma = sigma;
+    this.save(player);
   },
 
   /**

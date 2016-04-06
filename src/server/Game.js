@@ -128,14 +128,14 @@ assign(Game.prototype, Events, {
         this.io.emit('statusChange', this.status);
 
         if (this.status.redScore >= this.options.winScore) {
-            this.onWin('red');
+            this.onWin();
         }
         if (this.status.blueScore >= this.options.winScore) {
-            this.onWin('blue');
+            this.onWin();
         }
     },
 
-    onWin: function(winner) {
+    onWin: function() {
         this.off('redShort blueShort');
 
         // Rematch options
@@ -149,9 +149,7 @@ assign(Game.prototype, Events, {
         this.storeStatus();
 
         // Recompute players ranking
-        var Players = require('./Players');
-        var players = new Players(this.db);
-        players.reset();
+        this.trigger('onWin', status);
 
         // Go back to startup screen after 10s
         _setTimeout(this.onStartup.bind(this), this.options.winnerDisplayTime);
