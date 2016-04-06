@@ -14,7 +14,8 @@ const sys = require('sys');
 var options = {
   address: "no address",
   // TODO Reverse blue and red button
-  reverse: false
+  reverse: false,
+  port: 3000
 };
 
 // Credits to https://github.com/xxorax/node-shell-escape
@@ -38,6 +39,9 @@ process.argv.slice(2).forEach(function (val) {
     switch(match[1]) {
       case 'address':
         options.address = match[2];
+        break;
+      case 'port':
+        options.port = match[2];
         break;
       case 'reverse':
         options.reverse = true;
@@ -169,6 +173,6 @@ io.on('connection', function(socket){
     });
 });
 
-http.listen(80, function(){
-    console.log('listening on *:80');
+http.listen(options.port, function(){
+    console.log('listening on *:'+options.port);
 });
