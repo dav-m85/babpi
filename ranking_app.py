@@ -1,56 +1,23 @@
-from flask import Flask, url_for, json, request, Response
+import sys
+import json
 from trueskill import Rating, rate_1vs1, rate
 
-app = Flask(__name__)
-
 """
-Python Flask Application for ranking
+Python cli ranking
 
-JSON message should be like :
-    var yolo = [
-      {
-          "name": "davm",
-          "mu": 25.0,
-          "sigma": 8.55,
-          "rank": 1
-      },
-      {
-          "name": "thom",
-          "mu": 25.0,
-          "sigma": 8.55,
-          "rank": 1
-      },
-      {
-          "name": "nels",
-          "mu": 25.0,
-          "sigma": 8.55,
-          "rank": 2
-      },
-      {
-          "name": "bigm",
-          "mu": 25.0,
-          "sigma": 8.55,
-          "rank": 2
-      }
-    ];
+sudo pip install trueskill
 
-To test :
-    curl -H "Content-type: application/json" -X POST http://127.0.0.1:5000/update_rank -d '[{ "name": "davm", "mu": 25.0, "sigma": 8.55, "rank": 1 }, { "name": "thom", "mu": 25.0, "sigma": 8.55, "rank": 1 }, { "name": "nels", "mu": 25.0, "sigma": 8.55, "rank": 2 }, { "name": "bigm", "mu": 25.0, "sigma": 8.55, "rank": 2 }]'
+To test:
+echo '[{"name": "davm","mu": 25.0,"sigma": 8.55,"rank": 1},{"name": "thom","mu": 25.0,"sigma": 8.55,"rank": 2}]' \
+| python ranking_app.py
 
+Echoes back the same json but with updated mu and sigma.
 """
-
-
-@app.route('/')
-def api_root():
-    return 'Welcome to Ranking App'
-
-
 def create_players(res_list):
     """
     Creates a dict of {'player_name': player_rating} for each list items
     """
     return {p['name']: Rating(mu=p['mu'], sigma=p['sigma']) for p in res_list}
-
 
 def create_teams(res_list):
     """
@@ -102,37 +69,8 @@ def get_new_ratings(players, teams):
         return [player1, player2, player4]
     return [player1, player3]
 
-
-@app.route('/predict', methods=['POST'])
-def predict():
-    if request.headers['Content-Type'] == 'application/json':
-        # get list of players scores
-        # data = json.loads(request.data)
-        # players = create_players(data)
-        # teams = create_teams(data)
-        return "I predict a win for david and thomas" 
-
-
-@app.route('/update_rank', methods=['POST'])
-def rank():
-    if request.headers['Content-Type'] == 'application/json':
-        try:
-            data = json.loads(request.data)
-        except Exception as e:
-            return "\n Error cant load JSON ! \n"
-        try:
-            players = create_players(data)
-        except Exception as e:
-            return "\n Error cant create players ! \n"
-        try:
-            teams = create_teams(data)
-        except Exception as e:
-            return "\n Error cant create teams ! \n"
-        return Response(json.dumps(get_new_ratings(players, teams)),
-                        mimetype='application/json')
-    else:
-        return "415 Unsupported Format Type (use application/json)"
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+jsonData = sys.stdin.readline()
+data = json.loads(jsonData)
+players = create_players(data)
+teams = create_teams(data)
+print json.dumps(get_new_ratings(players, teams))
