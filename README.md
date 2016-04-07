@@ -6,7 +6,7 @@ You'll need:
 * [Raspberry-pi B+ with 2016-02-09-raspbian-jessie-lite clean](https://www.raspberrypi.org/downloads/raspbian)
 * An HDMI screen (to display current game scoreboard)
 * Two arcade plunger buttons (to increment score and interact with scoreboard)
-* Lot of wires
+* Lot of wires (or maybe a nrf24l01 transceiver)
 * Basic shell understanding
 
 And you'll get:
@@ -55,6 +55,10 @@ Let's start with a fresh raspberry pi:
     gpio -v
     gpio readall
     gpio mode 0 up
+    
+    # Setup python for the ranking system
+    sudo apt-get install python-pip
+    sudo pip install trueskill
 
     # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines
     @lxpanel --profile LXDE
@@ -68,19 +72,20 @@ Let's start with a fresh raspberry pi:
     node /home/pi/babpi/server.js --address="ip" --port=3000 </dev/null >/home/pi/babpi/server.log 2>&1 &
     chromium-browser --kiosk http://192.168.0.107:3000/scoreboard --incognito
 
+You can swap the buttons with the ```--reverse``` argument.
+
 ## TODO
 There's still a few things I would like to improve:
 
-* Stat endpoint
-* Ranking page with TrueSkill algo, could use http://www.moserware.com/2010/03/computing-your-skill.html, and even https://github.com/freethenation/node-trueskill
 * Deal with longClick and shortClick on the GPIO
 * Autocomplete player in book page
 * Competition mode
+* Write doc and hardware guide
 * Proper build to ease installation
-* Propose a wireless version with a [low energy transceiver](http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html).
 * long click cancel point instead of canceling game
 * long click on both sides cancel the game
-* On win screen, long click replay
+* Find a way of specifying Control as argument
+* General code cleanup
 
 Feel free to do a Pull Request.
 
@@ -94,6 +99,9 @@ Feel free to do a Pull Request.
 * http://conoroneill.net/running-the-latest-chromium-45-on-debian-jessie-on-your-raspberry-pi-2/
 * https://medium.com/@icebob/jessie-on-raspberry-pi-2-with-docker-and-chromium-c43b8d80e7e1#.by528ziyc
 * http://hackaday.com/2015/12/09/embed-with-elliot-debounce-your-noisy-buttons-part-i/ (debouncing them all)
+* http://www.moserware.com/2010/03/computing-your-skill.html (amazing resource on trueskill)
+* http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html (low energy transceiver used)
+* https://davidwalsh.name/street-fighter (the ken used on first page)
 
 Those below are outdated but I did use them for inspiration...
 
