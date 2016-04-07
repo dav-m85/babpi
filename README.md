@@ -59,6 +59,11 @@ Let's start with a fresh raspberry pi:
     # Setup python for the ranking system
     sudo apt-get install python-pip
     sudo pip install trueskill
+    
+    # Install on raspberry
+    sudo cp initd.sh /etc/init.d/babpi.sh
+    sudo chmod +x /etc/init.d/babpi.sh
+    sudo update-rc.d babpi.sh defaults  
 
     # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines
     @lxpanel --profile LXDE
@@ -68,9 +73,7 @@ Let's start with a fresh raspberry pi:
     @xset -dpms
     @xset s noblank
     unclutter -idle 0
-    gpio mode 0 up
-    node /home/pi/babpi/server.js --address="ip" --port=3000 </dev/null >/home/pi/babpi/server.log 2>&1 &
-    chromium-browser --kiosk http://192.168.0.107:3000/scoreboard --incognito
+    chromium-browser --kiosk http://127.0.0.1/scoreboard --incognito
 
 You can swap the buttons with the ```--reverse``` argument.
 
@@ -81,7 +84,6 @@ There's still a few things I would like to improve:
 * Autocomplete player in book page
 * Competition mode
 * Write doc and hardware guide
-* Proper build to ease installation
 * long click cancel point instead of canceling game
 * long click on both sides cancel the game
 * Find a way of specifying Control as argument

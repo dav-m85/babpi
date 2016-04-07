@@ -1,25 +1,6 @@
 var Events = require('ampersand-events');
 var assign = require('lodash.assign');
 
-var timeout;
-function _clearTimeout() {
-    if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-    }
-}
-function _setTimeout(callback, delay) {
-    if (timeout) {
-        clearTimeout(timeout);
-    }
-    console.log('setTimeout ' + delay);
-    timeout = setTimeout(callback, delay);
-}
-
-function getRandomIntInclusive(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 /**
  * Manage game on the server side.
  */
@@ -32,10 +13,26 @@ var Game = function(io, db, options, debug){
         winScore: 10
     }, options || {});
     this.debug = debug;
-}
+    this.timeout = null;
+};
 
 // Extend the prototype with the event methods and your own:
 assign(Game.prototype, Events, {
+
+    _clearEvents: function(){
+        this.off('redShort blueShort redLong blueLong');
+    },
+    _clearTimeout: function() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+            this.timeout = null;
+        }
+    },
+    _setTimeout: function(callback, delay) {
+        this._clearTimeout();
+        this.timeout = setTimeout(callback, delay);
+    },
+
     /**
      * Update an incoming client
      */
@@ -62,13 +59,13 @@ assign(Game.prototype, Events, {
     onStartup: function() {
         console.log('onStartup');
         var that = this;
-        this.off('redShort blueShort');
+        this._clearEvents();
         this.on('redShort blueShort redLong blueLong', function(){
             // Acknowledgement that moves Ken
             that.io.emit('moveKen');
             console.log('moveKen');
         });
-        _clearTimeout();
+        this._clearTimeout();
 
         this.status = {
             'is': 'available'
@@ -78,7 +75,7 @@ assign(Game.prototype, Events, {
 
     // When a booking happened
     onBook: function(players) {
-        this.off('redShort blueShort redLong blueLong');
+        this._clearEvents();
         // TODO assign regarding ranks, except replays
         var rand = Math.round(Math.random()); // 0 or 1
         console.log(players);
@@ -96,12 +93,12 @@ assign(Game.prototype, Events, {
         // Register next steps
         this.once('redLong blueLong', this.onStartup); // Book canceled
         this.once('redShort blueShort', this.onMatch); // Book confirmed
-        _setTimeout(this.onStartup.bind(this), this.options.bookingExpiration); // Book expired after 10s
+        this._setTimeout(this.onStartup.bind(this), this.options.bookingExpiration); // Book expired after 10s
     },
 
     onMatch: function() {
-        this.off('redShort blueShort redLong blueLong');
-        _clearTimeout();
+        this._clearEvents();
+        this._clearTimeout();
         this.status.is = 'playing';
         this.status.redScore = 0;
         this.status.blueScore = 0;
@@ -136,7 +133,7 @@ assign(Game.prototype, Events, {
     },
 
     onWin: function() {
-        this.off('redShort blueShort');
+        this._clearEvents();
 
         // Rematch options
         var status = this.status;
@@ -152,7 +149,7 @@ assign(Game.prototype, Events, {
         this.trigger('onWin', status);
 
         // Go back to startup screen after 10s
-        _setTimeout(this.onStartup.bind(this), this.options.winnerDisplayTime);
+        this._setTimeout(this.onStartup.bind(this), this.options.winnerDisplayTime);
     },
 
     /**
@@ -171,6 +168,7 @@ assign(Game.prototype, Events, {
     storeStatus: function(){
         this.status.date = (new Date).getTime();
         this.db('games').push(this.status);
+        this.db.write();
     }
 });
 
