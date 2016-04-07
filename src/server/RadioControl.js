@@ -1,5 +1,5 @@
 module.exports = {
-    bind: function(game){
+    bind: function(game, reverse){
         var radio = require('nrf')
         	.connect('/dev/spidev0.0', 24, 25) //24, 25 - pas 25, 24
         	.channel(0x28)
@@ -8,22 +8,27 @@ module.exports = {
         	.autoRetransmit({count:15, delay:4000});
         ;
 
+        var red = 'red', blue = 'blue';
+        if (reverse) {
+            red = 'blue'; blue = 'red';
+        }
+
         radio.begin(function () {
             var rx = radio.openPipe('rx', new Buffer([0x0,0x0,0x0,0x0,0x34]), {size:1, autoAck:true});
 
         	rx.on('data', function (d) {
                 switch(d[0]) {
                     case 8:
-                        game.trigger('redShort');
+                        game.trigger(red+'Short');
                     break;
                     case 16:
-                        game.trigger('blueShort');
+                        game.trigger(blue+'Short');
                     break;
                     case 136:
-                        game.trigger('redLong');
+                        game.trigger(red+'Long');
                     break;
                     case 144:
-                        game.trigger('blueLong');
+                        game.trigger(blue+'Long');
                     break;
                     case 255:
                         game.trigger('reset');

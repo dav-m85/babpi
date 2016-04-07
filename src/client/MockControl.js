@@ -8,18 +8,22 @@ var assign = require('lodash.assign');
  * press b => ...
  * press maj+b => ...
  */
-var MockControl = function (socket) {
+var MockControl = function (socket, reverse) {
     window.addEventListener("keypress", function(e){
         var char = event.which || event.keyCode;
+        var red = 'red', blue = 'blue';
+        if (reverse) {
+            red = 'blue'; blue = 'red';
+        }
         switch(char) {
             case 97: // 'a'
-                socket.emit('buttonPress', {'color': 'red', 'type': 'short'}); break;
+                socket.emit('buttonPress', {'color': red, 'type': 'short'}); break;
             case 65: // 'A'
-                socket.emit('buttonPress', {'color': 'red', 'type': 'long'}); break;
+                socket.emit('buttonPress', {'color': red, 'type': 'long'}); break;
             case 98: // 'b'
-                socket.emit('buttonPress', {'color': 'blue', 'type': 'short'}); break;
+                socket.emit('buttonPress', {'color': blue, 'type': 'short'}); break;
             case 66: // 'B'
-                socket.emit('buttonPress', {'color': 'blue', 'type': 'long'}); break;
+                socket.emit('buttonPress', {'color': blue, 'type': 'long'}); break;
             default:
                 console.log(char + " was not sent to server");
                 break;

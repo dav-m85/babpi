@@ -104,7 +104,7 @@ assign(ScoreboardController.prototype, {
 
         // RaspberryPiControl lives in server code...
         var Control = require('./MockControl');
-        var control = new Control(socket);
+        new Control(socket, options.reverse);
 
         var bigInstr = $('.instruction.blink');
         var instr = $('.instruction').not('.blink');
