@@ -65,7 +65,7 @@ Let's start with a fresh raspberry pi:
     @xset s noblank
     unclutter -idle 0
     gpio mode 0 up
-    node /home/pi/babpi/server.js </dev/null >/home/pi/babpi/server.log 2>&1 &
+    node /home/pi/babpi/server.js --address="ip" --port=3000 </dev/null >/home/pi/babpi/server.log 2>&1 &
     chromium-browser --kiosk http://192.168.0.107:3000/scoreboard --incognito
 
 ## TODO

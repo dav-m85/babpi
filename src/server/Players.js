@@ -5,30 +5,6 @@ var Players = function(db){
 };
 assign(Players.prototype, {
   /**
-   * Use games to rebuild the player database
-   */
-  reset: function(){
-    // empty player database
-    this.db('players').remove({});
-
-    var that = this;
-    // Recompute players statistics out of games
-    // filter win
-    this.db('games')
-      .chain()
-      .filter({is: 'win'})
-      .map(function(game){
-        game.redPlayers.map(function(player){
-          that.updatePlayer(player, game.redScore);
-        });
-        game.bluePlayers.map(function(player){
-          that.updatePlayer(player, game.blueScore);
-        });
-      })
-      .value();
-  },
-
-  /**
    * Retrieve a player by name, or create it
    * @param name
    * @returns {*}
@@ -61,24 +37,13 @@ assign(Players.prototype, {
     return player;
   },
 
-  /**
-   * Change player stat
-   */
-  updatePlayer: function(name, score){
-    var player = this.getPlayer(name);
-    this.db('players')
-      .chain()
-      .find({name: name})
-      .assign({
-        gameCount: player.gameCount + 1,
-        scored: player.scored + score,
-        winCount: player.winCount + (score == 10 ? 1 : 0)
-      })
-      .value();
-  },
-
   save: function(player){
-    console.log("Saving",player);
+    var newRank = Math.floor((player.mu - 3*player.sigma)*10)/10;
+    player.rankingDelta = 0;
+    if (newRank != player.ranking) {
+      player.rankingDelta = Math.floor((player.ranking - newRank)*10)/10;
+    }
+    player.ranking = newRank;
     this.db('players')
       .chain()
       .find({name: player.name})
@@ -99,8 +64,8 @@ assign(Players.prototype, {
   all: function(){
     return this.db('players')
       .chain()
-      .sortBy('winCount')
-      .map(function(player){return player.name+"("+player.winCount+"/"+player.gameCount+")"})
+      .sortBy('ranking')
+      .map(function(player){return player.name+"("+player.ranking+")"}) // player.rankingDelta
       .value();
   }
 });

@@ -8,7 +8,7 @@ const storage = require('lowdb/file-sync');
 const db = low(__dirname+'/db.json', { storage: storage });
 const Game = require('./src/server/Game');
 const Players = require('./src/server/Players');
-const sys = require('sys');
+const Ranking = require('./src/server/Ranking');
 
 // Argument processing
 var options = {
@@ -17,22 +17,6 @@ var options = {
   reverse: false,
   port: 3000
 };
-
-// Credits to https://github.com/xxorax/node-shell-escape
-function shellescape(a) {
-  var ret = [];
-
-  a.forEach(function(s) {
-    if (/[^A-Za-z0-9_\/:=-]/.test(s)) {
-      s = "'"+s.replace(/'/g,"'\\''")+"'";
-      s = s.replace(/^(?:'')+/g, '') // unduplicate single-quote at the beginning
-        .replace(/\\'''/g, "\\'" ); // remove non-escaped single-quote if there are enclosed between 2 escaped
-    }
-    ret.push(s);
-  });
-
-  return ret.join(' ');
-}
 
 process.argv.slice(2).forEach(function (val) {
   if( match = val.match(/^--([^=]+)=?(.+?)?$/)) {
@@ -53,53 +37,12 @@ process.argv.slice(2).forEach(function (val) {
   }
 });
 
-var players = (new Players(db));
+var players = new Players(db);
+var ranking = new Ranking(players);
 var game = new Game(io, db, {}, process.arch != 'arm');
-var exec = require('child_process').exec;
-var child;
 game.onStartup();
 game.on('onWin', function(status){
-  var winners, losers;
-  if (status.redScore > status.blueScore) {
-    winners = status.redPlayers; losers = status.bluePlayers;
-  } else {
-    winners = status.bluePlayers; losers = status.redPlayers;
-  }
-  var data = [];
-  winners.forEach(function(value){
-    var p = players.getPlayer(value);
-    data.push({
-      name: p.name,
-      mu: p.mu,
-      sigma: p.sigma,
-      rank: 1
-    });
-  });
-  losers.forEach(function(value){
-    var p = players.getPlayer(value);
-    data.push({
-      name: p.name,
-      mu: p.mu,
-      sigma: p.sigma,
-      rank: 2
-    });
-  });
-
-  // send data to process
-  exec(
-    'echo '+shellescape([JSON.stringify(data)])+"|python ranking_app.py",
-      function (error, stdout, stderr) {
-        if (error !== null) {
-          console.log('exec error: ' + error + stderr);
-        }
-        var result = JSON.parse(stdout);
-        result.forEach(function(res){
-          players.updateMuSigma(res.name, res.mu, res.sigma);
-        });
-    }
-  );
-
-  console.log(JSON.stringify(data));
+  ranking.rankWith(status);
 });
 
 // Bind GPIO on a RaspberryPi (yes that's an arm architecture)
