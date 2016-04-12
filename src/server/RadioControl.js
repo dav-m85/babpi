@@ -1,3 +1,14 @@
+/*
+try {
+  control = require('./src/server/RadioControl');
+  control.bind(game, options.reverse);
+} catch(e) {
+  if ( e.code === 'MODULE_NOT_FOUND' ) {
+    console.log("Missing nrf. Please run \"npm require nrf\"");
+  }
+  throw e;
+}
+*/
 module.exports = {
     bind: function(game, reverse){
         var radio = require('nrf')

@@ -10,6 +10,15 @@ const Game = require('./src/server/Game');
 const Players = require('./src/server/Players');
 const Ranking = require('./src/server/Ranking');
 
+// Game init
+var players = new Players(db);
+var ranking = new Ranking(players);
+var game = new Game(io, db, {}, process.arch != 'arm');
+game.onStartup();
+game.on('onWin', function(status){
+  ranking.rankWith(status);
+});
+
 // Argument processing
 var options = {
   address: "no address",
@@ -18,6 +27,7 @@ var options = {
   port: 3000
 };
 
+var control = null;
 process.argv.slice(2).forEach(function (val) {
   if( match = val.match(/^--([^=]+)=?(.+?)?$/)) {
     switch(match[1]) {
@@ -30,40 +40,26 @@ process.argv.slice(2).forEach(function (val) {
       case 'reverse':
         options.reverse = true;
         break;
+      case 'control':
+        switch(match[2]){
+            case 'radio':
+                control = require('./src/server/RadioControl');
+                control.bind(game, options.reverse);
+            break;
+            case 'wire':
+                control = require('./src/server/GpioControl');
+                control.bind(require('onoff').Gpio, game);
+            break;
+            default:
+                throw new Error("Unknown control method "+match[2]);
+        }
+        break;
       default:
         console.log("Cannot understand argument "+match[0]);
         break;
     }
   }
 });
-
-var players = new Players(db);
-var ranking = new Ranking(players);
-var game = new Game(io, db, {}, process.arch != 'arm');
-game.onStartup();
-game.on('onWin', function(status){
-  ranking.rankWith(status);
-});
-
-// Bind GPIO on a RaspberryPi (yes that's an arm architecture)
-// @todo this check would be better with http://raspberrypi.stackexchange.com/questions/24733/determine-if-running-on-a-raspberry-pi-in-node-js
-if (process.arch == 'arm') {
-  console.log("Pi mode");
-  try {
-    // GPIO = require('onoff').Gpio;
-    // var control = require('./src/server/GpioControl');
-    // control.bind(GPIO, game);
-    var control = require('./src/server/RadioControl');
-    control.bind(game);
-  } catch(e) {
-    if ( e.code === 'MODULE_NOT_FOUND' ) {
-      console.log("Missing onoff. Please run \"npm require onoff@1.0.4\"");
-    }
-    throw e;
-  }
-} else {
-  console.log("dev mode");
-}
 
 // Static files
 app.use(express.static(__dirname + '/public'));

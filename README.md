@@ -1,17 +1,24 @@
 # babpi
-Follow score and rank players for your football table games, using a raspberry-pi. Not a new idea, but never found a complete solution.
+Follow score and rank players for your football table games, using a [Raspberry Pi](https://www.raspberrypi.org/). Not a new idea, but never found a complete solution.
+
+![babPi in action](photo.jpg)
+
+Features:
+
+* Game booking
+* Player ranking using XBox's Trueskill algorithm.
+* History for all games played
+* Simple wiring
+* ... or if you want, nrf24l01 transceiver support for wireless.
+* Retro look'n'feel
 
 You'll need:
-* Football table
+
+* A Football table
 * [Raspberry-pi B+ with 2016-02-09-raspbian-jessie-lite clean](https://www.raspberrypi.org/downloads/raspbian)
-* An HDMI screen (to display current game scoreboard)
+* A screen (to display current game scoreboard)
 * Two arcade plunger buttons (to increment score and interact with scoreboard)
-* Lot of wires (or maybe a nrf24l01 transceiver)
 * Basic shell understanding
-
-And you'll get:
-
-__provide screenshot__
 
 ## Installation
 ### For development
@@ -41,7 +48,7 @@ Let's start with a fresh raspberry pi:
     wget http://node-arm.herokuapp.com/node_latest_armhf.deb
     sudo dpkg -i node_latest_armhf.deb
 
-    # Install babPi (this)
+    # Install babPi
     cd
     sudo apt-get install git
     git clone https://github.com/dav-m85/babpi.git
@@ -50,16 +57,10 @@ Let's start with a fresh raspberry pi:
     npm install onoff
     npm run build
 
-    # Setup GPIO
-    cd wiringPi-b0a60c3/
-    gpio -v
-    gpio readall
-    gpio mode 0 up
-    
     # Setup python for the ranking system
     sudo apt-get install python-pip
     sudo pip install trueskill
-    
+
     # Install on raspberry
     sudo cp initd.sh /etc/init.d/babpi.sh
     sudo chmod +x /etc/init.d/babpi.sh
@@ -75,7 +76,25 @@ Let's start with a fresh raspberry pi:
     unclutter -idle 0
     chromium-browser --kiosk http://127.0.0.1/scoreboard --incognito
 
-You can swap the buttons with the ```--reverse``` argument.
+You can choose one of several ways of connecting buttons to the interface now.
+
+#### Wire
+Just wire the buttons straight to the Pi GPIO. By default GPIO17 and 18 are used.
+
+    # We need the on off library
+    npm install onoff
+    # Lets activate pull ups
+    sudo apt-get install device-tree-compiler
+    dtc -@ -I dts -O dtb -o mygpio-overlay.dtb hardware/wire/mygpio-overlay.dts
+    sudo cp mygpio-overlay.dtb /boot/overlays/mygpio-overlay.dtb
+    echo "device_tree_overlay=overlays/mygpio-overlay.dtb" | sudo tree /boot/config.txt
+    sudo reboot
+
+#### Remote with nrf24l01
+
+    # Setup GPIO
+    npm install nrf
+    # To be continued...
 
 ## TODO
 There's still a few things I would like to improve:
@@ -91,7 +110,6 @@ There's still a few things I would like to improve:
 
 Feel free to do a Pull Request.
 
-
 ## References
 * https://www.raspberrypi.org/downloads/raspbian/ (root of it all)
 * https://www.raspberrypi.org/forums/viewtopic.php?t=121195 (how to get chromium 48)
@@ -104,6 +122,7 @@ Feel free to do a Pull Request.
 * http://www.moserware.com/2010/03/computing-your-skill.html (amazing resource on trueskill)
 * http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html (low energy transceiver used)
 * https://davidwalsh.name/street-fighter (the ken used on first page)
+* https://github.com/fivdi/onoff/wiki/Enabling-Pullup-and-Pulldown-Resistors-on-The-Raspberry-Pi
 
 Those below are outdated but I did use them for inspiration...
 
