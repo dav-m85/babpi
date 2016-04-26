@@ -66,6 +66,12 @@ Let's start with a fresh raspberry pi:
     sudo chmod +x /etc/init.d/babpi.sh
     sudo update-rc.d babpi.sh defaults  
 
+    # edit rc.local
+    echo "25" >> /sys/class/gpio/export
+    echo "24" >> /sys/class/gpio/export
+    ...
+    exit 0;
+
     # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines
     @lxpanel --profile LXDE
     @pcmanfm --desktop --profile LXDE
@@ -102,11 +108,12 @@ There's still a few things I would like to improve:
 * Deal with longClick and shortClick on the GPIO
 * Autocomplete player in book page
 * Competition mode
+* Nicer scoreboard
 * Write doc and hardware guide
 * long click cancel point instead of canceling game
 * long click on both sides cancel the game
-* Find a way of specifying Control as argument
 * General code cleanup
+* Provide graph with player stats, http://nvd3.org/examples/cumulativeLine.html
 
 Feel free to do a Pull Request.
 

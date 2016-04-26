@@ -6,3 +6,5 @@ db.json
 public/.*
 public/main.css
 server.log
+db*.json
+*.psd
