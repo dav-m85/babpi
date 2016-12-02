@@ -31,60 +31,42 @@ Then just open http://127.0.0.1:3000/ in your favorite browser. You can mock the
 
 
 ### Raspberry pi
-Let's start with a fresh raspberry pi:
-
-    # Update system
-    sudo apt-get update
-    sudo apt-get upgrade
-
-    # Install chromium 48
-    cd
-    wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser_48.0.2564.82-0ubuntu0.15.04.1.1193_armhf.deb
-    wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser-l10n_48.0.2564.82-0ubuntu0.15.04.1.1193_all.deb
-    sudo dpkg -i chromium-browser-l10n_48.0.2564.82-0ubuntu0.15.04.1.1193_all.deb chromium-browser_48.0.2564.82-0ubuntu0.15.04.1.1193_armhf.deb
-
-    # Install node
-    cd
-    wget http://node-arm.herokuapp.com/node_latest_armhf.deb
-    sudo dpkg -i node_latest_armhf.deb
-
-    # Install babPi
-    cd
-    sudo apt-get install git
-    git clone https://github.com/dav-m85/babpi.git
-    cd babpi
-    npm install
-    npm install onoff
-    npm run build
-
+Let's start with a fresh raspberry pi, minimal Raspbian:
+    
     # Setup python for the ranking system
     sudo apt-get install python-pip
     sudo pip install trueskill
+    
+    # Install node
+    wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+    sudo dpkg -i node_latest_armhf.deb
+    
+    # We need git (@todo explain direct download install)
+    sudo apt-get install git
+    
+    # Lets put babpi inside the /opt folder
+    sudo mkdir /opt/babpi
+    sudo chown pi: /opt/babpi
+    cd /opt/babpi
+    git clone https://github.com/dav-m85/babpi.git .
+    
+    # Install dependencies and build the thing
+    npm install
+    npm run build
+    
+    # Run the server for a test
+    node server.js
 
-    # Install on raspberry
-    sudo cp initd.sh /etc/init.d/babpi.sh
-    sudo chmod +x /etc/init.d/babpi.sh
-    sudo update-rc.d babpi.sh defaults  
+Opening ```http://ip-of-your-raspberrypi:3000/scoreboard``` should display... the scoreboard.
 
-    # edit rc.local
-    echo "25" >> /sys/class/gpio/export
-    echo "24" >> /sys/class/gpio/export
-    ...
-    exit 0;
+From here, depending on your hardware setup, you can decide to use one of the following input method:
 
-    # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines
-    @lxpanel --profile LXDE
-    @pcmanfm --desktop --profile LXDE
-    #@xscreensaver -no-splash
-    @xset s off
-    @xset -dpms
-    @xset s noblank
-    unclutter -idle 0
-    chromium-browser --kiosk http://127.0.0.1/scoreboard --incognito
+- **wire**: Pi GPIO is directly connected to the buttons.
+- **radio**: A nrf24 remote board is used. You connect a nrf24l01 to the GPIO.
 
-You can choose one of several ways of connecting buttons to the interface now.
+Installation differs for both methods.
 
-#### Wire
+#### wire ####
 Just wire the buttons straight to the Pi GPIO. By default GPIO17 and 18 are used.
 
     # We need the on off library
@@ -96,11 +78,40 @@ Just wire the buttons straight to the Pi GPIO. By default GPIO17 and 18 are used
     echo "device_tree_overlay=overlays/mygpio-overlay.dtb" | sudo tree /boot/config.txt
     sudo reboot
 
-#### Remote with nrf24l01
 
-    # Setup GPIO
+#### radio ####
+You can find hardware sources in the [radio folder](./hardware/radio).
     npm install nrf
-    # To be continued...
+    
+    # edit rc.local
+    echo "25" >> /sys/class/gpio/export
+    echo "24" >> /sys/class/gpio/export
+    ...
+    exit 0;
+
+### Kiosk ###
+Having the scoreboard displayed at all time with the Raspberry Pi needs some installation.
+
+    # Install chromium 48
+    cd
+    wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser_48.0.2564.82-0ubuntu0.15.04.1.1193_armhf.deb
+    wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser-l10n_48.0.2564.82-0ubuntu0.15.04.1.1193_all.deb
+    sudo dpkg -i chromium-browser-l10n_48.0.2564.82-0ubuntu0.15.04.1.1193_all.deb chromium-browser_48.0.2564.82-0ubuntu0.15.04.1.1193_armhf.deb
+
+    # Install on raspberry
+    sudo cp initd.sh /etc/init.d/babpi.sh
+    sudo chmod +x /etc/init.d/babpi.sh
+    sudo update-rc.d babpi.sh defaults  
+
+    # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines
+    @lxpanel --profile LXDE
+    @pcmanfm --desktop --profile LXDE
+    #@xscreensaver -no-splash
+    @xset s off
+    @xset -dpms
+    @xset s noblank
+    unclutter -idle 0
+    chromium-browser --kiosk http://127.0.0.1/scoreboard --incognito
 
 ## TODO
 There's still a few things I would like to improve:
@@ -148,4 +159,4 @@ Those below are outdated but I did use them for inspiration...
 * https://developer.ibm.com/bluemix/2015/08/06/built-iot-foosball-table-ibm-bluemix/
 * https://www.reddit.com/r/AskElectronics/comments/2rqlhy/help_with_building_an_electronic_foosball_scoring/
 * http://www.semageek.com/projet-le-robot-champion-de-babyfoot-de-epfl/
-* I know [BusBud](https://github.com/busbud) is working on a similar project, but they haven't open sourced it yet.
+* Check [pongdome](https://github.com/busbud/pongdome) it's quite the same thing
