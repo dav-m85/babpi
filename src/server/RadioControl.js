@@ -27,26 +27,26 @@ module.exports = {
         radio.begin(function () {
             var rx = radio.openPipe('rx', new Buffer([0x0,0x0,0x0,0x0,0x34]), {size:1, autoAck:true});
 
-        	rx.on('data', function (d) {
-                switch(d[0]) {
-                    case 8:
-                        game.trigger(red+'Short');
-                    break;
-                    case 16:
-                        game.trigger(blue+'Short');
-                    break;
-                    case 136:
+        	rx.on('data', function (data) {
+        	    // first 4 bits are the button identifier, last 4 are duration
+                var d = data[0];
+                var button = d & 15;
+                var duration = (d & 15<<4)>>4;
+                if (button & 4) {
+                    if (duration > 1) {
                         game.trigger(red+'Long');
-                    break;
-                    case 144:
+                    } else {
+                        game.trigger(red+'Short');
+                    }
+                } else {
+                    if (duration > 1) {
                         game.trigger(blue+'Long');
-                    break;
-                    case 255:
-                        game.trigger('reset');
-                    break;
-                    default:
-                        console.log('Unrecognized data '+d[0]);
+                    } else {
+                        game.trigger(blue+'Short');
+                    }
                 }
+
+                console.log('Received '+data);
             });
         	rx.on('error', function (e) {
         	    console.warn("Error sending reply.", e);
