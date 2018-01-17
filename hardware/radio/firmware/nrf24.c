@@ -6,8 +6,8 @@
 #define EN_AA      0x01 // ENAA_P0 => auto ack data pipe 0
 #define EN_RXADDR  0x01 // ERX_P0 => data pipe 0 in reception mode
 #define SETUP_RETR 0x00 // re transmit disabled
-#define CHANNEL    73   // select channel
-#define RF_SETUP   0x27 // RF_PWR=0dBm, RF_DR_HIGH=1, PLL_LOCK=0, RF_DR_LOW=0 (2Mbps)
+#define CHANNEL    0x49 // select channel
+#define RF_SETUP   0x27 // RF_PWR=0dBm, RF_DR_HIGH=1, PLL_LOCK=0, RF_DR_LOW=0 (250kbps)
 
 void nrf_init(char *address, int address_size) {
   	P2DIR |= NRF_CE;

@@ -9,3 +9,17 @@ server.log
 db*.json
 *.psd
 datasheets/
+
+
+.vscode/
+	
+hardware/radio/*.lck
+hardware/radio/firmware/.ccsproject
+hardware/radio/firmware/.cproject
+hardware/radio/firmware/.launches/
+hardware/radio/firmware/.project
+hardware/radio/firmware/.settings/
+hardware/radio/firmware/lnk_msp430g2553.cmd
+hardware/radio/firmware/targetConfigs/
+package-lock.json
+hardware/radio/firmware/Debug

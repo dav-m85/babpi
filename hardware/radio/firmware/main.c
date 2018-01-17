@@ -39,7 +39,7 @@ int main(void)
 
 				// @todo deal here with multi press
 
-				sendThis = pressedButtons;
+				sendThis = pressedButtons >> 3;
 
 				// P2OUT &= ~BUTTON_1; // Debug by using an output with a led
 

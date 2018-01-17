@@ -12,9 +12,9 @@ try {
 module.exports = {
     bind: function(game, reverse){
         var radio = require('nrf')
-        	.connect('/dev/spidev0.0', 24, 25) //24, 25 - pas 25, 24
-        	.channel(0x28)
-        	.dataRate('2Mbps')
+        	.connect('/dev/spidev0.0', 22, 25) // (spi,ce,irq)
+        	.channel(0x49)
+        	.dataRate('250kbps')
         	.crcBytes(2)
         	.autoRetransmit({count:15, delay:4000});
         ;
