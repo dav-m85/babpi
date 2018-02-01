@@ -1,7 +1,7 @@
 # babpi
-Follow score and rank players for your football table games, using a [Raspberry Pi](https://www.raspberrypi.org/). Not a new idea, but never found a complete solution.
+Follow score and rank players for your football table games, using a [Raspberry Pi](https://www.raspberrypi.org/).
 
-![babPi in action](photo.jpg)
+![babpi in action](photo.jpg)
 
 Features:
 
@@ -9,16 +9,17 @@ Features:
 * Player ranking using XBox's Trueskill algorithm.
 * History for all games played
 * Simple wiring
-* ... or if you want, nrf24l01 transceiver support for wireless.
+* ... or if you want, MSP430 + nrf24l01 transceiver support for wireless with all sources
 * Retro look'n'feel
 
 You'll need:
 
 * A Football table
-* [Raspberry-pi B+ with 2016-02-09-raspbian-jessie-lite clean](https://www.raspberrypi.org/downloads/raspbian)
+* [Raspberry-pi B+ or later](https://www.raspberrypi.org)
 * A screen (to display current game scoreboard)
 * Two arcade plunger buttons (to increment score and interact with scoreboard)
 * Basic shell understanding
+* A few wires
 
 ## Installation
 ### For development
@@ -29,31 +30,30 @@ babpi can be run straight from your dev machine with:
 
 Then just open http://127.0.0.1:3000/ in your favorite browser. You can mock the button interface by pressing a, A, b and B.
 
-
 ### Raspberry pi
-Let's start with a fresh raspberry pi, minimal Raspbian:
-    
+Follow [this tutorial](https://blog.gordonturner.com/2017/12/10/raspberry-pi-full-screen-browser-raspbian-december-2017/) to get a Pi that starts in kiosk mode (use the following kiosk url ```--kiosk http://127.0.0.1:3000/scoreboard```).
+
+You already have ```git```, ```pip``` ```python``` and ```node``` if you followed the tutorial.
+
+Run the following commands once ssh logged:
+
     # Setup python for the ranking system
-    sudo apt-get install python-pip
     sudo pip install trueskill
-    
-    # Install node
-    wget http://node-arm.herokuapp.com/node_latest_armhf.deb
-    sudo dpkg -i node_latest_armhf.deb
-    
-    # We need git (@todo explain direct download install)
-    sudo apt-get install git
-    
+
+    # We need npm
+    sudo apt-get -y install npm
+
     # Lets put babpi inside the /opt folder
     sudo mkdir /opt/babpi
     sudo chown pi: /opt/babpi
     cd /opt/babpi
     git clone https://github.com/dav-m85/babpi.git .
-    
+
     # Install dependencies and build the thing
     npm install
+    mkdir public
     npm run build
-    
+
     # Run the server for a test
     node server.js
 
@@ -78,40 +78,84 @@ Just wire the buttons straight to the Pi GPIO. By default GPIO17 and 18 are used
     echo "device_tree_overlay=overlays/mygpio-overlay.dtb" | sudo tree /boot/config.txt
     sudo reboot
 
+Sorry for not giving more info, I don't have many since I'm using the radio myself. I just know it worked at some point.
 
 #### radio ####
-You can find hardware sources in the [radio folder](./hardware/radio).
+A remote radio input is supported with a board running a MSP430G2 and a [nRF24L01](http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24L01).
+
+You'll need to wire appropriately the module:
+
+https://forum.mysensors.org/topic/2437/step-by-step-procedure-to-connect-the-nrf24l01-to-the-gpio-pins-and-use-the-raspberry-as-a-serial-gateway-mysensors-1-x
+
+NRF24L01  Pin	NRF24L01	RPi2	RPi2 – Connector Pin
+1	GND	rpi-gnd	(25)
+2	VCC	rpi-3v3	(17)
+3	CE	rpi-gpio22	(15)
+4	CSN	rpi-gpio8	(24)
+5	SCK	rpi-sckl	(23)
+6	MOSI	rpi-mosi	(19)
+7	MISO	rpi-miso	(21)
+8	IRQ	rpi-gpio25 (22)
+
+250KBPS
+
+The MSP firmware is available in the [radio folder](./hardware/radio). The Pi installation needs a bit of tweaking:
+
     npm install nrf
-    
+
     # edit rc.local
+    echo "22" >> /sys/class/gpio/export
     echo "25" >> /sys/class/gpio/export
-    echo "24" >> /sys/class/gpio/export
     ...
     exit 0;
 
-### Kiosk ###
-Having the scoreboard displayed at all time with the Raspberry Pi needs some installation.
+##### Compiling the firmware
+There's decent tutorials on TI explaining how to achieve that. For fellow programmers, make sure you [activate HEX output like described here](http://processors.wiki.ti.com/index.php/Generating_and_Loading_MSP430_Binary_Files).
 
-    # Install chromium 48
-    cd
-    wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser_48.0.2564.82-0ubuntu0.15.04.1.1193_armhf.deb
-    wget http://ports.ubuntu.com/pool/universe/c/chromium-browser/chromium-browser-l10n_48.0.2564.82-0ubuntu0.15.04.1.1193_all.deb
-    sudo dpkg -i chromium-browser-l10n_48.0.2564.82-0ubuntu0.15.04.1.1193_all.deb chromium-browser_48.0.2564.82-0ubuntu0.15.04.1.1193_armhf.deb
+If you are on Mac OS X and uses one of the unsupported launchpad boards (MSP-EXP430G2 like me), you can flash with mspdebug (found in Energia):
 
-    # Install on raspberry
-    sudo cp initd.sh /etc/init.d/babpi.sh
-    sudo chmod +x /etc/init.d/babpi.sh
-    sudo update-rc.d babpi.sh defaults  
+    alias mspdebug /Applications/Energia.app/Contents/Java/hardware/tools/msp430/bin/mspdebug
+    mspdebug rf2500
+    (mspdebug) prog /absolute/path/to/project/firmware.txt
 
-    # Replace /home/pi/.config/lxsession/LXDE/autostart with the following lines
-    @lxpanel --profile LXDE
-    @pcmanfm --desktop --profile LXDE
+### Misc ###
+sudo nano /lib/systemd/system/babpi.service
+sudo systemctl enable babpi.service
+
+    [Unit]
+    Description=Babpi
+    After=network.target
+
+    [Service]
+    ExecStart=/usr/bin/node server.js
+    WorkingDirectory=/opt/babpi
+    StandardOutput=inherit
+    StandardError=inherit
+    Restart=always
+    User=pi
+
+    [Install]
+    WantedBy=multi-user.target
+
+sudo nano .config/lxsession/LXDE-pi/autostart
+
+    @lxpanel --profile LXDE-pi
+    @pcmanfm --desktop --profile LXDE-pi
     #@xscreensaver -no-splash
+    @point-rpi
+
+    # BEGIN ADDED
+
+    # Normal website that does not need any exceptions
+    @/usr/bin/chromium-browser --incognito --start-maximized --kiosk http://127.0.0.1/scoreboard
+    # Enable mixed http/https content, remember if invalid certs were allowed (ie self signed certs)
+    #@/usr/bin/chromium-browser --incognito --start-maximized --kiosk --allow-running-insecure-content --remember-cert-error-dec$
+    @unclutter
     @xset s off
-    @xset -dpms
     @xset s noblank
-    unclutter -idle 0
-    chromium-browser --kiosk http://127.0.0.1/scoreboard --incognito
+    @xset -dpms
+
+    # END ADDED
 
 ## TODO
 There's still a few things I would like to improve:
@@ -129,29 +173,10 @@ There's still a few things I would like to improve:
 Feel free to do a Pull Request.
 
 ## References
-* https://www.raspberrypi.org/downloads/raspbian/ (root of it all)
-* https://www.raspberrypi.org/forums/viewtopic.php?t=121195 (how to get chromium 48)
-* http://weworkweplay.com/play/raspberry-pi-nodejs/ (how to get nodejs)
-* https://learn.adafruit.com/adafruits-raspberry-pi-lesson-2-first-time-configuration/overview (using all partition)
-* http://alexba.in/blog/2013/01/07/use-your-raspberrypi-to-power-a-company-dashboard/ (boot)
-* http://conoroneill.net/running-the-latest-chromium-45-on-debian-jessie-on-your-raspberry-pi-2/
-* https://medium.com/@icebob/jessie-on-raspberry-pi-2-with-docker-and-chromium-c43b8d80e7e1#.by528ziyc
 * http://hackaday.com/2015/12/09/embed-with-elliot-debounce-your-noisy-buttons-part-i/ (debouncing them all)
 * http://www.moserware.com/2010/03/computing-your-skill.html (amazing resource on trueskill)
-* http://www.miniinthebox.com/nrf24l01-2-4ghz-wireless-transceiver-module-for-arduino_p903473.html (low energy transceiver used)
 * https://davidwalsh.name/street-fighter (the ken used on first page)
-* https://github.com/fivdi/onoff/wiki/Enabling-Pullup-and-Pulldown-Resistors-on-The-Raspberry-Pi
-
-Those below are outdated but I did use them for inspiration...
-
-* https://learn.adafruit.com/node-embedded-development/installing-node-dot-js
-* http://blogs.wcode.org/2013/09/howto-boot-your-raspberry-pi-into-a-fullscreen-browser-kiosk/
-* https://www.danpurdy.co.uk/web-development/raspberry-pi-kiosk-screen-tutorial/
-* https://github.com/basdegroot/raspberry-pi-kiosk
-* https://lokir.wordpress.com/2012/09/16/raspberry-pi-kiosk-mode-with-chromium/
-
 * http://www.framboise314.fr/faire-dialoguer-un-raspberry-et-un-arduino-via-nrf24l01/#Installation_de_SPI (wireless inspiration)
-* http://www.helmancnc.com/g-code-example-mill-sample-g-code-program-for-beginners/
 
 ## Other projects
 * http://blog.makingwaves.com/technology/the-foosball-table-live-status-system/
