@@ -32,7 +32,7 @@ module.exports = {
                 var d = data[0];
                 var button = d & 15;
                 var duration = (d & 15<<4)>>4;
-                if (button & 4) {
+                if (button & 1) {
                     if (duration > 1) {
                         game.trigger(red+'Long');
                     } else {
