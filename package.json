@@ -2,29 +2,29 @@
   "name": "babpi",
   "version": "1.0.0",
   "description": "Use a Raspberry Pi to track your football table games.",
-  "main": "server.js",
+  "main": "webpack.config.js",
   "dependencies": {
     "ampersand-events": "v1.1.1",
-    "express": "^4.13.4",
+    "bootstrap-less": "^3.3.8",
+    "css-loader": "^0.28.9",
+    "express": "^4.16.2",
     "jquery": "^2.2.2",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "lodash.assign": "4.0.6",
     "lowdb": "^0.12.5",
-    "socket.io": "^1.4.5"
-  },
-  "devDependencies": {
-    "less": "^2.6.1",
-    "browserify": "^13.0.0",
-    "bootstrap-less": "^3.3.8",
-    "catw": "~1.0.1",
-    "watchify": "^3.7.0"
+    "meow": "^4.0.0",
+    "socket.io": "^1.4.5",
+    "style-loader": "^0.20.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.4"
   },
   "scripts": {
-    "build-js": "browserify client.js > public/build.js",
-    "build-css": "catw -c 'lessc --include-path=./less -' 'less/*.less' > public/main.css",
-    "build": "npm run build-js; npm run build-css",
-    "watch-css": "catw -c 'lessc --include-path=./less -' 'less/*.less' -o public/main.css -v",
-    "watch-js": "watchify client.js --poll=500 -o public/build.js -v",
-    "dev": "npm run watch-js & npm run watch-css & nodemon server.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open",
+    "server": "node server.js",
+    "build": "webpack"
   },
   "author": "dav.m85@gmail.com",
   "license": "MIT",
