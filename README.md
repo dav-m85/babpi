@@ -169,6 +169,7 @@ There's still a few things I would like to improve:
 * long click on both sides cancel the game
 * General code cleanup
 * Provide graph with player stats, http://nvd3.org/examples/cumulativeLine.html
+* End of game, show ranking evolution for players
 
 Feel free to do a Pull Request.
 
