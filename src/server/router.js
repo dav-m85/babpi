@@ -1,44 +1,20 @@
 const fs = require('fs')
 const path = require('path')
-const view = path.join.bind(null, __dirname, '../../views')
+const view = path.join.bind(null, __dirname, '../../public')
 
-module.exports = function (app, options, players, db) {
-  var headerHtm
-  fs.readFile(view('_head.html'), 'utf8', function (err, raw) {
-    headerHtm = raw
+const respond = (file) => function (req, res) {
+  fs.readFile(view(file), 'utf8', function (err, raw) {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(raw)
+    }
   })
-  var footerHtm
-  fs.readFile(view('_foot.html'), 'utf8', function (err, raw) {
-    footerHtm = raw
-  })
+}
 
-  app.get('/', function (req, res) {
-    fs.readFile(view('index.html'), 'utf8', function (err, raw) {
-      raw = raw.replace('/*%options%*/', JSON.stringify(options))
-      raw = raw.replace('/*%players%*/', '[]')
-      res.send(headerHtm + raw + footerHtm)
-    })
-  })
-
-  app.get('/rank', function (req, res) {
-    fs.readFile(view('rank.html'), 'utf8', function (err, raw) {
-      raw = raw.replace('/*%players%*/', JSON.stringify(players.all()))
-      res.send(headerHtm + raw + footerHtm)
-    })
-  })
-
-  app.get('/scoreboard', function (req, res) {
-    fs.readFile(view('scoreboard.html'), 'utf8', function (err, raw) {
-      raw = raw.replace('/*%params%*/', JSON.stringify(options))
-      raw = raw.replace('/*%players%*/', JSON.stringify(players.all()))
-      res.send(headerHtm + raw + footerHtm)
-    })
-  })
-
-  app.get('/history', function (req, res) {
-    fs.readFile(view('history.html'), 'utf8', function (err, raw) {
-      raw = raw.replace('/*%games%*/', JSON.stringify(db.object.games || []))
-      res.send(headerHtm + raw + footerHtm)
-    })
-  })
+module.exports = function (app, options) {
+  app.get('/', respond('index.html'))
+  app.get('/history', respond('history.html'))
+  app.get('/rank', respond('rank.html'))
+  app.get('/scoreboard', respond('scoreboard.html'))
 }

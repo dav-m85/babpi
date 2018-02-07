@@ -5,6 +5,9 @@
   "main": "webpack.config.js",
   "dependencies": {
     "ampersand-events": "v1.1.1",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-react": "^6.24.1",
     "bootstrap-less": "^3.3.8",
     "css-loader": "^0.28.9",
     "express": "^4.16.2",
@@ -14,6 +17,9 @@
     "lodash.assign": "4.0.6",
     "lowdb": "^0.12.5",
     "meow": "^4.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "redux": "^3.7.2",
     "socket.io": "^1.4.5",
     "style-loader": "^0.20.1",
     "webpack": "^3.10.0",
@@ -28,5 +34,11 @@
   "license": "MIT",
   "engines": {
     "node": ">=0.12"
+  },
+  "nodemonConfig": {
+    "ignore": ["src/*"]
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^2.30.1"
   }
 }

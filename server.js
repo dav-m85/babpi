@@ -1,24 +1,22 @@
 const express = require('express')
 const app = express()
 const http = require('http').Server(app)
-const io = require('socket.io')(http)
-const low = require('lowdb')
-const storage = require('lowdb/file-sync')
 const path = require('path')
-const db = low(path.join(__dirname, 'db.json'), { storage: storage })
+const fs = require('fs')
 const Game = require('./src/server/Game')
 const Players = require('./src/server/Players')
 const Ranking = require('./src/server/Ranking')
 const meow = require('meow')
-
+const debug = require('debug')('app')
+const Actions = require('./src/actions')
 // Game init
-var players = new Players(db)
-var ranking = new Ranking(players)
-var game = new Game(io, db, {}, process.arch !== 'arm')
-game.onStartup()
-game.on('onWin', (status) => {
-  ranking.rankWith(status)
-})
+// var players = new Players(db)
+// var ranking = new Ranking(players)
+// var game = new Game(io, db, {}, process.arch !== 'arm')
+// game.onStartup()
+// game.on('onWin', (status) => {
+//   ranking.rankWith(status)
+// })
 
 // Argument processing
 const cli = meow(`
@@ -55,6 +53,7 @@ switch (options.control) {
     throw new Error('Unknown control method ' + options.control)
 }
 
+
 // DEV
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
@@ -70,16 +69,29 @@ app.use(webpackDevMiddleware(compiler, {
 // Static files
 app.use(express.static(path.join(__dirname, 'public')))
 
-require('./src/server/router')(app, options, players, db)
+require('./src/server/router')(app, options)
 
-io.on('connection', function (socket) {
-  game.onConnect(socket)
-
-  // io.emit('some event', { for: 'everyone' });
-  socket.on('disconnect', function () {
-    console.log('user disconnected')
-  })
+// Store creation
+const {createStore} = require('redux')
+const reducers = require('./src/server/reducers')
+const initialState = {
+  'currentGame': null,
+  'clients': 0,
+  'games': [],
+  'players': []
+}
+const store = createStore(reducers, initialState)
+store.subscribe(() => {
+  debug('STORE', store.getState())
 })
+
+// Load the initial database
+let data = JSON.parse(fs.readFileSync(path.join(__dirname, 'db.json')))
+store.dispatch(Actions.dbRead(data))
+
+const ClientHandler = require('./src/server/ClientHandler')
+const clientHandler = new ClientHandler(store)
+clientHandler.bind(http) // not sure on this one
 
 http.listen(options.port, function () {
   console.log('listening on *:' + options.port)

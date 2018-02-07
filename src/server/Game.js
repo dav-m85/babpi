@@ -60,11 +60,6 @@ assign(Game.prototype, Events, {
         console.log('onStartup');
         var that = this;
         this._clearEvents();
-        this.on('redShort blueShort redLong blueLong', function(){
-            // Acknowledgement that moves Ken
-            that.io.emit('moveKen');
-            console.log('moveKen');
-        });
         this._clearTimeout();
 
         this.status = {
