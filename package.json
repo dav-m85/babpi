@@ -32,7 +32,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node server.js",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest"
   },
   "author": "dav.m85@gmail.com",
   "license": "MIT",
@@ -50,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "html-webpack-plugin": "^2.30.1"
+    "html-webpack-plugin": "^2.30.1",
+    "jest": "^22.2.2"
   }
 }
