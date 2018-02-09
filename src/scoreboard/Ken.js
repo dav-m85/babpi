@@ -88,6 +88,9 @@ module.exports = class App extends React.Component {
   //         var walkRight = function(){
   //           $ken.addClass('walk').css({ marginLeft:'+=10px' });
   //         };
+  // <div className='stage'>
+  //   //     <div className='ken stance' />
+  //   //   </div>
 
   render () {
     return <div className='ken stance' />

@@ -3,9 +3,6 @@ const app = express()
 const http = require('http').Server(app)
 const path = require('path')
 const fs = require('fs')
-const Game = require('./src/server/Game')
-const Players = require('./src/server/Players')
-const Ranking = require('./src/server/Ranking')
 const meow = require('meow')
 const debug = require('debug')('app')
 const Actions = require('./src/actions')
@@ -28,6 +25,7 @@ const cli = meow(`
       --control
       --port
       --reverse
+      --webpack  Builds frontend files on the fly
 
     Examples
       $ node server.js --control=radio
@@ -36,7 +34,8 @@ const cli = meow(`
     address: {type: 'string', default: 'no address'},
     control: {type: 'string', default: 'debug'},
     port: {type: 'string', default: '3000'},
-    reverse: {type: 'boolean', default: false}
+    reverse: {type: 'boolean', default: false},
+    webpack: {type: 'boolean', default: false}
   }
 })
 const options = cli.flags
@@ -53,26 +52,28 @@ switch (options.control) {
     throw new Error('Unknown control method ' + options.control)
 }
 
-
 // DEV
-const webpack = require('webpack')
-const webpackDevMiddleware = require('webpack-dev-middleware')
-const webpackConfig = require('./webpack.config.js')
-const compiler = webpack(webpackConfig)
+if (options.webpack) {
+  const webpack = require('webpack')
+  const webpackDevMiddleware = require('webpack-dev-middleware')
+  const webpackConfig = require('./webpack.config.js')
+  const compiler = webpack(webpackConfig)
 
-// Tell express to use the webpack-dev-middleware and use the webpack.config.js
-// configuration file as a base.
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: webpackConfig.output.publicPath
-}))
+  // Tell express to use the webpack-dev-middleware and use the webpack.config.js
+  // configuration file as a base.
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath
+  }))
+}
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')))
 
 require('./src/server/router')(app, options)
 
-// Store creation
-const {createStore} = require('redux')
+const reduxDebug = require('redux-debug')
+
+const {createStore, applyMiddleware} = require('redux')
 const reducers = require('./src/server/reducers')
 const initialState = {
   'currentGame': null,
@@ -80,14 +81,15 @@ const initialState = {
   'games': [],
   'players': []
 }
-const store = createStore(reducers, initialState)
-store.subscribe(() => {
-  debug('STORE', store.getState())
-})
+const asyncDispatch = require('./src/server/AsyncDispatchMiddleware')
+const store = createStore(reducers, initialState, applyMiddleware(reduxDebug(debug), asyncDispatch))
+// store.subscribe(() => {
+//   debug('STORE', store.getState())
+// })
 
 // Load the initial database
-let data = JSON.parse(fs.readFileSync(path.join(__dirname, 'db.json')))
-store.dispatch(Actions.dbRead(data))
+// let data = JSON.parse(fs.readFileSync(path.join(__dirname, 'db.json')))
+// store.dispatch(Actions.dbRead(data))
 
 const ClientHandler = require('./src/server/ClientHandler')
 const clientHandler = new ClientHandler(store)

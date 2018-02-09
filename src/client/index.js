@@ -1,7 +1,7 @@
 const React = require('react')
 const io = require('socket.io-client')
 
-require('../../less/main.less')
+// require('../../less/main.less')
 
 class Booking extends React.Component {
   constructor (props, context) {

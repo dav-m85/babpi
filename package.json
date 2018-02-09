@@ -12,6 +12,8 @@
     "css-loader": "^0.28.9",
     "express": "^4.16.2",
     "jquery": "^2.2.2",
+    "json-diff-patch": "0.0.1",
+    "jsonpatch": "^3.0.1",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "lodash.assign": "4.0.6",
@@ -20,8 +22,10 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "redux": "^3.7.2",
+    "redux-debug": "^1.0.3",
     "socket.io": "^1.4.5",
     "style-loader": "^0.20.1",
+    "ts-trueskill": "^1.4.18",
     "webpack": "^3.10.0",
     "webpack-dev-middleware": "^2.0.4"
   },
@@ -36,7 +40,14 @@
     "node": ">=0.12"
   },
   "nodemonConfig": {
-    "ignore": ["src/*"]
+    "ignore": [
+      "src/scoreboard",
+      "src/client",
+      "node_modules",
+      "less",
+      "public",
+      "hardware"
+    ]
   },
   "devDependencies": {
     "html-webpack-plugin": "^2.30.1"
