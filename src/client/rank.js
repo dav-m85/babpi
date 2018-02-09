@@ -21,14 +21,16 @@ class Rank extends React.Component {
 
   render () {
     let players = this.state.players
-
+    let rank = (p) => Math.floor((p.mu - 3 * p.sigma) * 10) / 10
     return <div className='container'>
       <table className='table table-striped'>
         <tbody>{
-          players.reverse().map((p, i) => <tr key={i}>
-            <td>{'#' + (i + 1)}</td>
-            <td>{p.name + ' (' + p.ranking + ')'}</td>
-          </tr>)
+          players.sort((a, b) => (rank(b) - rank(a))).map((p, i) => {
+            return <tr key={i}>
+              <td>{'#' + (i + 1)}</td>
+              <td>{p.name + ' (' + rank(p) + ')'}</td>
+            </tr>
+          })
         }</tbody>
       </table>
 

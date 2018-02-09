@@ -186,3 +186,7 @@ Feel free to do a Pull Request.
 * https://www.reddit.com/r/AskElectronics/comments/2rqlhy/help_with_building_an_electronic_foosball_scoring/
 * http://www.semageek.com/projet-le-robot-champion-de-babyfoot-de-epfl/
 * Check [pongdome](https://github.com/busbud/pongdome) it's quite the same thing
+
+## Thanks
+- @discreetmayor for the original wireless hardware and firmware design
+- @thobardin for his suggestion on Trueskill, first python implementation and continous challenge at the soccer table

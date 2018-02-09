@@ -33,7 +33,7 @@ class History extends React.Component {
         <tbody id='gameTable'>{
           games.reverse().map((g, i) => <tr key={i}>
             <td>{i}</td>
-            <td>{(new Date(g.date)).toLocaleDateString()}</td>
+            <td>{(new Date(g.date < 1e12 ? g.date * 1000 : g.date)).toLocaleDateString()}</td>
             <td>{g.redScore + '/' + g.blueScore}</td>
             <td className={g.redScore > g.blueScore ? 'danger' : ''}>{g.redPlayers.join(' ')}</td>
             <td className={g.redScore < g.blueScore ? 'primary' : ''}>{g.bluePlayers.join(' ')}</td>

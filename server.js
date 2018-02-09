@@ -72,9 +72,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 require('./src/server/router')(app, options)
 
 const reduxDebug = require('redux-debug')
-
+const file = path.join(__dirname, 'db.json')
 const {createStore, applyMiddleware} = require('redux')
-const reducers = require('./src/server/reducers')
+const reducers = require('./src/server/reducers')({db: file})
 const initialState = {
   'currentGame': null,
   'clients': 0,
@@ -83,13 +83,12 @@ const initialState = {
 }
 const asyncDispatch = require('./src/server/AsyncDispatchMiddleware')
 const store = createStore(reducers, initialState, applyMiddleware(reduxDebug(debug), asyncDispatch))
-// store.subscribe(() => {
-//   debug('STORE', store.getState())
-// })
 
 // Load the initial database
-// let data = JSON.parse(fs.readFileSync(path.join(__dirname, 'db.json')))
-// store.dispatch(Actions.dbRead(data))
+if (fs.existsSync(file)) {
+  let data = JSON.parse(fs.readFileSync(file))
+  store.dispatch(Actions.dbRead(data))
+}
 
 const ClientHandler = require('./src/server/ClientHandler')
 const clientHandler = new ClientHandler(store)

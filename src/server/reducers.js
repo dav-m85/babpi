@@ -4,6 +4,7 @@ const {updateObject, updateItemInArray} = require('../reducerUtilities')
 const log = require('debug')('reducer')
 const { rate, Rating } = require('ts-trueskill')
 const winScore = 3
+const fs = require('fs')
 
 // bookingExpiration: 60000, // 60s
 // winnerDisplayTime: 15000, // 15s
@@ -224,7 +225,7 @@ function updatePlayers (players, game) {
 }
 
 // This special function archives a game
-module.exports = createReducer(
+module.exports = options => createReducer(
   combineReducers({
     currentGame,
     clients,
@@ -248,7 +249,13 @@ module.exports = createReducer(
         })
       }
 
-      // @todo store to db :)
+      if (options.db) {
+        fs.writeFileSync(options.db, JSON.stringify({
+          games: state.games,
+          players: state.players
+        }), 'utf8')
+      }
+
       return state
     }
   }
