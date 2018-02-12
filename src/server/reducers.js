@@ -9,7 +9,17 @@ const fs = require('fs')
 // bookingExpiration: 60000, // 60s
 // winnerDisplayTime: 15000, // 15s
 // winScore: 10
-
+// function reducer(state, action) {
+//   switch (action.type) {
+//     case "fetch-start":
+//       fetch('wwww.example.com')
+//         .then(r => r.json())
+//         .then(r => action.asyncDispatch({ type: "fetch-response", value: r }))
+//       return state;
+//     case "fetch-response":
+//       return Object.assign({}, state, { whatever: action.value });;
+//   }
+// }
 // TODO rebook assign regarding ranks, except replays
 
 // Deal with client connection/deconnection from socket.io
@@ -41,75 +51,113 @@ function currentGame (state = null, action) {
         log('game already on !')
       }
       return state
-    case Actions.PRESS:
-      // Let's create a new game
-      if (!state) {
-        // No game yet, do nothing...
-        log('no game yet')
-        return state
-      } else {
-        // GAMES ON
-        switch (state.is) {
-          case 'booked':
-            if (action.duration === 'short') {
-              return updateObject(state, {is: 'playing'})
-            } else {
-              setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
+    default:
+      return state
+  }
+}
 
-              return updateObject(state, {is: 'cancelled'})
-            }
-          case 'playing':
-            if (action.duration === 'short') {
-              if (action.button === 'red') {
-                let score = ++state.redScore
-                if (score >= winScore) {
-                  setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
+function pressReducer (state, action) {
+  let game = state.currentGame
+  let updateGame = (what) => updateObject(state, {currentGame: updateObject(state.currentGame, what)})
+  let update = (game, screen) => Object.assign({}, {
+    currentGame: updateObject(state.currentGame, game),
+    screen: updateObject(state.screen, screen)
+  })
+  // Let's create a new game
+  if (!game) {
+    if (action.duration === 'long') {
+      // No game yet, do nothing...
+      return update({
+        'is': 'build',
+        'redPlayers': [],
+        'bluePlayers': [],
+        'redScore': 0,
+        'blueScore': 0,
+        'date': Date.now() / 1000 | 0
+      }, {
+        options: ['jouer', 'retirer joueur', 'annuler', ...state.players.map(p => p.name)]
+      })
+    } else {
+      // hadoken
+      let selection = state.screen.options[0]
+      switch (selection) {
+        case 'jouer':
+          break
 
-                  return updateObject(state, {
-                    is: 'win',
-                    redScore: score
-                  })
-                }
-                return updateObject(state, {redScore: score})
-              } else {
-                let score = ++state.blueScore
-                if (score >= winScore) {
-                  setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
+        case 'retirer joueur':
+          break
 
-                  return updateObject(state, {
-                    is: 'win',
-                    blueScore: score
-                  })
-                }
-                return updateObject(state, {blueScore: score})
-              }
-            } else {
-              console.log('deal with long click while playing')
-              return state
-            }
-          default:
-            return state
-        }
+        case 'annuler':
+          setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
+          return updateGame({is: 'cancelled'})
+
+        default:
+          return update({
+            'is': 'build',
+            'redPlayers': game.redPlayers.concat(selection),
+            'bluePlayers': [],
+            'redScore': 0,
+            'blueScore': 0,
+            'date': Date.now() / 1000 | 0
+          }, {
+            options: state.screen.options.slice(1)
+          })
       }
-    default:
       return state
-  }
-}
+    }
+  } else {
+    // GAMES ON
+    switch (game.is) {
+      case 'booked':
+        if (action.duration === 'short') {
+          return updateGame({is: 'playing'})
+        } else {
+          setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
 
-function players (state = null, action) {
-  switch (action.type) {
-    case Actions.DB_READ:
-      return action.data.players
-    default:
-      return state
-  }
-}
+          return updateGame({is: 'cancelled'})
+        }
 
-function games (state = null, action) {
-  switch (action.type) {
-    case Actions.DB_READ:
-      return action.data.games
-    // case Actions.PRESS:
+      case 'build':
+        if (action.duration === 'short') {
+          // this.unshift.apply( this, this.splice( n, this.length ) )
+          let opt = state.screen.options
+          opt.push(opt.shift())
+          return update({}, {
+            options: opt
+          })
+        } else {
+          setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
+
+          return updateGame({is: 'cancelled'})
+        }
+
+      case 'playing':
+        if (action.duration === 'short') {
+          if (action.button === 'red') {
+            let score = ++state.redScore
+            if (score >= winScore) {
+              setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
+              return updateGame({is: 'win', redScore: score})
+            }
+            return updateGame({redScore: score})
+          } else {
+            let score = ++state.blueScore
+            if (score >= winScore) {
+              setTimeout(() => action.asyncDispatch(Actions.archive()), 3000)
+              return updateGame({is: 'win', blueScore: score})
+            }
+            return updateGame({blueScore: score})
+          }
+        } else {
+          console.log('deal with long click while playing')
+          return state
+        }
+
+      default:
+        return state
+    }
+  }
+  // case Actions.PRESS:
     //   // do we have a pending game ?
 
     //   if (!state) {
@@ -118,29 +166,25 @@ function games (state = null, action) {
     //   } else {
 
     //   }
+}
 
+function players (state = [], action) {
+  switch (action.type) {
+    case Actions.DB_READ:
+      return action.data.players
     default:
       return state
   }
 }
 
-// {
-//   clients: int, // num of connected
-//   games: [{
-//     "is": "win",
-//     "redPlayers": [
-//       "jj1",
-//       "dav"
-//     ],
-//     "bluePlayers": [
-//       "aud",
-//       "chr"
-//     ],
-//     "redScore": 8,
-//     "blueScore": 10,
-//     "date": 1517608759819
-//   }]
-// }
+function games (state = [], action) {
+  switch (action.type) {
+    case Actions.DB_READ:
+      return action.data.games
+    default:
+      return state
+  }
+}
 
 function createReducer (defaultReducer, actionReducers) {
   return function (state, action) {
@@ -152,19 +196,6 @@ function createReducer (defaultReducer, actionReducers) {
     }
   }
 }
-
-// function reducer(state, action) {
-//   switch (action.type) {
-//     case "fetch-start":
-//       fetch('wwww.example.com')
-//         .then(r => r.json())
-//         .then(r => action.asyncDispatch({ type: "fetch-response", value: r }))
-//       return state;
-
-//     case "fetch-response":
-//       return Object.assign({}, state, { whatever: action.value });;
-//   }
-// }
 
 function updatePlayers (players, game) {
   // Add missing player if not in players list
@@ -224,6 +255,32 @@ function updatePlayers (players, game) {
   return players.map(p => Object.assign({}, p))
 }
 
+const archiveReducer = (options) => (state, action) => {
+  const g = state.currentGame
+  if (g && (g.is === 'win' || g.is === 'cancelled')) {
+    // Compute player mu/sigma
+    let players = state.players
+    if (g.is === 'win') {
+      players = updatePlayers(players, state.currentGame)
+    }
+
+    state = Object.assign({}, state, {
+      games: [...state.games, state.currentGame],
+      currentGame: null,
+      players
+    })
+  }
+
+  if (options.db) {
+    fs.writeFileSync(options.db, JSON.stringify({
+      games: state.games,
+      players: state.players
+    }), 'utf8')
+  }
+
+  return state
+}
+
 // This special function archives a game
 module.exports = options => createReducer(
   combineReducers({
@@ -233,30 +290,7 @@ module.exports = options => createReducer(
     games
   }),
   {
-    'ARCHIVE': function (state, action) {
-      const g = state.currentGame
-      if (g && (g.is === 'win' || g.is === 'cancelled')) {
-        // Compute player mu/sigma
-        let players = state.players
-        if (g.is === 'win') {
-          players = updatePlayers(players, state.currentGame)
-        }
-
-        state = Object.assign({}, state, {
-          games: [...state.games, state.currentGame],
-          currentGame: null,
-          players
-        })
-      }
-
-      if (options.db) {
-        fs.writeFileSync(options.db, JSON.stringify({
-          games: state.games,
-          players: state.players
-        }), 'utf8')
-      }
-
-      return state
-    }
+    'ARCHIVE': archiveReducer(options),
+    'PRESS': pressReducer
   }
 )

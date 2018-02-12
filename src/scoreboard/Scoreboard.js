@@ -37,42 +37,65 @@ module.exports = class App extends React.Component {
     }, false)
   }
   render () {
-    let bigInstr = ''
+    let title = ''
     let instr = ''
+    let main = ''
     let score = ''
     let {currentGame} = this.state
     if (!currentGame) {
-      bigInstr = 'Start game on<br />' + 'address'
-      instr = ''
+      title = <p>Start game on<br /></p>
+      instr = <p>
+        . hadoken<br />
+        _ commencer une partie
+      </p>
       score = ''
     } else {
       let blues = currentGame.bluePlayers.join(', ')
       let reds = currentGame.redPlayers.join(', ')
       switch (currentGame.is) {
+        case 'build':
+          title = 'Sélection des joueurs'
+          main = this.state.screen && this.state.screen.options.map((m, k) => { return <p key={k}>{k === 0 ? '> ' : ''}{m}</p> })
+          instr = <p>
+            . suivant<br />
+            _ sélection
+          </p>
+          score = <p><span className='blue'>{blues}</span> VS <span className='red'>{reds}</span></p>
+          break
         case 'booked':
-          bigInstr = 'Push any button to start'
-          instr = 'Long push to cancel'
-          score = `<span class="blue">${blues}</span> VS <span class="red">${reds}</span>`
+          title = ''
+          instr = <p>
+            . jouer !<br />
+            _ annuler la partie
+          </p>
+          score = <p><span className='blue'>{blues}</span> VS <span className='red'>{reds}</span></p>
           break
         case 'playing':
-          bigInstr = ''
-          instr = 'Push to score<br />Long push to stop'
-          score = `<span class="blue">${blues}</span> VS <span class="red">${reds}</span><br /><span class="big">${currentGame.blueScore} - ${currentGame.redScore}</span>`
+          title = ''
+          instr = <p>
+            . point<br />
+            _ annuler le point<br />
+            _ + _ annuler la partie
+          </p>
+          score = <p>
+            <span className='blue'>{blues}</span> VS <span className='red'>{reds}</span><br />
+            <span class='big'>{currentGame.blueScore} - {currentGame.redScore}</span>
+          </p>
           break
         case 'win':
-          instr = 'Win'
+          title = 'Win'
           break
         default:
-          instr = 'Euuhhh'
+          title = 'Euuhhh'
           break
       }
     }
 
     return <div>
-      <div className='instruction blink' dangerouslySetInnerHTML={{__html: bigInstr}} />
-      <div className='instruction' dangerouslySetInnerHTML={{__html: instr}} />
-      <div className='score' dangerouslySetInnerHTML={{__html: score}} />
-      <div className='leaderboard' />
+      <div className='instruction blink'>{title}</div>
+      {main}
+      <div className='instruction'>{instr}</div>
+      <div className='score'>{score}</div>
     </div>
   }
 }

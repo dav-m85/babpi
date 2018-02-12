@@ -31,3 +31,15 @@ test('ARCHIVE computes new player rank', () => {
 
   expect(state.players.filter(a => a.name === 'dav').pop().mu).toBeTruthy()
 })
+
+test('PRESS adds player', () => {
+  let state = reducers({
+    currentGame: aWonGame,
+    players: [],
+    games: []
+  }, Actions.archive())
+
+  console.log(state)
+
+  expect(state.players.filter(a => a.name === 'dav').pop().mu).toBeTruthy()
+})
