@@ -1,26 +1,11 @@
 const React = require('react')
-const io = require('socket.io-client')
+const remoteStateSocket = require('../remoteStateSocket')
 
-require('../../less/main.less')
+// require('../../less/main.less')
 
 class Rank extends React.Component {
-  constructor (props, context) {
-    super(props, context)
-    this.state = {
-      players: []
-    }
-
-    this.socket = io()
-  }
-
-  componentDidMount () {
-    this.socket.on('state', (data) => {
-      this.setState(data)
-    })
-  }
-
   render () {
-    let players = this.state.players
+    let players = this.props.players
     let rank = (p) => Math.floor((p.mu - 3 * p.sigma) * 10) / 10
     return <div className='container'>
       <table className='table table-striped'>
@@ -44,4 +29,4 @@ class Rank extends React.Component {
 }
 
 const {render} = require('react-dom')
-render(<Rank />, document.body)
+render(React.createElement(remoteStateSocket(Rank)), document.body)

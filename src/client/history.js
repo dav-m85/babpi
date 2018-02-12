@@ -1,26 +1,11 @@
 const React = require('react')
-const io = require('socket.io-client')
+const remoteStateSocket = require('../remoteStateSocket')
 
-require('../../less/main.less')
+// require('../../less/main.less')
 
 class History extends React.Component {
-  constructor (props, context) {
-    super(props, context)
-    this.state = {
-      games: []
-    }
-
-    this.socket = io()
-  }
-
-  componentDidMount () {
-    this.socket.on('state', (data) => {
-      this.setState(data)
-    })
-  }
-
   render () {
-    let games = this.state.games.filter(g => g.is === 'win')
+    let games = this.props.games.filter(g => g.is === 'win')
     return <div className='container'>
       <table className='table table-striped'>
         <thead><tr>
@@ -51,4 +36,4 @@ class History extends React.Component {
 }
 
 const {render} = require('react-dom')
-render(<History />, document.body)
+render(React.createElement(remoteStateSocket(History)), document.body)

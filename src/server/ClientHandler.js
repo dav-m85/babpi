@@ -1,6 +1,7 @@
 const SocketIo = require('socket.io')
 const debug = require('debug')('client')
 const Actions = require('../actions')
+const jsonpatch = require('fast-json-patch')
 
 // @todo handle smaller payloads with jsonpatch
 module.exports = class ClientHandler {
@@ -13,16 +14,19 @@ module.exports = class ClientHandler {
     this.io = SocketIo(http)
     this.io.on('connection', (socket) => {
       debug('Client connection')
-      const unsubscribe = this.store.subscribe(() => {
-        socket.emit('state', this.store.getState())
-      })
-      this.store.dispatch(Actions.clientConnect())
-      socket.emit('state', this.store.getState())
+
+      // We init the client's state
+      let currentClientState = this.store.getState()
+      socket.emit('state', currentClientState)
 
       // Send store update to distant client
-      this.store.subscribe(() => {
-        socket.emit('state', this.store.getState())
+      const unsubscribe = this.store.subscribe(() => {
+        let newClientState = this.store.getState()
+        let diff = jsonpatch.compare(currentClientState, newClientState)
+        socket.emit('diff-state', diff)
+        currentClientState = newClientState
       })
+      this.store.dispatch(Actions.clientConnect())
 
       // Bind incoming onBook
       socket.on('onBook', (data) => {

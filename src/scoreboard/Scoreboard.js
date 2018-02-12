@@ -1,22 +1,8 @@
 const React = require('react')
-const io = require('socket.io-client')
 
 module.exports = class App extends React.Component {
-  constructor (props, context) {
-    super(props, context)
-    this.state = {
-      currentGame: null,
-      players: [],
-      games: []
-    }
-  }
   componentDidMount () {
-    var socket = io()
-
-    socket.on('state', (data) => {
-      console.log(data)
-      this.setState(data)
-    })
+    let socket = this.props.socket
 
     // Attach default key pressing
     window.addEventListener('keypress', function (e) {
@@ -41,7 +27,7 @@ module.exports = class App extends React.Component {
     let instr = ''
     let main = ''
     let score = ''
-    let {currentGame} = this.state
+    let {currentGame} = this.props
     if (!currentGame) {
       title = <p>Start game on<br /></p>
       instr = <p>
@@ -55,7 +41,7 @@ module.exports = class App extends React.Component {
       switch (currentGame.is) {
         case 'build':
           title = 'Sélection des joueurs'
-          main = this.state.screen && this.state.screen.options.map((m, k) => { return <p key={k}>{k === 0 ? '> ' : ''}{m}</p> })
+          main = this.props.screen && this.props.screen.options.map((m, k) => { return <p key={k}>{k === 0 ? '> ' : ''}{m}</p> })
           instr = <p>
             . suivant<br />
             _ sélection

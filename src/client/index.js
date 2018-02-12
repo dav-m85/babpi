@@ -1,25 +1,12 @@
 const React = require('react')
-const io = require('socket.io-client')
+const remoteStateSocket = require('../remoteStateSocket')
 
 // require('../../less/main.less')
 
 class Booking extends React.Component {
   constructor (props, context) {
     super(props, context)
-    this.state = {
-      currentGame: null,
-      players: [],
-      games: []
-    }
-
     this.bookGame = this.bookGame.bind(this)
-    this.socket = io()
-  }
-
-  componentDidMount () {
-    this.socket.on('state', (data) => {
-      this.setState(data)
-    })
   }
 
   bookGame (event) {
@@ -36,17 +23,15 @@ class Booking extends React.Component {
     let team1 = clean(this.team1.value)
     let team2 = clean(this.team2.value)
 
-    this.socket.emit('onBook', [
+    this.props.socket.emit('onBook', [
       team1,
       team2
     ])
-
-    this.setState({currentGame: true}) // make sure interface disappear
   }
 
   render () {
     return <div className='container'>
-      {!this.state.currentGame
+      {!this.props.currentGame
       ? <div>
         <p>Enter players</p>
         <form id='bookAGame' className='form-horizontal'>
@@ -78,4 +63,4 @@ class Booking extends React.Component {
 }
 
 const {render} = require('react-dom')
-render(<Booking />, document.body)
+render(React.createElement(remoteStateSocket(Booking)), document.body)
