@@ -1,14 +1,13 @@
 const React = require('react')
 
-module.exports = (props) => (
+module.exports = ({game}) => (
   <div>
     <p>
-      . ok<br />
-      _ rematch
+      . ok
     </p>
     <p>
-      <span className='blue'>{blues}</span> VS <span className='red'>{reds}</span><br />
-      <span class='big'>{currentGame.blueScore} - {currentGame.redScore}</span>
+      <span className='blue'>{game.bluePlayers.join(' ')}</span> VS <span className='red'>{game.redPlayers.join(' ')}</span><br />
+      <span class='big'>{game.blueScore} - {game.redScore}</span>
     </p>
   </div>
 )

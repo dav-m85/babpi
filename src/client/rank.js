@@ -5,7 +5,7 @@ const remoteStateSocket = require('../remoteStateSocket')
 
 class Rank extends React.Component {
   render () {
-    let players = this.props.players
+    let players = this.props.players || []
     let rank = (p) => Math.floor((p.mu - 3 * p.sigma) * 10) / 10
     return <div className='container'>
       <table className='table table-striped'>

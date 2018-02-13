@@ -6,14 +6,6 @@ const fs = require('fs')
 const meow = require('meow')
 const debug = require('debug')('app')
 const Actions = require('./src/actions')
-// Game init
-// var players = new Players(db)
-// var ranking = new Ranking(players)
-// var game = new Game(io, db, {}, process.arch !== 'arm')
-// game.onStartup()
-// game.on('onWin', (status) => {
-//   ranking.rankWith(status)
-// })
 
 // Argument processing
 const cli = meow(`

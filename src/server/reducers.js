@@ -74,10 +74,9 @@ const uiReducer = (game, players, state = {
   // on short we rotate the display, aka just incrementing the index
   // on long we may change the game status (captured later in pressReducer haha)
   if (action.duration === 'short') {
-    return updateObject(state, {index: state.index + 1})
+    return updateObject(state, {index: (state.index + 1) % (2 + players.length - state.players.length)})
   } else {
-    let menu = state.index % (2 + players.length) // play, remove, ...players
-    switch (menu) {
+    switch (state.index) {
       case 0: // play the game
         return state
       case 1: // remove one player
@@ -87,13 +86,12 @@ const uiReducer = (game, players, state = {
         if (availables.length === 0) {
           return state
         }
-        log('AVAILABLES ### ', availables)
 
         let newP = state.players.slice()
-        newP.push(availables[menu - 2])
+        newP.push(availables[state.index - 2])
         return updateObject(state, {
           players: newP,
-          index: 0
+          index: state.index - 1
         })
     }
   }
