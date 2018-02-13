@@ -1,20 +1,25 @@
 const React = require('react')
 const socket = require('socket.io-client')()
-const DiffSocket = require('./diff-socket')
+const jsonpatch = require('fast-json-patch')
 
-module.exports = (WrappedComponent) => class RemoteStateSocket extends React.Component {
+module.exports = (WrappedComponent, initialState) => class RemoteStateSocket extends React.Component {
   constructor (props, context) {
     super(props, context)
-    // Some state definition
-    this.state = {
-      currentGame: null,
-      players: [],
-      games: []
-    }
+    this.state = initialState
   }
 
   componentDidMount () {
-    DiffSocket(socket, this)
+    socket.on('state', (state) => {
+      this.setState(state)
+      console.log('STATE', state)
+    })
+
+    socket.on('diff-state', (patch) => {
+      let state = jsonpatch.deepClone(this.state)
+      jsonpatch.applyPatch(state, jsonpatch.deepClone(patch))
+      this.setState(state)
+      console.log('STATE', state)
+    })
   }
 
   render () {

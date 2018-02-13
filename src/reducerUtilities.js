@@ -16,4 +16,14 @@ function updateItemInArray (array, itemId, updateItemCallback) {
   })
 }
 
-module.exports = {updateObject, updateItemInArray}
+function createReducer (actionReducers) {
+  return function (state, action) {
+    if (actionReducers.hasOwnProperty(action.type)) {
+      return actionReducers[action.type](state, action)
+    } else {
+      return state
+    }
+  }
+}
+
+module.exports = {updateObject, updateItemInArray, createReducer}

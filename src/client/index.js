@@ -31,7 +31,7 @@ class Booking extends React.Component {
 
   render () {
     return <div className='container'>
-      {!this.props.currentGame
+      {!this.props.game
       ? <div>
         <p>Enter players</p>
         <form id='bookAGame' className='form-horizontal'>

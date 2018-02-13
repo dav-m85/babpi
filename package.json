@@ -31,7 +31,8 @@
   "scripts": {
     "test": "jest",
     "server": "node server.js",
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "author": "dav.m85@gmail.com",
   "license": "MIT",

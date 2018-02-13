@@ -43,5 +43,8 @@ module.exports = {
       filename: 'rank.html',
       chunks: ['rank']
     })
-  ]
+  ],
+  watchOptions: {
+    ignored: [/node_modules/, 'src/server', 'src/tests']
+  }
 }
