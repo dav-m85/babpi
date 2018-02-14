@@ -31,15 +31,8 @@
 
 // Instructions at top
 .instruction {
-  width: 100%;
-  font-size: 2em;
-  text-align: center;
-  margin-top: 1em;
-
-  &.blink {
-    text-transform: uppercase;
-    animation: blinker 2s linear infinite;
-  }
+  position: absolute;
+  bottom: 0
 }
 
 // Score
@@ -48,12 +41,14 @@
   width: 100%;
   font-size: 3em;
   text-align: center;
-  span.red{color:red;}
-  span.blue{color:lightblue;}
+
   span.big{
     font-size:6em;
   }
 }
+
+span.red{color:red;}
+span.blue{color:lightblue;}
 
 // Player
 @playerHeight: 72px;
@@ -90,4 +85,8 @@ footer {
 
 .table > tbody > tr > td.primary {
   background-color: @brand-primary;
+}
+
+.list {
+  list-style-type: none;
 }

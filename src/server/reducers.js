@@ -56,7 +56,7 @@ function game (state = null, action) {
 }
 
 function dbReadReducer (state = [], action) {
-  return Object.assign({}, action.data)
+  return Object.assign({}, state, action.data)
 }
 
 const archiveReducer = require('./archiveReducer')
@@ -102,14 +102,13 @@ module.exports = options => (state, action) => {
   let intermediateState = combineReducers({
     clients,
     game,
-    games: (x = []) => x,
-    players: identity([{
-      name: 'dav'
-    }, {
-      name: 'bob'
-    }]),
+    games: identity([]),
+    options: identity({}),
+    players: identity([]),
     ui: uiReducer.bind(null, state ? state.game : {}, state ? state.players : [])
   })(state, action)
+
+  log(JSON.stringify([state.options, intermediateState.options]))
 
   return createReducer( // crossSliceReducer @see https://redux.js.org/docs/recipes/reducers/BeyondCombineReducers.html
     {

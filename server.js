@@ -16,7 +16,8 @@ const cli = meow(`
       --address
       --control
       --port
-      --reverse
+      --swap Swap the logical button red and blue, in case you got something wrong in the wiring
+      --swapcolor Swap the position of the red color on the other side
       --webpack  Builds frontend files on the fly
 
     Examples
@@ -26,14 +27,15 @@ const cli = meow(`
     address: {type: 'string', default: 'no address'},
     control: {type: 'string', default: 'debug'},
     port: {type: 'string', default: '3000'},
-    reverse: {type: 'boolean', default: false},
+    swap: {type: 'boolean', default: false},
+    swapcolor: {type: 'boolean', default: false},
     webpack: {type: 'boolean', default: false}
   }
 })
 const options = cli.flags
 switch (options.control) {
   case 'radio':
-    require('./src/server/RadioControl').bind(game, options.reverse)
+    require('./src/server/RadioControl').bind(game, options.swap)
     break
   case 'wire':
     require('./src/server/GpioControl').bind(require('onoff').Gpio, game)
@@ -67,14 +69,16 @@ const reduxDebug = require('redux-debug')
 const file = path.join(__dirname, 'db.json')
 const {createStore, applyMiddleware} = require('redux')
 const reducers = require('./src/server/reducers')({db: file})
-const initialState = {
-  'currentGame': null,
-  'clients': 0,
-  'games': [],
-  'players': []
-}
 const asyncDispatch = require('./src/server/AsyncDispatchMiddleware')
-const store = createStore(reducers, initialState, applyMiddleware(reduxDebug(debug), asyncDispatch))
+const init = {
+  // clients: 2,
+  // game: { is: 'building' },
+  // games: [],
+  // players: [ { name: 'dav' }, { name: 'bob' } ]
+  options
+}
+console.log(init)
+const store = createStore(reducers, init, applyMiddleware(reduxDebug(debug), asyncDispatch))
 
 // Load the initial database
 if (fs.existsSync(file)) {

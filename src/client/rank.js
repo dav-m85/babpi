@@ -1,7 +1,7 @@
 const React = require('react')
 const remoteStateSocket = require('../remoteStateSocket')
 
-// require('../../less/main.less')
+require('../../less/client.less')
 
 class Rank extends React.Component {
   render () {

@@ -2,7 +2,7 @@ const React = require('react')
 const remoteStateSocket = require('../remoteStateSocket')
 const moment = require('moment')
 
-// require('../../less/main.less')
+require('../../less/client.less')
 
 class History extends React.Component {
   render () {

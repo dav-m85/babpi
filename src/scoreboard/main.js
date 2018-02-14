@@ -2,6 +2,8 @@ const {render} = require('react-dom')
 const React = require('react')
 const remoteStateSocket = require('../remoteStateSocket')
 
+require('../../less/scoreboard.less')
+
 class App extends React.Component {
   componentDidMount () {
     let socket = this.props.socket

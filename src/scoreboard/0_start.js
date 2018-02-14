@@ -1,20 +1,22 @@
 const React = require('react')
+const {Instr, Red, Blue, swap} = require('./shared')
 
-module.exports = ({players}) => {
+module.exports = ({players, options}) => {
+  let Baby = swap(options, <Red>Baby</Red>, <Blue>Baby</Blue>)
+  let foot = swap(options, <Red>foot</Red>, <Blue>foot</Blue>)
   let rank = (p) => Math.floor((p.mu - 3 * p.sigma) * 10) / 10
   return <div>
-    Ranking !
-    <ul>
+    <h3>{Baby.Red}{foot.Blue}</h3>
+    <ul className='list'>
       {players.sort((a, b) => (rank(b) - rank(a))).map((p, i) => {
-        return <tr key={i}>
-          <td>{'#' + (i + 1)}</td>
-          <td>{p.name + ' (' + rank(p) + ')'}</td>
-        </tr>
+        return <li key={i}>
+          {'#' + (i + 1)} {p.name + ' (' + rank(p) + ')'}
+        </li>
       })}
     </ul>
-    <p>
+    <Instr>
       . hadoken<br />
       _ commencer une partie
-    </p>
+    </Instr>
   </div>
 }
