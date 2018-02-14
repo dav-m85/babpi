@@ -7,35 +7,21 @@
   100% { opacity: 0; }
 }
 
-// homeRank
-.homeRank {
-  height: 50%;
-  width: 100%;
-  position:absolute;
-  top:50%;
-}
-
-// bottom leaderboard
-.leaderboard {
-  width: 100%;
-  position:absolute;
-  bottom: 0px;
-  white-space: nowrap;
-  overflow: hidden;
+.list {
+  list-style-type: none;
 }
 
 .form-control {
   color: black;
+  border: 3px solid @input-border;
 }
 
-
-// Instructions at top
 .instruction {
   position: absolute;
-  bottom: 0
+  bottom: 0;
+  padding: 15px;
 }
 
-// Score
 .score {
   margin-top: 3em;
   width: 100%;
@@ -50,32 +36,6 @@
 span.red{color:red;}
 span.blue{color:lightblue;}
 
-// Player
-@playerHeight: 72px;
-.player {
-  position: relative;
-  padding-left: @playerHeight;
-  height: @playerHeight;
-  .player-avatar {
-    position:absolute;
-    left: 0;
-    width:@playerHeight; height:@playerHeight;
-    border-radius: @playerHeight / 2;
-  }
-  .player-name {
-    line-height: @playerHeight / 2;
-    font-size: 2em;
-  }
-  .player-rank {
-    line-height: @playerHeight / 2;
-    font-size: 1em;
-  }
-}
-
-.form-control {
-  border: 3px solid @input-border;
-}
-
 footer {
   display: block;
   position: absolute;
@@ -87,6 +47,3 @@ footer {
   background-color: @brand-primary;
 }
 
-.list {
-  list-style-type: none;
-}

@@ -37,6 +37,10 @@ You already have ```git```, ```pip``` ```python``` and ```node``` if you followe
 
 Run the following commands once ssh logged:
 
+    # Latest node version
+    curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
+    sudo apt install nodejs
+
     # Setup python for the ranking system
     sudo pip install trueskill
 
