@@ -33,12 +33,28 @@ const cli = meow(`
   }
 })
 const options = cli.flags
+
+const reduxDebug = require('redux-debug')
+const file = path.join(__dirname, 'db.json')
+const {createStore, applyMiddleware} = require('redux')
+const reducers = require('./src/server/reducers')({db: file})
+const asyncDispatch = require('./src/server/AsyncDispatchMiddleware')
+const init = {
+  // clients: 2,
+  // game: { is: 'building' },
+  // games: [],
+  // players: [ { name: 'dav' }, { name: 'bob' } ]
+  options
+}
+console.log(init)
+const store = createStore(reducers, init, applyMiddleware(reduxDebug(debug), asyncDispatch))
+
 switch (options.control) {
   case 'radio':
-    require('./src/server/RadioControl').bind(game, options.swap)
+    require('./src/server/RadioControl').bind(store, options.swap)
     break
   case 'wire':
-    require('./src/server/GpioControl').bind(require('onoff').Gpio, game)
+    require('./src/server/GpioControl').bind(require('onoff').Gpio, store)
     break
   case 'debug':
     break
@@ -64,21 +80,6 @@ if (options.webpack) {
 app.use(express.static(path.join(__dirname, 'public')))
 
 require('./src/server/router')(app, options)
-
-const reduxDebug = require('redux-debug')
-const file = path.join(__dirname, 'db.json')
-const {createStore, applyMiddleware} = require('redux')
-const reducers = require('./src/server/reducers')({db: file})
-const asyncDispatch = require('./src/server/AsyncDispatchMiddleware')
-const init = {
-  // clients: 2,
-  // game: { is: 'building' },
-  // games: [],
-  // players: [ { name: 'dav' }, { name: 'bob' } ]
-  options
-}
-console.log(init)
-const store = createStore(reducers, init, applyMiddleware(reduxDebug(debug), asyncDispatch))
 
 // Load the initial database
 if (fs.existsSync(file)) {
