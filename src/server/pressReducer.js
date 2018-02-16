@@ -2,6 +2,7 @@
 const {updateObject} = require('../reducerUtilities')
 const Actions = require('../actions')
 const winScore = 10
+const log = require('debug')('reducer')
 
 let updateGame = (state, what) => updateObject(state, {game: updateObject(state.game, what)})
 
@@ -57,6 +58,7 @@ function view_2_booked (state, {duration, button, asyncDispatch}) {
   switch (duration) {
     case 'short': return updateGame(state, {is: 'playing'})
     case 'long':
+      log('ARCHIVE in view_2_booked')
       setTimeout(() => asyncDispatch(Actions.archive()), 3000)
       return updateGame(state, {is: 'cancelled'})
     default: return state
@@ -68,6 +70,7 @@ function view_3_playing (state, {duration, button, asyncDispatch}) {
     if (button === 'red') {
       let score = state.game.redScore + 1
       if (score >= winScore) {
+        log('ARCHIVE in view_3_playing')
         setTimeout(() => asyncDispatch(Actions.archive()), 15000)
         return updateGame(state, {is: 'win', redScore: score})
       }
@@ -75,6 +78,7 @@ function view_3_playing (state, {duration, button, asyncDispatch}) {
     } else {
       let score = state.game.blueScore + 1
       if (score >= winScore) {
+        log('ARCHIVE in view_3_playing')
         setTimeout(() => asyncDispatch(Actions.archive()), 15000)
         return updateGame(state, {is: 'win', blueScore: score})
       }
@@ -84,6 +88,7 @@ function view_3_playing (state, {duration, button, asyncDispatch}) {
     if (button === 'red') {
       let score = state.game.redScore - 1
       if (score < 0) {
+        log('ARCHIVE in view_3_playing')
         asyncDispatch(Actions.archive())
         return updateGame(state, {is: 'cancelled'})
       }
@@ -91,6 +96,7 @@ function view_3_playing (state, {duration, button, asyncDispatch}) {
     } else {
       let score = state.game.blueScore - 1
       if (score < 0) {
+        log('ARCHIVE in view_3_playing')
         asyncDispatch(Actions.archive())
         return updateGame(state, {is: 'cancelled'})
       }
@@ -102,9 +108,11 @@ function view_3_playing (state, {duration, button, asyncDispatch}) {
 function view_4_win (state, {duration, asyncDispatch}) {
   switch (duration) {
     case 'short':
+      log('ARCHIVE in view_4_win')
       asyncDispatch(Actions.archive())
       return state
     case 'long':
+      log('ARCHIVE in view_4_win')
       asyncDispatch(Actions.archive()) // new action rematch ?
       return state
     default: return state

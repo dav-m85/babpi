@@ -44,7 +44,7 @@ const init = {
   options
 }
 console.log(init)
-const store = createStore(reducers, init, applyMiddleware(reduxDebug(debugStore), asyncDispatch))
+const store = createStore(reducers, init, applyMiddleware(reduxDebug(debugStore, {collapsed: true}), asyncDispatch))
 
 switch (options.control) {
   case 'radio':

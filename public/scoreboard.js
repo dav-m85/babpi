@@ -17973,6 +17973,7 @@ module.exports = ({ players, options }) => {
     'foot'
   ));
   let rank = p => Math.floor((p.mu - 3 * p.sigma) * 10) / 10;
+  let playersCopy = players.slice().sort((a, b) => rank(b) - rank(a));
   return React.createElement(
     'div',
     null,
@@ -17985,7 +17986,7 @@ module.exports = ({ players, options }) => {
     React.createElement(
       'div',
       { className: 'menu' },
-      players.sort((a, b) => rank(b) - rank(a)).map((p, i) => {
+      playersCopy.map((p, i) => {
         return React.createElement(
           'div',
           { className: 'menu-item', key: i },

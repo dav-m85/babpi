@@ -1,7 +1,11 @@
 const { rate, Rating } = require('ts-trueskill')
 const fs = require('fs')
+const jsonpatch = require('fast-json-patch')
 
-function updatePlayers (players, game) {
+function updatePlayers (nplayers, game) {
+  // lets deep copy players
+  let players = jsonpatch.deepClone(nplayers)
+
   // Add missing player if not in players list
   game.redPlayers.concat(game.bluePlayers).forEach(p => {
     if (players.filter(fp => fp.name === p).length === 0) {
@@ -56,7 +60,7 @@ function updatePlayers (players, game) {
     rankThem(game.bluePlayers, game.redPlayers)
   }
 
-  return players.map(p => Object.assign({}, p))
+  return players
 }
 
 module.exports = (options) => (state, action) => {
