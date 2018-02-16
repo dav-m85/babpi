@@ -18,12 +18,14 @@ module.exports = class ClientHandler {
       // We init the client's state
       let currentClientState = this.store.getState()
       socket.emit('state', currentClientState)
+      debug('state to client', currentClientState)
 
       // Send store update to distant client
       const unsubscribe = this.store.subscribe(() => {
         let newClientState = this.store.getState()
         let diff = jsonpatch.compare(currentClientState, newClientState)
         socket.emit('diff-state', diff)
+        debug('diff to client', diff)
         currentClientState = newClientState
       })
       this.store.dispatch(Actions.clientConnect())

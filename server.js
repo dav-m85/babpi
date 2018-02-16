@@ -5,6 +5,7 @@ const path = require('path')
 const fs = require('fs')
 const meow = require('meow')
 const debug = require('debug')('app')
+const debugStore = require('debug')('store')
 const Actions = require('./src/actions')
 
 // Argument processing
@@ -40,14 +41,10 @@ const {createStore, applyMiddleware} = require('redux')
 const reducers = require('./src/server/reducers')({db: file})
 const asyncDispatch = require('./src/server/AsyncDispatchMiddleware')
 const init = {
-  // clients: 2,
-  // game: { is: 'building' },
-  // games: [],
-  // players: [ { name: 'dav' }, { name: 'bob' } ]
   options
 }
 console.log(init)
-const store = createStore(reducers, init, applyMiddleware(reduxDebug(debug), asyncDispatch))
+const store = createStore(reducers, init, applyMiddleware(reduxDebug(debugStore), asyncDispatch))
 
 switch (options.control) {
   case 'radio':
