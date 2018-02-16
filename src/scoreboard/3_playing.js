@@ -1,19 +1,19 @@
 const React = require('react')
-const {Instr, Red, Blue, swap} = require('./shared')
+const {Red, Blue, swap} = require('./shared')
 
 module.exports = ({game, options}) => {
   let Players = swap(options, <Red>{game.redPlayers.join(' ')}</Red>, <Blue>{game.bluePlayers.join(' ')}</Blue>)
-  let score = swap(options, game.redScore, game.blueScore)
+  let Score = swap(options, game.redScore, game.blueScore)
   return <div>
-    <h3>Partie en cours</h3>
-    <Instr>
+    <h3 className='text-center'>Partie en cours</h3>
+
+    <div className='versus'>{Players.Red} VS {Players.Blue}</div>
+
+    <div className='score'>{Score.Red} - {Score.Blue}</div>
+
+    <div className='instruction'>
       . point<br />
       _ annuler le point
-    </Instr>
-    <p>
-      {Players.Red} VS
-      {Players.Blue}<br />
-      <span className='big'>{score.Red} - {score.Blue}</span>
-    </p>
+    </div>
   </div>
 }

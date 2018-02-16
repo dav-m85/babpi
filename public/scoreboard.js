@@ -17662,11 +17662,6 @@ module.exports = camelize;
 const React = __webpack_require__(5);
 
 module.exports = {
-  Instr: props => React.createElement(
-    'div',
-    { className: 'instruction' },
-    props.children
-  ),
   Red: ({ children }) => React.createElement(
     'span',
     { className: 'red' },
@@ -17872,16 +17867,20 @@ class App extends React.Component {
 
 // require('../../less/main.less')
 
-render(React.createElement(remoteStateSocket(App, {
-  clients: 0,
-  game: null,
-  games: [],
-  players: [],
-  ui: {
-    index: 0,
-    players: []
-  }
-})), document.body);
+render(React.createElement(
+  'div',
+  { className: 'scoreboard' },
+  React.createElement(remoteStateSocket(App, {
+    clients: 0,
+    game: null,
+    games: [],
+    players: [],
+    ui: {
+      index: 0,
+      players: []
+    }
+  }))
+), document.body);
 
 /***/ }),
 /* 216 */
@@ -17942,7 +17941,7 @@ exports = module.exports = __webpack_require__(80)(false);
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);", ""]);
 
 // module
-exports.push([module.i, "/*! normalize.css v3.0.2 | MIT License | git.io/normalize */\nhtml {\n  font-family: sans-serif;\n  -ms-text-size-adjust: 100%;\n  -webkit-text-size-adjust: 100%;\n}\nbody {\n  margin: 0;\n}\narticle,\naside,\ndetails,\nfigcaption,\nfigure,\nfooter,\nheader,\nhgroup,\nmain,\nmenu,\nnav,\nsection,\nsummary {\n  display: block;\n}\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block;\n  vertical-align: baseline;\n}\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n[hidden],\ntemplate {\n  display: none;\n}\na {\n  background-color: transparent;\n}\na:active,\na:hover {\n  outline: 0;\n}\nabbr[title] {\n  border-bottom: 1px dotted;\n}\nb,\nstrong {\n  font-weight: bold;\n}\ndfn {\n  font-style: italic;\n}\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\nmark {\n  background: #ff0;\n  color: #000;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\nsup {\n  top: -0.5em;\n}\nsub {\n  bottom: -0.25em;\n}\nimg {\n  border: 0;\n}\nsvg:not(:root) {\n  overflow: hidden;\n}\nfigure {\n  margin: 1em 40px;\n}\nhr {\n  -moz-box-sizing: content-box;\n  box-sizing: content-box;\n  height: 0;\n}\npre {\n  overflow: auto;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  color: inherit;\n  font: inherit;\n  margin: 0;\n}\nbutton {\n  overflow: visible;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\nhtml input[type=\"button\"],\ninput[type=\"reset\"],\ninput[type=\"submit\"] {\n  -webkit-appearance: button;\n  cursor: pointer;\n}\nbutton[disabled],\nhtml input[disabled] {\n  cursor: default;\n}\nbutton::-moz-focus-inner,\ninput::-moz-focus-inner {\n  border: 0;\n  padding: 0;\n}\ninput {\n  line-height: normal;\n}\ninput[type=\"checkbox\"],\ninput[type=\"radio\"] {\n  box-sizing: border-box;\n  padding: 0;\n}\ninput[type=\"number\"]::-webkit-inner-spin-button,\ninput[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: textfield;\n  -moz-box-sizing: content-box;\n  -webkit-box-sizing: content-box;\n  box-sizing: content-box;\n}\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\nfieldset {\n  border: 1px solid #c0c0c0;\n  margin: 0 2px;\n  padding: 0.35em 0.625em 0.75em;\n}\nlegend {\n  border: 0;\n  padding: 0;\n}\ntextarea {\n  overflow: auto;\n}\noptgroup {\n  font-weight: bold;\n}\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\ntd,\nth {\n  padding: 0;\n}\n* {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n*:before,\n*:after {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\nhtml {\n  font-size: 10px;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n}\nbody {\n  font-family: 'Press Start 2P', cursive;\n  font-size: 16px;\n  line-height: 1.42857143;\n  color: #FFF;\n  background-color: #060606;\n}\ninput,\nbutton,\nselect,\ntextarea {\n  font-family: inherit;\n  font-size: inherit;\n  line-height: inherit;\n}\na {\n  color: #2A9FD6;\n  text-decoration: none;\n}\na:hover,\na:focus {\n  color: #2A9FD6;\n  text-decoration: underline;\n}\na:focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\nfigure {\n  margin: 0;\n}\nimg {\n  vertical-align: middle;\n}\n.img-responsive {\n  display: block;\n  max-width: 100%;\n  height: auto;\n}\n.img-rounded {\n  border-radius: 6px;\n}\n.img-thumbnail {\n  padding: 4px;\n  line-height: 1.42857143;\n  background-color: #282828;\n  border: 1px solid #282828;\n  border-radius: 0px;\n  -webkit-transition: all 0.2s ease-in-out;\n  -o-transition: all 0.2s ease-in-out;\n  transition: all 0.2s ease-in-out;\n  display: inline-block;\n  max-width: 100%;\n  height: auto;\n}\n.img-circle {\n  border-radius: 50%;\n}\nhr {\n  margin-top: 22px;\n  margin-bottom: 22px;\n  border: 0;\n  border-top: 1px solid #282828;\n}\n.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  margin: -1px;\n  padding: 0;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  border: 0;\n}\n.sr-only-focusable:active,\n.sr-only-focusable:focus {\n  position: static;\n  width: auto;\n  height: auto;\n  margin: 0;\n  overflow: visible;\n  clip: auto;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\n.h1,\n.h2,\n.h3,\n.h4,\n.h5,\n.h6 {\n  font-family: 'Press Start 2P', cursive;\n  font-weight: 500;\n  line-height: 1.1;\n  color: #fff;\n}\nh1 small,\nh2 small,\nh3 small,\nh4 small,\nh5 small,\nh6 small,\n.h1 small,\n.h2 small,\n.h3 small,\n.h4 small,\n.h5 small,\n.h6 small,\nh1 .small,\nh2 .small,\nh3 .small,\nh4 .small,\nh5 .small,\nh6 .small,\n.h1 .small,\n.h2 .small,\n.h3 .small,\n.h4 .small,\n.h5 .small,\n.h6 .small {\n  font-weight: normal;\n  line-height: 1;\n  color: #888;\n}\nh1,\n.h1,\nh2,\n.h2,\nh3,\n.h3 {\n  margin-top: 22px;\n  margin-bottom: 11px;\n}\nh1 small,\n.h1 small,\nh2 small,\n.h2 small,\nh3 small,\n.h3 small,\nh1 .small,\n.h1 .small,\nh2 .small,\n.h2 .small,\nh3 .small,\n.h3 .small {\n  font-size: 65%;\n}\nh4,\n.h4,\nh5,\n.h5,\nh6,\n.h6 {\n  margin-top: 11px;\n  margin-bottom: 11px;\n}\nh4 small,\n.h4 small,\nh5 small,\n.h5 small,\nh6 small,\n.h6 small,\nh4 .small,\n.h4 .small,\nh5 .small,\n.h5 .small,\nh6 .small,\n.h6 .small {\n  font-size: 75%;\n}\nh1,\n.h1 {\n  font-size: 56px;\n}\nh2,\n.h2 {\n  font-size: 45px;\n}\nh3,\n.h3 {\n  font-size: 34px;\n}\nh4,\n.h4 {\n  font-size: 24px;\n}\nh5,\n.h5 {\n  font-size: 20px;\n}\nh6,\n.h6 {\n  font-size: 16px;\n}\np {\n  margin: 0 0 11px;\n}\n.lead {\n  margin-bottom: 22px;\n  font-size: 18px;\n  font-weight: 300;\n  line-height: 1.4;\n}\n@media (min-width: 768px) {\n  .lead {\n    font-size: 24px;\n  }\n}\nsmall,\n.small {\n  font-size: 50%;\n}\nmark,\n.mark {\n  background-color: #FF8800;\n  padding: .2em;\n}\n.text-left {\n  text-align: left;\n}\n.text-right {\n  text-align: right;\n}\n.text-center {\n  text-align: center;\n}\n.text-justify {\n  text-align: justify;\n}\n.text-nowrap {\n  white-space: nowrap;\n}\n.text-lowercase {\n  text-transform: lowercase;\n}\n.text-uppercase {\n  text-transform: uppercase;\n}\n.text-capitalize {\n  text-transform: capitalize;\n}\n.text-muted {\n  color: #888;\n}\n.text-primary {\n  color: #2A9FD6;\n}\na.text-primary:hover {\n  color: #2180ac;\n}\n.text-success {\n  color: #fff;\n}\na.text-success:hover {\n  color: #e6e6e6;\n}\n.text-info {\n  color: #fff;\n}\na.text-info:hover {\n  color: #e6e6e6;\n}\n.text-warning {\n  color: #fff;\n}\na.text-warning:hover {\n  color: #e6e6e6;\n}\n.text-danger {\n  color: #f00;\n}\na.text-danger:hover {\n  color: #cc0000;\n}\n.bg-primary {\n  color: #fff;\n  background-color: #2A9FD6;\n}\na.bg-primary:hover {\n  background-color: #2180ac;\n}\n.bg-success {\n  background-color: #77B300;\n}\na.bg-success:hover {\n  background-color: #558000;\n}\n.bg-info {\n  background-color: #9933CC;\n}\na.bg-info:hover {\n  background-color: #7a29a3;\n}\n.bg-warning {\n  background-color: #FF8800;\n}\na.bg-warning:hover {\n  background-color: #cc6d00;\n}\n.bg-danger {\n  background-color: #CC0000;\n}\na.bg-danger:hover {\n  background-color: #990000;\n}\n.page-header {\n  padding-bottom: 10px;\n  margin: 44px 0 22px;\n  border-bottom: 1px solid #282828;\n}\nul,\nol {\n  margin-top: 0;\n  margin-bottom: 11px;\n}\nul ul,\nol ul,\nul ol,\nol ol {\n  margin-bottom: 0;\n}\n.list-unstyled {\n  padding-left: 0;\n  list-style: none;\n}\n.list-inline {\n  padding-left: 0;\n  list-style: none;\n  margin-left: -5px;\n}\n.list-inline > li {\n  display: inline-block;\n  padding-left: 5px;\n  padding-right: 5px;\n}\ndl {\n  margin-top: 0;\n  margin-bottom: 22px;\n}\ndt,\ndd {\n  line-height: 1.42857143;\n}\ndt {\n  font-weight: bold;\n}\ndd {\n  margin-left: 0;\n}\n@media (min-width: 768px) {\n  .dl-horizontal dt {\n    float: left;\n    width: 160px;\n    clear: left;\n    text-align: right;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n  }\n  .dl-horizontal dd {\n    margin-left: 180px;\n  }\n}\nabbr[title],\nabbr[data-original-title] {\n  cursor: help;\n  border-bottom: 1px dotted #888;\n}\n.initialism {\n  font-size: 90%;\n  text-transform: uppercase;\n}\nblockquote {\n  padding: 11px 22px;\n  margin: 0 0 22px;\n  font-size: 20px;\n  border-left: 5px solid #282828;\n}\nblockquote p:last-child,\nblockquote ul:last-child,\nblockquote ol:last-child {\n  margin-bottom: 0;\n}\nblockquote footer,\nblockquote small,\nblockquote .small {\n  display: block;\n  font-size: 80%;\n  line-height: 1.42857143;\n  color: #555;\n}\nblockquote footer:before,\nblockquote small:before,\nblockquote .small:before {\n  content: '\\2014   \\A0';\n}\n.blockquote-reverse,\nblockquote.pull-right {\n  padding-right: 15px;\n  padding-left: 0;\n  border-right: 5px solid #282828;\n  border-left: 0;\n  text-align: right;\n}\n.blockquote-reverse footer:before,\nblockquote.pull-right footer:before,\n.blockquote-reverse small:before,\nblockquote.pull-right small:before,\n.blockquote-reverse .small:before,\nblockquote.pull-right .small:before {\n  content: '';\n}\n.blockquote-reverse footer:after,\nblockquote.pull-right footer:after,\n.blockquote-reverse small:after,\nblockquote.pull-right small:after,\n.blockquote-reverse .small:after,\nblockquote.pull-right .small:after {\n  content: '\\A0   \\2014';\n}\naddress {\n  margin-bottom: 22px;\n  font-style: normal;\n  line-height: 1.42857143;\n}\n@keyframes blinker {\n  0% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 1;\n  }\n  50.01% {\n    opacity: 0;\n  }\n  100% {\n    opacity: 0;\n  }\n}\n.homeRank {\n  height: 50%;\n  width: 100%;\n  position: absolute;\n  top: 50%;\n}\n.leaderboard {\n  width: 100%;\n  position: absolute;\n  bottom: 0px;\n  white-space: nowrap;\n  overflow: hidden;\n}\n.form-control {\n  color: black;\n}\n.instruction {\n  position: absolute;\n  bottom: 0;\n}\n.score {\n  margin-top: 3em;\n  width: 100%;\n  font-size: 3em;\n  text-align: center;\n}\n.score span.big {\n  font-size: 6em;\n}\nspan.red {\n  color: red;\n}\nspan.blue {\n  color: lightblue;\n}\n.player {\n  position: relative;\n  padding-left: 72px;\n  height: 72px;\n}\n.player .player-avatar {\n  position: absolute;\n  left: 0;\n  width: 72px;\n  height: 72px;\n  border-radius: 36px;\n}\n.player .player-name {\n  line-height: 36px;\n  font-size: 2em;\n}\n.player .player-rank {\n  line-height: 36px;\n  font-size: 1em;\n}\n.form-control {\n  border: 3px solid #282828;\n}\nfooter {\n  display: block;\n  position: absolute;\n  bottom: 0;\n  text-align: center;\n}\n.table > tbody > tr > td.primary {\n  background-color: #2A9FD6;\n}\n.list {\n  list-style-type: none;\n}\n", ""]);
+exports.push([module.i, "/*! normalize.css v3.0.2 | MIT License | git.io/normalize */\nhtml {\n  font-family: sans-serif;\n  -ms-text-size-adjust: 100%;\n  -webkit-text-size-adjust: 100%;\n}\nbody {\n  margin: 0;\n}\narticle,\naside,\ndetails,\nfigcaption,\nfigure,\nfooter,\nheader,\nhgroup,\nmain,\nmenu,\nnav,\nsection,\nsummary {\n  display: block;\n}\naudio,\ncanvas,\nprogress,\nvideo {\n  display: inline-block;\n  vertical-align: baseline;\n}\naudio:not([controls]) {\n  display: none;\n  height: 0;\n}\n[hidden],\ntemplate {\n  display: none;\n}\na {\n  background-color: transparent;\n}\na:active,\na:hover {\n  outline: 0;\n}\nabbr[title] {\n  border-bottom: 1px dotted;\n}\nb,\nstrong {\n  font-weight: bold;\n}\ndfn {\n  font-style: italic;\n}\nh1 {\n  font-size: 2em;\n  margin: 0.67em 0;\n}\nmark {\n  background: #ff0;\n  color: #000;\n}\nsmall {\n  font-size: 80%;\n}\nsub,\nsup {\n  font-size: 75%;\n  line-height: 0;\n  position: relative;\n  vertical-align: baseline;\n}\nsup {\n  top: -0.5em;\n}\nsub {\n  bottom: -0.25em;\n}\nimg {\n  border: 0;\n}\nsvg:not(:root) {\n  overflow: hidden;\n}\nfigure {\n  margin: 1em 40px;\n}\nhr {\n  -moz-box-sizing: content-box;\n  box-sizing: content-box;\n  height: 0;\n}\npre {\n  overflow: auto;\n}\ncode,\nkbd,\npre,\nsamp {\n  font-family: monospace, monospace;\n  font-size: 1em;\n}\nbutton,\ninput,\noptgroup,\nselect,\ntextarea {\n  color: inherit;\n  font: inherit;\n  margin: 0;\n}\nbutton {\n  overflow: visible;\n}\nbutton,\nselect {\n  text-transform: none;\n}\nbutton,\nhtml input[type=\"button\"],\ninput[type=\"reset\"],\ninput[type=\"submit\"] {\n  -webkit-appearance: button;\n  cursor: pointer;\n}\nbutton[disabled],\nhtml input[disabled] {\n  cursor: default;\n}\nbutton::-moz-focus-inner,\ninput::-moz-focus-inner {\n  border: 0;\n  padding: 0;\n}\ninput {\n  line-height: normal;\n}\ninput[type=\"checkbox\"],\ninput[type=\"radio\"] {\n  box-sizing: border-box;\n  padding: 0;\n}\ninput[type=\"number\"]::-webkit-inner-spin-button,\ninput[type=\"number\"]::-webkit-outer-spin-button {\n  height: auto;\n}\ninput[type=\"search\"] {\n  -webkit-appearance: textfield;\n  -moz-box-sizing: content-box;\n  -webkit-box-sizing: content-box;\n  box-sizing: content-box;\n}\ninput[type=\"search\"]::-webkit-search-cancel-button,\ninput[type=\"search\"]::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\nfieldset {\n  border: 1px solid #c0c0c0;\n  margin: 0 2px;\n  padding: 0.35em 0.625em 0.75em;\n}\nlegend {\n  border: 0;\n  padding: 0;\n}\ntextarea {\n  overflow: auto;\n}\noptgroup {\n  font-weight: bold;\n}\ntable {\n  border-collapse: collapse;\n  border-spacing: 0;\n}\ntd,\nth {\n  padding: 0;\n}\n* {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n*:before,\n*:after {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\nhtml {\n  font-size: 10px;\n  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);\n}\nbody {\n  font-family: 'Press Start 2P', cursive;\n  font-size: 16px;\n  line-height: 1.42857143;\n  color: #FFF;\n  background-color: #060606;\n}\ninput,\nbutton,\nselect,\ntextarea {\n  font-family: inherit;\n  font-size: inherit;\n  line-height: inherit;\n}\na {\n  color: #2A9FD6;\n  text-decoration: none;\n}\na:hover,\na:focus {\n  color: #2A9FD6;\n  text-decoration: underline;\n}\na:focus {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px;\n}\nfigure {\n  margin: 0;\n}\nimg {\n  vertical-align: middle;\n}\n.img-responsive {\n  display: block;\n  max-width: 100%;\n  height: auto;\n}\n.img-rounded {\n  border-radius: 6px;\n}\n.img-thumbnail {\n  padding: 4px;\n  line-height: 1.42857143;\n  background-color: #282828;\n  border: 1px solid #282828;\n  border-radius: 0px;\n  -webkit-transition: all 0.2s ease-in-out;\n  -o-transition: all 0.2s ease-in-out;\n  transition: all 0.2s ease-in-out;\n  display: inline-block;\n  max-width: 100%;\n  height: auto;\n}\n.img-circle {\n  border-radius: 50%;\n}\nhr {\n  margin-top: 22px;\n  margin-bottom: 22px;\n  border: 0;\n  border-top: 1px solid #282828;\n}\n.sr-only {\n  position: absolute;\n  width: 1px;\n  height: 1px;\n  margin: -1px;\n  padding: 0;\n  overflow: hidden;\n  clip: rect(0, 0, 0, 0);\n  border: 0;\n}\n.sr-only-focusable:active,\n.sr-only-focusable:focus {\n  position: static;\n  width: auto;\n  height: auto;\n  margin: 0;\n  overflow: visible;\n  clip: auto;\n}\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\n.h1,\n.h2,\n.h3,\n.h4,\n.h5,\n.h6 {\n  font-family: 'Press Start 2P', cursive;\n  font-weight: 500;\n  line-height: 1.1;\n  color: #fff;\n}\nh1 small,\nh2 small,\nh3 small,\nh4 small,\nh5 small,\nh6 small,\n.h1 small,\n.h2 small,\n.h3 small,\n.h4 small,\n.h5 small,\n.h6 small,\nh1 .small,\nh2 .small,\nh3 .small,\nh4 .small,\nh5 .small,\nh6 .small,\n.h1 .small,\n.h2 .small,\n.h3 .small,\n.h4 .small,\n.h5 .small,\n.h6 .small {\n  font-weight: normal;\n  line-height: 1;\n  color: #888;\n}\nh1,\n.h1,\nh2,\n.h2,\nh3,\n.h3 {\n  margin-top: 22px;\n  margin-bottom: 11px;\n}\nh1 small,\n.h1 small,\nh2 small,\n.h2 small,\nh3 small,\n.h3 small,\nh1 .small,\n.h1 .small,\nh2 .small,\n.h2 .small,\nh3 .small,\n.h3 .small {\n  font-size: 65%;\n}\nh4,\n.h4,\nh5,\n.h5,\nh6,\n.h6 {\n  margin-top: 11px;\n  margin-bottom: 11px;\n}\nh4 small,\n.h4 small,\nh5 small,\n.h5 small,\nh6 small,\n.h6 small,\nh4 .small,\n.h4 .small,\nh5 .small,\n.h5 .small,\nh6 .small,\n.h6 .small {\n  font-size: 75%;\n}\nh1,\n.h1 {\n  font-size: 56px;\n}\nh2,\n.h2 {\n  font-size: 45px;\n}\nh3,\n.h3 {\n  font-size: 34px;\n}\nh4,\n.h4 {\n  font-size: 24px;\n}\nh5,\n.h5 {\n  font-size: 20px;\n}\nh6,\n.h6 {\n  font-size: 16px;\n}\np {\n  margin: 0 0 11px;\n}\n.lead {\n  margin-bottom: 22px;\n  font-size: 18px;\n  font-weight: 300;\n  line-height: 1.4;\n}\n@media (min-width: 768px) {\n  .lead {\n    font-size: 24px;\n  }\n}\nsmall,\n.small {\n  font-size: 50%;\n}\nmark,\n.mark {\n  background-color: #FF8800;\n  padding: .2em;\n}\n.text-left {\n  text-align: left;\n}\n.text-right {\n  text-align: right;\n}\n.text-center {\n  text-align: center;\n}\n.text-justify {\n  text-align: justify;\n}\n.text-nowrap {\n  white-space: nowrap;\n}\n.text-lowercase {\n  text-transform: lowercase;\n}\n.text-uppercase {\n  text-transform: uppercase;\n}\n.text-capitalize {\n  text-transform: capitalize;\n}\n.text-muted {\n  color: #888;\n}\n.text-primary {\n  color: #2A9FD6;\n}\na.text-primary:hover {\n  color: #2180ac;\n}\n.text-success {\n  color: #fff;\n}\na.text-success:hover {\n  color: #e6e6e6;\n}\n.text-info {\n  color: #fff;\n}\na.text-info:hover {\n  color: #e6e6e6;\n}\n.text-warning {\n  color: #fff;\n}\na.text-warning:hover {\n  color: #e6e6e6;\n}\n.text-danger {\n  color: #f00;\n}\na.text-danger:hover {\n  color: #cc0000;\n}\n.bg-primary {\n  color: #fff;\n  background-color: #2A9FD6;\n}\na.bg-primary:hover {\n  background-color: #2180ac;\n}\n.bg-success {\n  background-color: #77B300;\n}\na.bg-success:hover {\n  background-color: #558000;\n}\n.bg-info {\n  background-color: #9933CC;\n}\na.bg-info:hover {\n  background-color: #7a29a3;\n}\n.bg-warning {\n  background-color: #FF8800;\n}\na.bg-warning:hover {\n  background-color: #cc6d00;\n}\n.bg-danger {\n  background-color: #CC0000;\n}\na.bg-danger:hover {\n  background-color: #990000;\n}\n.page-header {\n  padding-bottom: 10px;\n  margin: 44px 0 22px;\n  border-bottom: 1px solid #282828;\n}\nul,\nol {\n  margin-top: 0;\n  margin-bottom: 11px;\n}\nul ul,\nol ul,\nul ol,\nol ol {\n  margin-bottom: 0;\n}\n.list-unstyled {\n  padding-left: 0;\n  list-style: none;\n}\n.list-inline {\n  padding-left: 0;\n  list-style: none;\n  margin-left: -5px;\n}\n.list-inline > li {\n  display: inline-block;\n  padding-left: 5px;\n  padding-right: 5px;\n}\ndl {\n  margin-top: 0;\n  margin-bottom: 22px;\n}\ndt,\ndd {\n  line-height: 1.42857143;\n}\ndt {\n  font-weight: bold;\n}\ndd {\n  margin-left: 0;\n}\n@media (min-width: 768px) {\n  .dl-horizontal dt {\n    float: left;\n    width: 160px;\n    clear: left;\n    text-align: right;\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n  }\n  .dl-horizontal dd {\n    margin-left: 180px;\n  }\n}\nabbr[title],\nabbr[data-original-title] {\n  cursor: help;\n  border-bottom: 1px dotted #888;\n}\n.initialism {\n  font-size: 90%;\n  text-transform: uppercase;\n}\nblockquote {\n  padding: 11px 22px;\n  margin: 0 0 22px;\n  font-size: 20px;\n  border-left: 5px solid #282828;\n}\nblockquote p:last-child,\nblockquote ul:last-child,\nblockquote ol:last-child {\n  margin-bottom: 0;\n}\nblockquote footer,\nblockquote small,\nblockquote .small {\n  display: block;\n  font-size: 80%;\n  line-height: 1.42857143;\n  color: #555;\n}\nblockquote footer:before,\nblockquote small:before,\nblockquote .small:before {\n  content: '\\2014   \\A0';\n}\n.blockquote-reverse,\nblockquote.pull-right {\n  padding-right: 15px;\n  padding-left: 0;\n  border-right: 5px solid #282828;\n  border-left: 0;\n  text-align: right;\n}\n.blockquote-reverse footer:before,\nblockquote.pull-right footer:before,\n.blockquote-reverse small:before,\nblockquote.pull-right small:before,\n.blockquote-reverse .small:before,\nblockquote.pull-right .small:before {\n  content: '';\n}\n.blockquote-reverse footer:after,\nblockquote.pull-right footer:after,\n.blockquote-reverse small:after,\nblockquote.pull-right small:after,\n.blockquote-reverse .small:after,\nblockquote.pull-right .small:after {\n  content: '\\A0   \\2014';\n}\naddress {\n  margin-bottom: 22px;\n  font-style: normal;\n  line-height: 1.42857143;\n}\n.container {\n  margin-right: auto;\n  margin-left: auto;\n  padding-left: 15px;\n  padding-right: 15px;\n}\n@media (min-width: 768px) {\n  .container {\n    width: 750px;\n  }\n}\n@media (min-width: 992px) {\n  .container {\n    width: 970px;\n  }\n}\n@media (min-width: 1200px) {\n  .container {\n    width: 1170px;\n  }\n}\n.container-fluid {\n  margin-right: auto;\n  margin-left: auto;\n  padding-left: 15px;\n  padding-right: 15px;\n}\n.row {\n  margin-left: -15px;\n  margin-right: -15px;\n}\n.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {\n  position: relative;\n  min-height: 1px;\n  padding-left: 15px;\n  padding-right: 15px;\n}\n.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {\n  float: left;\n}\n.col-xs-12 {\n  width: 100%;\n}\n.col-xs-11 {\n  width: 91.66666667%;\n}\n.col-xs-10 {\n  width: 83.33333333%;\n}\n.col-xs-9 {\n  width: 75%;\n}\n.col-xs-8 {\n  width: 66.66666667%;\n}\n.col-xs-7 {\n  width: 58.33333333%;\n}\n.col-xs-6 {\n  width: 50%;\n}\n.col-xs-5 {\n  width: 41.66666667%;\n}\n.col-xs-4 {\n  width: 33.33333333%;\n}\n.col-xs-3 {\n  width: 25%;\n}\n.col-xs-2 {\n  width: 16.66666667%;\n}\n.col-xs-1 {\n  width: 8.33333333%;\n}\n.col-xs-pull-12 {\n  right: 100%;\n}\n.col-xs-pull-11 {\n  right: 91.66666667%;\n}\n.col-xs-pull-10 {\n  right: 83.33333333%;\n}\n.col-xs-pull-9 {\n  right: 75%;\n}\n.col-xs-pull-8 {\n  right: 66.66666667%;\n}\n.col-xs-pull-7 {\n  right: 58.33333333%;\n}\n.col-xs-pull-6 {\n  right: 50%;\n}\n.col-xs-pull-5 {\n  right: 41.66666667%;\n}\n.col-xs-pull-4 {\n  right: 33.33333333%;\n}\n.col-xs-pull-3 {\n  right: 25%;\n}\n.col-xs-pull-2 {\n  right: 16.66666667%;\n}\n.col-xs-pull-1 {\n  right: 8.33333333%;\n}\n.col-xs-pull-0 {\n  right: auto;\n}\n.col-xs-push-12 {\n  left: 100%;\n}\n.col-xs-push-11 {\n  left: 91.66666667%;\n}\n.col-xs-push-10 {\n  left: 83.33333333%;\n}\n.col-xs-push-9 {\n  left: 75%;\n}\n.col-xs-push-8 {\n  left: 66.66666667%;\n}\n.col-xs-push-7 {\n  left: 58.33333333%;\n}\n.col-xs-push-6 {\n  left: 50%;\n}\n.col-xs-push-5 {\n  left: 41.66666667%;\n}\n.col-xs-push-4 {\n  left: 33.33333333%;\n}\n.col-xs-push-3 {\n  left: 25%;\n}\n.col-xs-push-2 {\n  left: 16.66666667%;\n}\n.col-xs-push-1 {\n  left: 8.33333333%;\n}\n.col-xs-push-0 {\n  left: auto;\n}\n.col-xs-offset-12 {\n  margin-left: 100%;\n}\n.col-xs-offset-11 {\n  margin-left: 91.66666667%;\n}\n.col-xs-offset-10 {\n  margin-left: 83.33333333%;\n}\n.col-xs-offset-9 {\n  margin-left: 75%;\n}\n.col-xs-offset-8 {\n  margin-left: 66.66666667%;\n}\n.col-xs-offset-7 {\n  margin-left: 58.33333333%;\n}\n.col-xs-offset-6 {\n  margin-left: 50%;\n}\n.col-xs-offset-5 {\n  margin-left: 41.66666667%;\n}\n.col-xs-offset-4 {\n  margin-left: 33.33333333%;\n}\n.col-xs-offset-3 {\n  margin-left: 25%;\n}\n.col-xs-offset-2 {\n  margin-left: 16.66666667%;\n}\n.col-xs-offset-1 {\n  margin-left: 8.33333333%;\n}\n.col-xs-offset-0 {\n  margin-left: 0%;\n}\n@media (min-width: 768px) {\n  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {\n    float: left;\n  }\n  .col-sm-12 {\n    width: 100%;\n  }\n  .col-sm-11 {\n    width: 91.66666667%;\n  }\n  .col-sm-10 {\n    width: 83.33333333%;\n  }\n  .col-sm-9 {\n    width: 75%;\n  }\n  .col-sm-8 {\n    width: 66.66666667%;\n  }\n  .col-sm-7 {\n    width: 58.33333333%;\n  }\n  .col-sm-6 {\n    width: 50%;\n  }\n  .col-sm-5 {\n    width: 41.66666667%;\n  }\n  .col-sm-4 {\n    width: 33.33333333%;\n  }\n  .col-sm-3 {\n    width: 25%;\n  }\n  .col-sm-2 {\n    width: 16.66666667%;\n  }\n  .col-sm-1 {\n    width: 8.33333333%;\n  }\n  .col-sm-pull-12 {\n    right: 100%;\n  }\n  .col-sm-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-sm-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-sm-pull-9 {\n    right: 75%;\n  }\n  .col-sm-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-sm-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-sm-pull-6 {\n    right: 50%;\n  }\n  .col-sm-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-sm-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-sm-pull-3 {\n    right: 25%;\n  }\n  .col-sm-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-sm-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-sm-pull-0 {\n    right: auto;\n  }\n  .col-sm-push-12 {\n    left: 100%;\n  }\n  .col-sm-push-11 {\n    left: 91.66666667%;\n  }\n  .col-sm-push-10 {\n    left: 83.33333333%;\n  }\n  .col-sm-push-9 {\n    left: 75%;\n  }\n  .col-sm-push-8 {\n    left: 66.66666667%;\n  }\n  .col-sm-push-7 {\n    left: 58.33333333%;\n  }\n  .col-sm-push-6 {\n    left: 50%;\n  }\n  .col-sm-push-5 {\n    left: 41.66666667%;\n  }\n  .col-sm-push-4 {\n    left: 33.33333333%;\n  }\n  .col-sm-push-3 {\n    left: 25%;\n  }\n  .col-sm-push-2 {\n    left: 16.66666667%;\n  }\n  .col-sm-push-1 {\n    left: 8.33333333%;\n  }\n  .col-sm-push-0 {\n    left: auto;\n  }\n  .col-sm-offset-12 {\n    margin-left: 100%;\n  }\n  .col-sm-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-sm-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-sm-offset-9 {\n    margin-left: 75%;\n  }\n  .col-sm-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-sm-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-sm-offset-6 {\n    margin-left: 50%;\n  }\n  .col-sm-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-sm-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-sm-offset-3 {\n    margin-left: 25%;\n  }\n  .col-sm-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-sm-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-sm-offset-0 {\n    margin-left: 0%;\n  }\n}\n@media (min-width: 992px) {\n  .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {\n    float: left;\n  }\n  .col-md-12 {\n    width: 100%;\n  }\n  .col-md-11 {\n    width: 91.66666667%;\n  }\n  .col-md-10 {\n    width: 83.33333333%;\n  }\n  .col-md-9 {\n    width: 75%;\n  }\n  .col-md-8 {\n    width: 66.66666667%;\n  }\n  .col-md-7 {\n    width: 58.33333333%;\n  }\n  .col-md-6 {\n    width: 50%;\n  }\n  .col-md-5 {\n    width: 41.66666667%;\n  }\n  .col-md-4 {\n    width: 33.33333333%;\n  }\n  .col-md-3 {\n    width: 25%;\n  }\n  .col-md-2 {\n    width: 16.66666667%;\n  }\n  .col-md-1 {\n    width: 8.33333333%;\n  }\n  .col-md-pull-12 {\n    right: 100%;\n  }\n  .col-md-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-md-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-md-pull-9 {\n    right: 75%;\n  }\n  .col-md-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-md-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-md-pull-6 {\n    right: 50%;\n  }\n  .col-md-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-md-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-md-pull-3 {\n    right: 25%;\n  }\n  .col-md-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-md-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-md-pull-0 {\n    right: auto;\n  }\n  .col-md-push-12 {\n    left: 100%;\n  }\n  .col-md-push-11 {\n    left: 91.66666667%;\n  }\n  .col-md-push-10 {\n    left: 83.33333333%;\n  }\n  .col-md-push-9 {\n    left: 75%;\n  }\n  .col-md-push-8 {\n    left: 66.66666667%;\n  }\n  .col-md-push-7 {\n    left: 58.33333333%;\n  }\n  .col-md-push-6 {\n    left: 50%;\n  }\n  .col-md-push-5 {\n    left: 41.66666667%;\n  }\n  .col-md-push-4 {\n    left: 33.33333333%;\n  }\n  .col-md-push-3 {\n    left: 25%;\n  }\n  .col-md-push-2 {\n    left: 16.66666667%;\n  }\n  .col-md-push-1 {\n    left: 8.33333333%;\n  }\n  .col-md-push-0 {\n    left: auto;\n  }\n  .col-md-offset-12 {\n    margin-left: 100%;\n  }\n  .col-md-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-md-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-md-offset-9 {\n    margin-left: 75%;\n  }\n  .col-md-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-md-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-md-offset-6 {\n    margin-left: 50%;\n  }\n  .col-md-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-md-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-md-offset-3 {\n    margin-left: 25%;\n  }\n  .col-md-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-md-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-md-offset-0 {\n    margin-left: 0%;\n  }\n}\n@media (min-width: 1200px) {\n  .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {\n    float: left;\n  }\n  .col-lg-12 {\n    width: 100%;\n  }\n  .col-lg-11 {\n    width: 91.66666667%;\n  }\n  .col-lg-10 {\n    width: 83.33333333%;\n  }\n  .col-lg-9 {\n    width: 75%;\n  }\n  .col-lg-8 {\n    width: 66.66666667%;\n  }\n  .col-lg-7 {\n    width: 58.33333333%;\n  }\n  .col-lg-6 {\n    width: 50%;\n  }\n  .col-lg-5 {\n    width: 41.66666667%;\n  }\n  .col-lg-4 {\n    width: 33.33333333%;\n  }\n  .col-lg-3 {\n    width: 25%;\n  }\n  .col-lg-2 {\n    width: 16.66666667%;\n  }\n  .col-lg-1 {\n    width: 8.33333333%;\n  }\n  .col-lg-pull-12 {\n    right: 100%;\n  }\n  .col-lg-pull-11 {\n    right: 91.66666667%;\n  }\n  .col-lg-pull-10 {\n    right: 83.33333333%;\n  }\n  .col-lg-pull-9 {\n    right: 75%;\n  }\n  .col-lg-pull-8 {\n    right: 66.66666667%;\n  }\n  .col-lg-pull-7 {\n    right: 58.33333333%;\n  }\n  .col-lg-pull-6 {\n    right: 50%;\n  }\n  .col-lg-pull-5 {\n    right: 41.66666667%;\n  }\n  .col-lg-pull-4 {\n    right: 33.33333333%;\n  }\n  .col-lg-pull-3 {\n    right: 25%;\n  }\n  .col-lg-pull-2 {\n    right: 16.66666667%;\n  }\n  .col-lg-pull-1 {\n    right: 8.33333333%;\n  }\n  .col-lg-pull-0 {\n    right: auto;\n  }\n  .col-lg-push-12 {\n    left: 100%;\n  }\n  .col-lg-push-11 {\n    left: 91.66666667%;\n  }\n  .col-lg-push-10 {\n    left: 83.33333333%;\n  }\n  .col-lg-push-9 {\n    left: 75%;\n  }\n  .col-lg-push-8 {\n    left: 66.66666667%;\n  }\n  .col-lg-push-7 {\n    left: 58.33333333%;\n  }\n  .col-lg-push-6 {\n    left: 50%;\n  }\n  .col-lg-push-5 {\n    left: 41.66666667%;\n  }\n  .col-lg-push-4 {\n    left: 33.33333333%;\n  }\n  .col-lg-push-3 {\n    left: 25%;\n  }\n  .col-lg-push-2 {\n    left: 16.66666667%;\n  }\n  .col-lg-push-1 {\n    left: 8.33333333%;\n  }\n  .col-lg-push-0 {\n    left: auto;\n  }\n  .col-lg-offset-12 {\n    margin-left: 100%;\n  }\n  .col-lg-offset-11 {\n    margin-left: 91.66666667%;\n  }\n  .col-lg-offset-10 {\n    margin-left: 83.33333333%;\n  }\n  .col-lg-offset-9 {\n    margin-left: 75%;\n  }\n  .col-lg-offset-8 {\n    margin-left: 66.66666667%;\n  }\n  .col-lg-offset-7 {\n    margin-left: 58.33333333%;\n  }\n  .col-lg-offset-6 {\n    margin-left: 50%;\n  }\n  .col-lg-offset-5 {\n    margin-left: 41.66666667%;\n  }\n  .col-lg-offset-4 {\n    margin-left: 33.33333333%;\n  }\n  .col-lg-offset-3 {\n    margin-left: 25%;\n  }\n  .col-lg-offset-2 {\n    margin-left: 16.66666667%;\n  }\n  .col-lg-offset-1 {\n    margin-left: 8.33333333%;\n  }\n  .col-lg-offset-0 {\n    margin-left: 0%;\n  }\n}\n@keyframes blinker {\n  0% {\n    opacity: 1;\n  }\n  50% {\n    opacity: 1;\n  }\n  50.01% {\n    opacity: 0;\n  }\n  100% {\n    opacity: 0;\n  }\n}\n.list {\n  list-style-type: none;\n}\n.form-control {\n  color: black;\n  border: 3px solid #282828;\n}\n.scoreboard {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n  padding: 20px;\n  font-size: 1.2em;\n}\n.instruction {\n  position: absolute;\n  bottom: 0;\n  padding: 15px;\n}\n.menu {\n  margin: 40px 0 0 0;\n  padding-top: 20px;\n  padding-left: 30%;\n}\n.menu .menu-item {\n  padding-left: 20px;\n  position: relative;\n  margin: 10px 0;\n}\n.text-center {\n  text-align: center;\n}\n.versus {\n  margin: 40px 0 0 0;\n  text-align: center;\n  font-size: 2em;\n}\n.caret:before {\n  content: \">\";\n  position: absolute;\n  left: 0;\n}\n.banner {\n  text-align: center;\n  margin: 20px;\n}\n.score {\n  text-align: center;\n  margin: 20px;\n  font-size: 5em;\n}\nspan.red {\n  color: red;\n}\nspan.blue {\n  color: lightblue;\n}\nfooter {\n  display: block;\n  position: absolute;\n  bottom: 0;\n  text-align: center;\n}\n.table > tbody > tr > td.primary {\n  background-color: #2A9FD6;\n}\n", ""]);
 
 // exports
 
@@ -17952,7 +17951,7 @@ exports.push([module.i, "/*! normalize.css v3.0.2 | MIT License | git.io/normali
 /***/ (function(module, exports, __webpack_require__) {
 
 const React = __webpack_require__(5);
-const { Instr, Red, Blue, swap } = __webpack_require__(94);
+const { Red, Blue, swap } = __webpack_require__(94);
 
 module.exports = ({ players, options }) => {
   let Baby = swap(options, React.createElement(
@@ -17979,17 +17978,17 @@ module.exports = ({ players, options }) => {
     null,
     React.createElement(
       'h3',
-      null,
+      { className: 'text-center' },
       Baby.Red,
       foot.Blue
     ),
     React.createElement(
-      'ul',
-      { className: 'list' },
+      'div',
+      { className: 'menu' },
       players.sort((a, b) => rank(b) - rank(a)).map((p, i) => {
         return React.createElement(
-          'li',
-          { key: i },
+          'div',
+          { className: 'menu-item', key: i },
           '#' + (i + 1),
           ' ',
           p.name + ' (' + rank(p) + ')'
@@ -17997,9 +17996,9 @@ module.exports = ({ players, options }) => {
       })
     ),
     React.createElement(
-      Instr,
-      null,
-      '. hadoken',
+      'div',
+      { className: 'instruction' },
+      '. pas grand chose',
       React.createElement('br', null),
       '_ commencer une partie'
     )
@@ -18012,7 +18011,7 @@ module.exports = ({ players, options }) => {
 
 const React = __webpack_require__(5);
 const { byName, nameNotIn } = __webpack_require__(220);
-const { Instr, Red, Blue, swap } = __webpack_require__(94);
+const { Red, Blue, swap } = __webpack_require__(94);
 
 /* @arg props state.screen */
 module.exports = ({ ui, players }) => {
@@ -18024,30 +18023,30 @@ module.exports = ({ ui, players }) => {
     null,
     React.createElement(
       'h3',
-      null,
+      { className: 'text-center' },
       'S\xE9lection des joueurs'
     ),
     React.createElement(
-      'p',
-      null,
+      'div',
+      { className: 'menu' },
       'Joueurs: ',
       ui.players.join(' ')
     ),
     React.createElement(
       'div',
-      null,
+      { className: 'menu' },
       opts.map((m, k) => {
         return React.createElement(
-          'p',
-          { key: k },
-          k === ui.index ? '> ' : '',
+          'div',
+          { key: k, className: 'menu-item' },
+          k === ui.index && React.createElement('span', { className: 'caret' }),
           m
         );
       })
     ),
     React.createElement(
-      Instr,
-      null,
+      'div',
+      { className: 'instruction' },
       '. suivant',
       React.createElement('br', null),
       '_ s\xE9lection'
@@ -18072,7 +18071,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 const React = __webpack_require__(5);
-const { Instr, Red, Blue, swap } = __webpack_require__(94);
+const { Red, Blue, swap } = __webpack_require__(94);
 
 module.exports = ({ game, options }) => {
   let Players = swap(options, React.createElement(
@@ -18089,19 +18088,19 @@ module.exports = ({ game, options }) => {
     null,
     React.createElement(
       'h3',
-      null,
+      { className: 'text-center' },
       'Pr\xEAt ?'
     ),
     React.createElement(
-      'p',
-      null,
+      'div',
+      { className: 'versus' },
       Players.Red,
-      ' VS',
+      ' VS ',
       Players.Blue
     ),
     React.createElement(
-      Instr,
-      null,
+      'div',
+      { className: 'instruction' },
       '. jouer !',
       React.createElement('br', null),
       '_ annuler la partie'
@@ -18114,7 +18113,7 @@ module.exports = ({ game, options }) => {
 /***/ (function(module, exports, __webpack_require__) {
 
 const React = __webpack_require__(5);
-const { Instr, Red, Blue, swap } = __webpack_require__(94);
+const { Red, Blue, swap } = __webpack_require__(94);
 
 module.exports = ({ game, options }) => {
   let Players = swap(options, React.createElement(
@@ -18126,36 +18125,35 @@ module.exports = ({ game, options }) => {
     null,
     game.bluePlayers.join(' ')
   ));
-  let score = swap(options, game.redScore, game.blueScore);
+  let Score = swap(options, game.redScore, game.blueScore);
   return React.createElement(
     'div',
     null,
     React.createElement(
       'h3',
-      null,
+      { className: 'text-center' },
       'Partie en cours'
     ),
     React.createElement(
-      Instr,
-      null,
+      'div',
+      { className: 'versus' },
+      Players.Red,
+      ' VS ',
+      Players.Blue
+    ),
+    React.createElement(
+      'div',
+      { className: 'score' },
+      Score.Red,
+      ' - ',
+      Score.Blue
+    ),
+    React.createElement(
+      'div',
+      { className: 'instruction' },
       '. point',
       React.createElement('br', null),
       '_ annuler le point'
-    ),
-    React.createElement(
-      'p',
-      null,
-      Players.Red,
-      ' VS',
-      Players.Blue,
-      React.createElement('br', null),
-      React.createElement(
-        'span',
-        { className: 'big' },
-        score.Red,
-        ' - ',
-        score.Blue
-      )
     )
   );
 };
@@ -18165,7 +18163,7 @@ module.exports = ({ game, options }) => {
 /***/ (function(module, exports, __webpack_require__) {
 
 const React = __webpack_require__(5);
-const { Instr, Red, Blue, swap } = __webpack_require__(94);
+const { Red, Blue, swap } = __webpack_require__(94);
 
 module.exports = ({ game, options }) => {
   let Players = swap(options, React.createElement(
@@ -18177,34 +18175,33 @@ module.exports = ({ game, options }) => {
     null,
     game.bluePlayers.join(' ')
   ));
-  let score = swap(options, game.redScore, game.blueScore);
+  let Score = swap(options, game.redScore, game.blueScore);
   return React.createElement(
     'div',
     null,
     React.createElement(
       'h3',
-      null,
+      { className: 'text-center' },
       'Victoire'
     ),
     React.createElement(
-      Instr,
-      null,
-      '. ok'
+      'div',
+      { className: 'versus' },
+      Players.Red,
+      ' VS ',
+      Players.Blue
     ),
     React.createElement(
-      'p',
-      null,
-      Players.Red,
-      ' VS',
-      Players.Blue,
-      React.createElement('br', null),
-      React.createElement(
-        'span',
-        { className: 'big' },
-        score.Red,
-        ' - ',
-        score.Blue
-      )
+      'div',
+      { className: 'score' },
+      Score.Red,
+      ' - ',
+      Score.Blue
+    ),
+    React.createElement(
+      'div',
+      { className: 'instruction' },
+      '. ok'
     )
   );
 };

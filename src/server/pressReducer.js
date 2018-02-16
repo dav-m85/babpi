@@ -13,6 +13,10 @@ function view_0_start (state, {duration, type}) {
   }
 }
 
+function getRandomInt (max) {
+  return Math.floor(Math.random() * Math.floor(max))
+}
+
 function view_1_building (state, {duration}) {
   let players = state.ui.players
   if (state.ui.index === 0 && duration === 'long' && (players.length === 2 || players.length === 4)) {
@@ -29,6 +33,13 @@ function view_1_building (state, {duration}) {
         break
       default: return state
     }
+
+    // Swap teams randomly
+    if (getRandomInt(2) === 1) {
+      console.log('swap team')
+      bluePlayers = [redPlayers, redPlayers = bluePlayers][0]
+    }
+
     return updateGame(state, {
       is: 'booked',
       redPlayers,

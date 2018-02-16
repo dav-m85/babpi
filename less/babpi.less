@@ -16,21 +16,62 @@
   border: 3px solid @input-border;
 }
 
+@gutter: 20px;
+@bigGutter: 40px;
+
+.scoreboard {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  padding: @gutter;
+  font-size: 1.2em;
+}
+
 .instruction {
   position: absolute;
   bottom: 0;
   padding: 15px;
 }
 
-.score {
-  margin-top: 3em;
-  width: 100%;
-  font-size: 3em;
-  text-align: center;
+.menu {
+  margin: @bigGutter 0 0 0;
+  padding-top: @gutter;
+  padding-left: 30%;
 
-  span.big{
-    font-size:6em;
+  .menu-item {
+    padding-left: 20px;
+    position: relative;
+    margin: 10px 0;
   }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.versus {
+  margin: @bigGutter 0 0 0;
+  text-align: center;
+  font-size: 2em;
+}
+
+.caret {
+  &:before {
+    content: ">";
+    position: absolute;
+    left: 0;
+  }
+}
+
+.banner {
+  text-align: center;
+  margin: 20px;
+}
+
+.score {
+  text-align: center;
+  margin: 20px;
+  font-size: 5em;
 }
 
 span.red{color:red;}

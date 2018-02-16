@@ -67,6 +67,9 @@ const uiReducer = (game, players, state = {
   players: [],
   index: 0
 }, action) => {
+  if (game && game.is === 'booked' && action.type === Actions.PRESS) {
+    return updateObject(state, {ui: updateObject(state.ui, {players: []})})
+  }
   if (!(game && game.is === 'building') || action.type !== Actions.PRESS) {
     return state
   }

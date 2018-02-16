@@ -1,5 +1,5 @@
 const React = require('react')
-const {Instr, Red, Blue, swap} = require('./shared')
+const {Red, Blue, swap} = require('./shared')
 
 module.exports = ({players, options}) => {
   let Baby = swap(options, <Red>Baby</Red>, <Blue>Baby</Blue>)
@@ -8,16 +8,17 @@ module.exports = ({players, options}) => {
   return <div>
     <h3 className='text-center'>{Baby.Red}{foot.Blue}</h3>
 
-    <ul className='list'>
+    <div className='menu'>
       {players.sort((a, b) => (rank(b) - rank(a))).map((p, i) => {
-        return <li key={i}>
+        return <div className='menu-item' key={i}>
           {'#' + (i + 1)} {p.name + ' (' + rank(p) + ')'}
-        </li>
+        </div>
       })}
-    </ul>
-    <Instr>
-      . hadoken<br />
+    </div>
+
+    <div className='instruction'>
+      . pas grand chose<br />
       _ commencer une partie
-    </Instr>
+    </div>
   </div>
 }

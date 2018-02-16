@@ -1,6 +1,6 @@
 const React = require('react')
 const {byName, nameNotIn} = require('../shared')
-const {Instr, Red, Blue, swap} = require('./shared')
+const {Red, Blue, swap} = require('./shared')
 
 /* @arg props state.screen */
 module.exports = ({ui, players}) => {
@@ -8,14 +8,17 @@ module.exports = ({ui, players}) => {
   opts.unshift('Jouer !', 'Enlever joueur')
 
   return <div>
-    <h3>Sélection des joueurs</h3>
-    <p>Joueurs: {ui.players.join(' ')}</p>
-    <div>
-      {opts.map((m, k) => { return <p key={k}>{k === ui.index ? '> ' : ''}{m}</p> })}
+    <h3 className='text-center'>Sélection des joueurs</h3>
+
+    <div className='menu'>Joueurs: {ui.players.join(' ')}</div>
+
+    <div className='menu'>
+      {opts.map((m, k) => { return <div key={k} className='menu-item'>{k === ui.index && <span className='caret' />}{m}</div> })}
     </div>
-    <Instr>
+
+    <div className='instruction'>
     . suivant<br />
       _ sélection
-    </Instr>
+    </div>
   </div>
 }

@@ -59,7 +59,7 @@ class App extends React.Component {
 
 // require('../../less/main.less')
 
-render(React.createElement(remoteStateSocket(
+render(<div className='scoreboard'>{React.createElement(remoteStateSocket(
   App,
   {
     clients: 0,
@@ -71,4 +71,4 @@ render(React.createElement(remoteStateSocket(
       players: []
     }
   }
-)), document.body)
+))}</div>, document.body)
