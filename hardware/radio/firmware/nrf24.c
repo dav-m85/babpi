@@ -3,9 +3,9 @@
 #include "spi.h"
 
 #define CONFIG     0x0e // PTX, PWR_UP, CRC 2bytes, EN_CRC
-#define EN_AA      0x01 // ENAA_P0 => auto ack data pipe 0
+#define EN_AA      0x03 // ENAA_P0 => auto ack data pipe 0
 #define EN_RXADDR  0x01 // ERX_P0 => data pipe 0 in reception mode
-#define SETUP_RETR 0x00 // re transmit disabled
+#define SETUP_RETR 0xff // Re-transmit retries at max, longest delay
 #define CHANNEL    0x49 // select channel
 #define RF_SETUP   0x27 // RF_PWR=0dBm, RF_DR_HIGH=1, PLL_LOCK=0, RF_DR_LOW=0 (250kbps)
 
