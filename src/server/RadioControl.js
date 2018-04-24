@@ -29,23 +29,19 @@ module.exports = {
 
       rx.on('data', function (data) {
         // first 4 bits are the button identifier, last 4 are duration
-        var d = data[0]
-        var button = d & 15
-        var duration = (d & 15 << 4) >> 4
-        if (button & 1) {
-          if (duration > 1) {
-            store.dispatch(Actions.pressButton(red, 'long'))
-          } else {
-            store.dispatch(Actions.pressButton(red, 'short'))
-          }
-        } else {
-          if (duration > 1) {
-            store.dispatch(Actions.pressButton(blue, 'long'))
-          } else {
-            store.dispatch(Actions.pressButton(blue, 'short'))
-          }
+        var button = data[0] & 15
+        var duration = (data[0] & 240) >> 4
+        var press = 'short'
+        var whichButton = blue
+        if (duration > 1) {
+                press = 'long'
         }
-        console.log('Received ' + data)
+        if (button & 1) {
+                whichButton = red
+        }
+        store.dispatch(Actions.pressButton(whichButton,press))
+        console.log('Button ' + button)
+        console.log('Duration ' + duration)
       })
 
       rx.on('error', function (e) {

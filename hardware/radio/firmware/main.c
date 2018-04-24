@@ -11,6 +11,7 @@ unsigned int pressedButtons = 0;
 unsigned int sendThis = 0;
 unsigned int button_press_time = 0;
 unsigned char buttons;
+volatile unsigned char interruptButton = 0;
 
 //LSB first
 char nrf_address[5] = {
@@ -21,7 +22,7 @@ char nrf_address[5] = {
 	0x00
 };
 
-State state = IDLE;
+volatile State state = IDLE;
 
 /**
  * Main routine
@@ -30,20 +31,18 @@ int main(void)
 {
   	init();
 
+	// Transmission format is 0baaaa00bb
+	// where aaaa is press time (each bit is 0.5s), and the last two bits bb correspond to which button is pressed
+
 	while (1) {
 		switch (state) {
 
 			case STATE_BUTTON_DOWN:
 				__delay_cycles(2000); // Soft debounce
-				start_button_timer();
-
-				// @todo deal here with multi press
-
-				sendThis = pressedButtons >> 3;
-
-				// P2OUT &= ~BUTTON_1; // Debug by using an output with a led
-
-				// Let's wait for button up
+				start_button_timer(); // Transmission is sent only on button up
+				P2IES &= ~interruptButton; // 0 - Set low to high transition (listen for button up)
+				pressedButtons |= interruptButton; // Allows for multi-button press
+				sendThis = pressedButtons >> 3; // Shift to first two bits
 				state = IDLE;
 				break;
 
@@ -51,31 +50,31 @@ int main(void)
 				__delay_cycles(2000); // Soft debounce
 				stop_button_timer();
 
-				// P2OUT |= BUTTON_1; // Debug by using an output with a led
+				// Disable interrupt while shifting transition direction (listen for button down)
+				P2IE  &= ~interruptButton;
+				P2IES |= interruptButton;
+				P2IFG &= ~interruptButton;
+				P2IE  |= interruptButton;
 
-				// Add press time to payload
+				// Add press time to payload, shift out of the way of actual button
 				sendThis |= button_press_time<<4;
-
-				// 1 timer cycle (0.5s @1MHz)
 
 				nrf_tx(sendThis);
 
 				button_press_time = 0;
 				pressedButtons    = 0;
+				interruptButton   = 0;
 
-				// mmm
 				state = SLEEP;
 				break;
 
 			case IDLE:
-				// enter LPM with timer
-				_bis_SR_register(LPM0);
 				nrf_cel();
 				spi_csl();
 				break;
 
 			case SLEEP:
-				// enter LPM no timer
+				// Enter LPM no timer
 				_bis_SR_register(LPM4);
 				nrf_cel();
 				spi_csl();
@@ -114,13 +113,13 @@ void init_tx(void) {
 }
 
 void init_nrf(void) {
-	//set up interrupt for NRF
+    // Set up interrupt for NRF
     P2DIR  &= ~NRF_IRQ;
-    //clear interrupt flag
+    // Clear interrupt flag
     P2IFG  &= ~NRF_IRQ;
-    //interrupt on high to low transition
+    // Interrupt on high to low transition
     P2IES  |= NRF_IRQ;
-    //enable interrupt for NRF
+    // Enable interrupt for NRF
     P2IE   |= NRF_IRQ;
     nrf_init(nrf_address, sizeof(nrf_address));
 }
@@ -141,10 +140,9 @@ void init_buttons(void) {
     P2IE   |= buttons;
 
     // Timer configuration for button duration detection
-    CCR0 =  62500; //0.5 sec @ID_3
-	TACTL = TASSEL_2 + MC_1 + ID_3;
-
-	// P2OUT |= BUTTON_1; // Debug by using an output with a led
+    // 1 timer cycle (0.5s @1MHz / ID_3)
+    CCR0 =  30000;
+    TACTL = TASSEL_2 + MC_1 + ID_3;
 }
 
 void start_button_timer() {
@@ -158,7 +156,7 @@ void stop_button_timer(void) {
 	TACCTL0 &= ~CCIE;
 }
 
-//RX interrupt OR closed contacts in TX mode
+// Button press or TX FIFO is full / unacked
 #pragma vector=PORT2_VECTOR
 __interrupt void Port_2(void) {
 	char nrfState;
@@ -168,36 +166,36 @@ __interrupt void Port_2(void) {
 			nrf_write(NRF_STATUS,nrfState|NRF_TX_DS);
 		} else if(nrfState & NRF_MAX_RETRIES)  {
 			nrf_write(NRF_STATUS,nrfState|NRF_MAX_RETRIES);
-			nrf_set_channel();
 			nrf_flush_tx();
 		}
+		// Clear interrupt flag
 		P2IFG &= ~BIT2;
 		return;
 	}
 
-	LPM0_EXIT;
 	LPM4_EXIT;
 
-	// Store interruptedButton and clear flags
-	char interruptedButton = P2IFG & buttons;
+	// Store interruptButton and clear flags
+	interruptButton = P2IFG & buttons;
 
-	// Set state according transition, and toggle edge detection direction
-	if( interruptedButton & P2IES ) {
+	// Check which edge triggered the interrupt, and set state accordingly
+	if( interruptButton & P2IES ) {
 		state = STATE_BUTTON_DOWN;
-		P2IES &= ~interruptedButton; // 0 - Set low to high interruption
-		pressedButtons |= interruptedButton;
 	} else {
 		state = STATE_BUTTON_UP;
-		P2IES |= interruptedButton; // 1 - Set high to low interruption
-		pressedButtons &= ~interruptedButton;
 	}
 
-	// Clear flags
-	P2IFG &= ~buttons;
+	// Clear iterrupt flag
+	P2IFG &= ~interruptButton;
 }
 
-//button timer
+// Button timer
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void button_time(void) {
-	button_press_time++;
+	// If the button is pressed long enough, immediately trigger
+	// the long button press event so the user doesn't have to guess how long to press.
+	// Corresponding code in receiver must by synchronised with this timing
+	stop_button_timer();
+	button_press_time = 2;
+	state = STATE_BUTTON_UP;
 }
